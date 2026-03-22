@@ -359,7 +359,7 @@ function renderPage({ listings, servicesMap, distanceMap, totalCount, currentPag
                 type="text"
                 defaultValue={postcode || ''}
                 placeholder="Postcode (e.g. M1 4BT)"
-                className="w-full sm:w-48 rounded-xl border border-input bg-background pl-11 pr-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+                className="w-full sm:w-64 rounded-xl border border-input bg-background pl-11 pr-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
               />
             </div>
           </div>
