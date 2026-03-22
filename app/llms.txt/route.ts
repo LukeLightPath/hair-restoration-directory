@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 import { citySlug } from '@/lib/utils'
 import { TREATMENTS } from '@/lib/types'
 
 export async function GET() {
-  const supabase = await createServiceClient()
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, supabaseKey)
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
 
   // Fetch cities from listings
