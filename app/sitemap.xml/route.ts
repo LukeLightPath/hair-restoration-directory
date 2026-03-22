@@ -80,9 +80,10 @@ export async function GET() {
   // Dynamic pages from Supabase
   try {
     const { createClient } = await import('@supabase/supabase-js')
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      supabaseKey
     )
 
     const { data: listings } = await supabase
