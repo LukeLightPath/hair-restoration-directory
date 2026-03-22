@@ -4,6 +4,7 @@ interface InquiryEmailData {
   enquirerEmail: string
   enquirerPhone: string | null
   message: string | null
+  unsubscribeUrl: string
 }
 
 export function buildInquirySubject(enquirerName: string, clinicName: string) {
@@ -16,6 +17,7 @@ export function buildInquiryHtml({
   enquirerEmail,
   enquirerPhone,
   message,
+  unsubscribeUrl,
 }: InquiryEmailData): string {
   const phoneRow = enquirerPhone
     ? `<tr>
@@ -94,6 +96,12 @@ export function buildInquiryHtml({
     <div style="text-align:center;padding:20px 0 0;">
       <p style="margin:0;font-size:12px;color:#9ca3af;">
         This email was sent by Hair Restoration Guide because someone enquired about your clinic.
+      </p>
+      <p style="margin:8px 0 0;font-size:12px;color:#9ca3af;">
+        <a href="https://www.hairrestorationguide.com/for-clinics" style="color:#9ca3af;text-decoration:underline;">Claim your listing</a>
+        to manage enquiries &amp; notifications
+        &nbsp;|&nbsp;
+        <a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe</a>
       </p>
     </div>
 

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { sendEmail } from '@/lib/email'
 import { buildInquirySubject, buildInquiryHtml } from '@/lib/emails/inquiry-notification'
+import { sendSms, buildInquirySmsBody } from '@/lib/sms'
+import { buildUnsubscribeUrl } from '@/app/api/unsubscribe/route'
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,17 +44,16 @@ export async function POST(request: NextRequest) {
       // Analytics tracking is best-effort
     }
 
-    // Send email notification to clinic (fire-and-forget)
+    // Notify clinic: email + SMS to mobiles (fire-and-forget)
     try {
-      // Look up the listing to get clinic name and contact email
       const { data: listing } = await supabase
         .from('listings')
-        .select('title, email, claimed_by')
+        .select('title, email, phone, claimed_by, notifications_off')
         .eq('id', listing_id)
         .single()
 
-      if (listing) {
-        // Determine recipient: claimed owner's email first, then listing email
+      if (listing && !listing.notifications_off) {
+        // Resolve recipient email: claimed owner first, then listing email
         let recipientEmail = listing.email
 
         if (listing.claimed_by) {
@@ -63,7 +64,6 @@ export async function POST(request: NextRequest) {
             .single()
 
           if (ownerProfile) {
-            // Get the auth user's email
             const { data: authUser } = await supabase.auth.admin.getUserById(listing.claimed_by)
             if (authUser?.user?.email) {
               recipientEmail = authUser.user.email
@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
           }
         }
 
+        // Send email if we have one
         if (recipientEmail) {
           await sendEmail({
             to: recipientEmail,
@@ -81,14 +82,28 @@ export async function POST(request: NextRequest) {
               enquirerEmail: email,
               enquirerPhone: phone,
               message,
+              unsubscribeUrl: buildUnsubscribeUrl(listing_id),
             }),
             replyTo: email,
           })
         }
+
+        // Also send SMS if the clinic has a mobile number
+        if (listing.phone && isMobileNumber(listing.phone)) {
+          await sendSms({
+            to: listing.phone,
+            body: buildInquirySmsBody({
+              clinicName: listing.title,
+              enquirerName: name,
+              enquirerEmail: email,
+              enquirerPhone: phone,
+            }),
+          })
+        }
       }
-    } catch (emailErr) {
-      // Email is best-effort — never block the response
-      console.error('[Inquiry] Email notification failed:', emailErr)
+    } catch (notifyErr) {
+      // Notification is best-effort — never block the response
+      console.error('[Inquiry] Notification failed:', notifyErr)
     }
 
     return NextResponse.json({ success: true, id: inquiry.id }, { status: 201 })
@@ -96,4 +111,17 @@ export async function POST(request: NextRequest) {
     console.error('Inquiry API error:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
+}
+
+/**
+ * Check if a UK phone number is a mobile (07xxx / +447xxx).
+ * Landlines (01, 02, 03, 08) cannot receive SMS.
+ */
+function isMobileNumber(phone: string): boolean {
+  const digits = phone.replace(/\s+/g, '')
+  // +447... format (international)
+  if (digits.startsWith('+447')) return true
+  // 07... format (local UK mobile)
+  if (digits.startsWith('07') && digits.length >= 11) return true
+  return false
 }

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  MapPin, Phone, Globe, Mail, Clock, Star, Shield,
+  MapPin, Globe, Clock, Star, Shield,
   ExternalLink, Navigation, Users, Scissors, Camera, ImageIcon, BadgeCheck
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
@@ -400,61 +400,9 @@ export default async function ListingPage({ params }: ListingPageProps) {
                   Contact {typed.title}
                 </h2>
 
-                <div className="space-y-3 mb-6">
-                  {typed.phone && (
-                    <ClickTracker listingId={typed.id} eventType="phone_click">
-                      <a
-                        href={`tel:${typed.phone}`}
-                        className="flex items-center gap-3 rounded-xl border border-border p-3.5 text-sm transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
-                      >
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                          <Phone className="h-4 w-4 text-primary" />
-                        </div>
-                        <span className="text-card-foreground font-medium">{typed.phone}</span>
-                      </a>
-                    </ClickTracker>
-                  )}
-                  {typed.website && (
-                    <ClickTracker listingId={typed.id} eventType="website_click">
-                      <a
-                        href={typed.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-3 rounded-xl border border-border p-3.5 text-sm transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
-                      >
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                          <Globe className="h-4 w-4 text-primary" />
-                        </div>
-                        <span className="text-card-foreground font-medium truncate">Visit website</span>
-                        <ExternalLink className="h-3 w-3 text-muted-foreground ml-auto shrink-0" />
-                      </a>
-                    </ClickTracker>
-                  )}
-                  {typed.email && (
-                    <a
-                      href={`mailto:${typed.email}`}
-                      className="flex items-center gap-3 rounded-xl border border-border p-3.5 text-sm transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
-                    >
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                        <Mail className="h-4 w-4 text-primary" />
-                      </div>
-                      <span className="text-card-foreground font-medium truncate">{typed.email}</span>
-                    </a>
-                  )}
-                  {typed.google_maps_url && (
-                    <a
-                      href={typed.google_maps_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-xl border border-border p-3.5 text-sm transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
-                    >
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                        <Navigation className="h-4 w-4 text-primary" />
-                      </div>
-                      <span className="text-card-foreground font-medium">Get directions</span>
-                      <ExternalLink className="h-3 w-3 text-muted-foreground ml-auto shrink-0" />
-                    </a>
-                  )}
+                {/* Enquiry form */}
+                <div className="mb-6">
+                  <ContactForm listingId={typed.id} clinicName={typed.title} freeConsultation={!!typed.free_consultation} />
                 </div>
 
                 {/* Quick facts */}
@@ -482,10 +430,38 @@ export default async function ListingPage({ params }: ListingPageProps) {
                   )}
                 </div>
 
-                {/* Enquiry form */}
-                <div className="border-t border-border pt-6">
-                  <h3 className="text-sm font-semibold text-card-foreground mb-4">Send an enquiry</h3>
-                  <ContactForm listingId={typed.id} clinicName={typed.title} freeConsultation={!!typed.free_consultation} />
+                {/* Website & Directions links */}
+                <div className="border-t border-border pt-5 space-y-3">
+                  {typed.website && (
+                    <ClickTracker listingId={typed.id} eventType="website_click">
+                      <a
+                        href={typed.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 rounded-xl border border-border p-3.5 text-sm transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
+                      >
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                          <Globe className="h-4 w-4 text-primary" />
+                        </div>
+                        <span className="text-card-foreground font-medium truncate">Visit website</span>
+                        <ExternalLink className="h-3 w-3 text-muted-foreground ml-auto shrink-0" />
+                      </a>
+                    </ClickTracker>
+                  )}
+                  {typed.google_maps_url && (
+                    <a
+                      href={typed.google_maps_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-xl border border-border p-3.5 text-sm transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
+                    >
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                        <Navigation className="h-4 w-4 text-primary" />
+                      </div>
+                      <span className="text-card-foreground font-medium">Get directions</span>
+                      <ExternalLink className="h-3 w-3 text-muted-foreground ml-auto shrink-0" />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
