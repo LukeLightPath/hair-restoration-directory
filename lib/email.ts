@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null
 
-const FROM_ADDRESS = 'Hair Restoration Guide <notifications@hairrestorationguide.com>'
+const FROM_ADDRESS = 'Hair Restoration Guide <noreply@hairrestorationguide.com>'
 
 interface SendEmailOptions {
   to: string | string[]

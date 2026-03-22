@@ -80,7 +80,7 @@ export default function WigsGuidePage() {
             What Is a Wig?
           </h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-2xl">
-            A wig is a head covering made from human hair, synthetic fibre, or a blend of both.
+            A wig is a head covering made from human hair, synthetic fibre or a blend of both.
             For people experiencing hair loss, wigs offer an immediate transformation without
             surgery, adhesives or any permanent commitment. Modern wigs have come a long way from
             the obvious, costume-like pieces of the past.

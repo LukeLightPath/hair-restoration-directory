@@ -253,12 +253,12 @@ const FAQ_POOL: FAQ[] = [
 /* ── Meta Title Variants ──────────────────────────────────── */
 
 const META_TITLE_VARIANTS = [
-  (city: string, count: number) => `Hair Systems in ${city} | Compare ${count} Clinics | Hair Restoration Guide`,
+  (city: string, count: number) => `Hair Systems in ${city} | Compare ${count} Clinics`,
   (city: string, count: number) => `${count} Hair System Clinics in ${city} | Ratings & Reviews`,
-  (city: string) => `Hair Systems in ${city}: Compare Clinics, Costs & Options`,
-  (city: string) => `Non-Surgical Hair Replacement in ${city} | Find a Clinic`,
-  (city: string, count: number) => `Compare ${count} Hair System Clinics in ${city} | Free Consultations`,
-  (city: string) => `Hair Replacement Systems in ${city} | Clinic Comparison`,
+  (city: string) => `Hair Systems in ${city} | Clinics, Costs & Reviews`,
+  (city: string) => `Non-Surgical Hair Replacement in ${city} | Compare Clinics`,
+  (city: string, count: number) => `Compare ${count} Hair System Clinics in ${city}`,
+  (city: string) => `Hair Replacement Systems in ${city} | Clinic Guide`,
 ]
 
 /* ── Meta Description Variants ────────────────────────────── */

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { LogOut } from 'lucide-react'
+import { LogOut, ShieldCheck } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import DashboardNav, { DashboardMobileNav } from '@/components/dashboard-nav'
 
@@ -21,6 +21,8 @@ export default async function DashboardLayout({
     .select('full_name, role')
     .eq('id', user.id)
     .single()
+
+  const isAdmin = profile?.role === 'super_admin'
 
   const initials = (profile?.full_name || user.email || '?')
     .split(' ')
@@ -48,6 +50,18 @@ export default async function DashboardLayout({
 
         <DashboardNav />
 
+        {isAdmin && (
+          <div className="px-3 pt-2 border-t border-border">
+            <Link
+              href="/admin"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-amber-600 bg-amber-500/8 hover:bg-amber-500/12 transition-colors dark:text-amber-400"
+            >
+              <ShieldCheck className="h-4 w-4 shrink-0" />
+              Admin Dashboard
+            </Link>
+          </div>
+        )}
+
         <div className="p-3 border-t border-border mt-auto">
           <form action="/api/auth/signout" method="post">
             <button
@@ -63,7 +77,7 @@ export default async function DashboardLayout({
 
       {/* Mobile nav */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-lg">
-        <DashboardMobileNav />
+        <DashboardMobileNav isAdmin={isAdmin} />
       </div>
 
       {/* Content */}

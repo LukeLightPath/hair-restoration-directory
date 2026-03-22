@@ -113,7 +113,7 @@ export default function HairToppersGuidePage() {
             <p>
               A topper sits on top of your head and clips into your surrounding hair using small
               pressure-sensitive clips. Your own hair falls over and blends with the topper&apos;s
-              hair, creating a seamless, natural look. The result is instant additional volume and
+              hair, creating a natural, blended look. The result is instant additional volume and
               coverage over thinning areas.
             </p>
             <p>

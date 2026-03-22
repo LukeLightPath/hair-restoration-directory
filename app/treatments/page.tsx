@@ -6,9 +6,9 @@ import { TREATMENTS } from '@/lib/types'
 import Breadcrumbs from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Hair Restoration Treatments',
+  title: 'Hair Restoration Treatments UK | Browse All Options',
   description:
-    'Explore all hair restoration treatments available in the UK: hair systems, SMP, wigs, extensions, PRP, transplants, trichology, laser therapy and more.',
+    'Explore every hair restoration treatment available in the UK. Compare clinics offering hair systems, SMP, wigs, PRP and more. Find clinics near you.',
 }
 
 /* ── Unique icon per treatment ── */
@@ -69,7 +69,7 @@ export default async function TreatmentsIndexPage() {
         </h1>
         <p className="mt-4 text-muted-foreground max-w-2xl text-lg leading-relaxed">
           Explore all the treatments available at clinics across the UK.
-          Click a treatment to find clinics that offer it, or narrow down by city.
+          Click a treatment to find clinics that offer it or narrow down by city.
         </p>
       </div>
 

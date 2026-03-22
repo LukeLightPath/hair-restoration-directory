@@ -38,7 +38,7 @@ const FAQS = [
   },
   {
     question: 'Can a trichologist help with hair loss?',
-    answer: 'Yes, particularly in diagnosing the cause. Many people don\'t know why they\'re losing hair, and a trichologist can identify underlying factors: nutritional deficiencies, scalp conditions, hormonal imbalances, stress, or styling damage. Once the cause is identified, they can recommend appropriate treatment or refer you to a specialist.',
+    answer: 'Yes, particularly in diagnosing the cause. Many people don\'t know why they\'re losing hair, and a trichologist can identify underlying factors: nutritional deficiencies, scalp conditions, hormonal imbalances, stress or styling damage. Once the cause is identified, they can recommend appropriate treatment or refer you to a specialist.',
   },
 ]
 
@@ -145,7 +145,7 @@ export default function TrichologyGuidePage() {
               <li><strong>Scalp examination:</strong> Using a trichoscope or dermascope (a magnified camera) to examine the scalp and hair follicles in detail.</li>
               <li><strong>Hair analysis:</strong> Assessing hair density, shaft diameter and growth patterns.</li>
               <li><strong>Diagnosis:</strong> Identifying the likely cause of your hair or scalp problem.</li>
-              <li><strong>Treatment plan:</strong> Recommendations for products, lifestyle changes, or referrals if medical treatment is needed.</li>
+              <li><strong>Treatment plan:</strong> Recommendations for products, lifestyle changes or referrals if medical treatment is needed.</li>
             </ol>
             <p>Some trichologists may request blood tests (arranged through your GP) to check for deficiencies or hormonal imbalances.</p>
           </section>

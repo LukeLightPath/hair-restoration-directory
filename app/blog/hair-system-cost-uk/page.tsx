@@ -527,7 +527,7 @@ export default function HairSystemCostPage() {
             There&apos;s no single right answer here. It depends on your hair loss pattern, 
             your budget (both now and ongoing), and how you want to look day to day. 
             Many people combine treatments: SMP underneath a hair system for added 
-            density, or medication alongside a system to preserve their remaining 
+            density or medication alongside a system to preserve their remaining 
             natural hair.
           </p>
 

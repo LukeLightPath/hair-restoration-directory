@@ -80,7 +80,7 @@ export default function HairIntegrationGuidePage() {
             Hair integration is a non-surgical solution for thinning hair that blends added hair with
             your own existing hair. A fine mesh base is placed over the thinning area, your natural
             hair is pulled through the mesh, and additional hair is attached to fill in the gaps.
-            The result is a seamless combination of your real hair and the added hair, creating
+            The result is a natural combination of your real hair and the added hair, creating
             natural-looking volume and coverage.
           </p>
           <p className="mt-3 text-sm text-muted-foreground">Updated March 2026 &middot; 5 min read</p>
@@ -131,7 +131,7 @@ export default function HairIntegrationGuidePage() {
               <li><strong>Mesh fitting:</strong> A mesh base is custom-cut or selected to cover your thinning area.</li>
               <li><strong>Integration:</strong> Your natural hair is threaded through the mesh.</li>
               <li><strong>Hair attachment:</strong> Additional hair is woven or tied into the mesh where coverage is needed.</li>
-              <li><strong>Cutting and blending:</strong> The specialist cuts and styles everything together for a seamless finish.</li>
+              <li><strong>Cutting and blending:</strong> The specialist cuts and styles everything together for a smooth, natural finish.</li>
             </ol>
             <p>An initial fitting typically takes 1.5 to 3 hours depending on the size of the area and the amount of blending needed.</p>
           </section>

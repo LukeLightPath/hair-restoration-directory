@@ -15,6 +15,51 @@ export const metadata: Metadata = {
 
 const POSTS = [
   {
+    slug: 'uk-hair-restoration-market-2026',
+    title: 'UK Hair Restoration Market in 2026: Where the Industry Is Heading',
+    excerpt:
+      'The UK market hit $121.6M in 2023 and is projected to reach $396M by 2030. Here\'s what\'s driving the growth and the five trends shaping the industry.',
+    date: '2026-03-21',
+    readTime: '10 min',
+    category: 'Industry Report',
+  },
+  {
+    slug: 'spotting-bad-hair-clinics',
+    title: 'How to Spot a Bad Hair Clinic: Red Flags and What Good Ones Get Right',
+    excerpt:
+      'A checklist for choosing a UK hair clinic. Red flags to walk away from, green flags to look for, how to read reviews and which professional bodies matter.',
+    date: '2026-03-21',
+    readTime: '10 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'hair-system-annual-cost',
+    title: 'The Real Annual Cost of Owning a Hair System in the UK',
+    excerpt:
+      'Beyond the purchase price: replacement units, maintenance appointments and products. Three budget scenarios for what a hair system really costs per year.',
+    date: '2026-03-21',
+    readTime: '9 min',
+    category: 'Cost Guide',
+  },
+  {
+    slug: 'womens-hair-loss-uk',
+    title: 'Women\'s Hair Loss in the UK: The Numbers Nobody Talks About',
+    excerpt:
+      '8 million UK women experience hair loss. Here\'s the data on prevalence by age, mental health impact, career consequences and why NHS care is falling short.',
+    date: '2026-03-21',
+    readTime: '11 min',
+    category: 'Data Report',
+  },
+  {
+    slug: 'finasteride-minoxidil-side-effects',
+    title: 'Finasteride & Minoxidil Side Effects: What the UK\'s Own Data Says',
+    excerpt:
+      'MHRA Yellow Card data, clinical trial figures and NHS guidance on the two most popular hair loss medications. The real UK numbers, not marketing spin.',
+    date: '2026-03-21',
+    readTime: '10 min',
+    category: 'Data Report',
+  },
+  {
     slug: 'uk-hair-loss-statistics',
     title: 'UK Hair Loss by the Numbers: Who\'s Affected and What the Data Shows',
     excerpt:
@@ -25,9 +70,9 @@ const POSTS = [
   },
   {
     slug: 'hair-loss-treatments-compared',
-    title: 'Every Hair Loss Treatment Compared: Cost, Results, and What the Data Shows',
+    title: 'Every Hair Loss Treatment Compared: Cost, Results and What the Data Shows',
     excerpt:
-      'Seven treatments side by side. Real UK pricing, effectiveness data, and a stage-by-stage guide to what actually works.',
+      'Seven treatments side by side. Real UK pricing, effectiveness data and a stage-by-stage guide to what actually works.',
     date: '2026-03-20',
     readTime: '14 min',
     category: 'Complete Guide',
@@ -36,7 +81,7 @@ const POSTS = [
     slug: 'smp-vs-hair-systems',
     title: 'SMP vs Hair Systems: Which Is Right for You?',
     excerpt:
-      'A neutral comparison of scalp micropigmentation and hair systems. Real UK costs, daily routines, and a decision framework to help you choose.',
+      'A neutral comparison of scalp micropigmentation and hair systems. Real UK costs, daily routines and a decision framework to help you choose.',
     date: '2026-03-20',
     readTime: '9 min',
     category: 'Comparison',
@@ -45,7 +90,7 @@ const POSTS = [
     slug: 'hair-systems-vs-transplants',
     title: 'Hair Systems vs Hair Transplants: Which One Actually Makes Sense?',
     excerpt:
-      'An honest, data-backed comparison of the two most popular hair restoration options. Real UK costs, realistic timelines, and a clear decision framework.',
+      'An honest, data-backed comparison of the two most popular hair restoration options. Real UK costs, realistic timelines and a clear decision framework.',
     date: '2026-03-20',
     readTime: '12 min',
     category: 'Comparison',

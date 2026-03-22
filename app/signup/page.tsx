@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Mail, Lock, User, Loader2, Eye, EyeOff, Camera, Shield, Heart, CheckCircle, Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -88,9 +89,7 @@ export default function SignupPage() {
 
         <div className="relative flex flex-col justify-center px-12 xl:px-16">
           <Link href="/" className="flex items-center gap-3 mb-12">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-white text-sm font-extrabold backdrop-blur-sm">
-              HR
-            </span>
+            <Image src="/logo-icon.png" alt="Hair Restoration Guide" width={40} height={40} />
             <span className="text-white font-heading font-semibold text-lg">Hair Restoration Guide</span>
           </Link>
 
@@ -122,8 +121,8 @@ export default function SignupPage() {
       <div className="flex flex-1 items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="lg:hidden mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground text-lg font-extrabold">
-              HR
+            <div className="lg:hidden mx-auto mb-4">
+              <Image src="/logo-icon.png" alt="Hair Restoration Guide" width={48} height={48} />
             </div>
             <h1 className="text-2xl font-bold text-foreground">Create your account</h1>
             <p className="mt-2 text-sm text-muted-foreground">

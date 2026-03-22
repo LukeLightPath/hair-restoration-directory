@@ -33,6 +33,7 @@ export interface Listing {
   brands_stocked: string | null
   meta_title: string | null
   meta_description: string | null
+  logo_url: string | null
   claimed: boolean
   claimed_by: string | null
   featured: boolean
@@ -183,9 +184,9 @@ export const SERVICE_LABELS: Record<string, string> = {
 }
 
 export const TREATMENT_CATEGORY_LABELS: Record<string, string> = {
-  'Cosmetic Systems': 'Cosmetic Systems',
-  'Advanced Scalp Therapies': 'Advanced Scalp Therapies',
-  'Both': 'Cosmetic Systems & Scalp Therapies',
+  'Cosmetic Systems': 'Hair Replacement',
+  'Advanced Scalp Therapies': 'Scalp Treatments',
+  'Both': 'Full Service',
   'Wig Specialist': 'Wig Specialist',
   'General Salon': 'General Salon',
 }

@@ -3,7 +3,7 @@ import Breadcrumbs from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Hair Restoration Guide privacy policy — how we collect, use, store and protect your personal data under UK GDPR.',
+  description: 'Hair Restoration Guide privacy policy: how we collect, use, store and protect your personal data under UK GDPR.',
 }
 
 export default function PrivacyPage() {
@@ -18,7 +18,7 @@ export default function PrivacyPage() {
         <p>
           Hair Restoration Guide (&quot;we&quot;, &quot;our&quot; or &quot;us&quot;) is committed
           to protecting your privacy and handling your personal data responsibly. This Privacy
-          Policy explains what data we collect, why we collect it, how we use it, and your
+          Policy explains what data we collect, why we collect it, how we use it and your
           rights under the UK General Data Protection Regulation (UK GDPR) and the Data
           Protection Act 2018.
         </p>
@@ -29,11 +29,11 @@ export default function PrivacyPage() {
         <h3>a) Information you provide directly</h3>
         <ul>
           <li>
-            <strong>Enquiry form submissions</strong> — your name, email address, phone number
+            <strong>Enquiry form submissions:</strong> your name, email address, phone number
             (if provided) and message when you submit an enquiry to a clinic
           </li>
           <li>
-            <strong>Account registration</strong> — your name, email address and password when
+            <strong>Account registration:</strong> your name, email address and password when
             you create a clinic owner account
           </li>
         </ul>
@@ -41,11 +41,11 @@ export default function PrivacyPage() {
         <h3>b) Information collected automatically</h3>
         <ul>
           <li>
-            <strong>Usage data</strong> — pages visited, time spent on pages and interaction
+            <strong>Usage data:</strong> pages visited, time spent on pages and interaction
             patterns, collected via anonymised analytics
           </li>
           <li>
-            <strong>Cookies</strong> — we use essential cookies to maintain your session and
+            <strong>Cookies:</strong> we use essential cookies to maintain your session and
             preferences. We do not use third-party advertising cookies.
           </li>
         </ul>
@@ -54,17 +54,17 @@ export default function PrivacyPage() {
         <p>Under the UK GDPR, we process your personal data on the following legal bases:</p>
         <ul>
           <li>
-            <strong>Consent</strong> — when you submit an enquiry form, you explicitly consent
+            <strong>Consent:</strong> when you submit an enquiry form, you explicitly consent
             to your details being shared with the selected clinic. You can withdraw consent at
             any time by contacting us.
           </li>
           <li>
-            <strong>Contract performance</strong> — when you create a clinic owner account, we
+            <strong>Contract performance:</strong> when you create a clinic owner account, we
             process your data to provide the services you have signed up for (listing management,
             enquiry delivery, dashboard access).
           </li>
           <li>
-            <strong>Legitimate interest</strong> — we process anonymised usage data to improve
+            <strong>Legitimate interest:</strong> we process anonymised usage data to improve
             the Platform. We also display publicly available business information (e.g. Google
             reviews, business addresses) to help users find clinics.
           </li>
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
           <li>To deliver enquiries from prospective clients to clinics</li>
           <li>To provide clinic owners with dashboard access and listing management tools</li>
           <li>To send transactional emails (account verification, enquiry notifications)</li>
-          <li>To send marketing communications (only with your explicit consent, and you can unsubscribe at any time)</li>
+          <li>To send marketing communications (only with your explicit consent; you can unsubscribe at any time)</li>
           <li>To improve the Platform through anonymised analytics</li>
         </ul>
 
@@ -101,14 +101,14 @@ export default function PrivacyPage() {
         </p>
         <ul>
           <li>
-            <strong>Supabase</strong> — database hosting and authentication (data stored in
+            <strong>Supabase:</strong> database hosting and authentication (data stored in
             EU data centres)
           </li>
           <li>
-            <strong>Vercel</strong> — website hosting and content delivery
+            <strong>Vercel:</strong> website hosting and content delivery
           </li>
           <li>
-            <strong>Resend</strong> — transactional email delivery (enquiry notifications,
+            <strong>Resend:</strong> transactional email delivery (enquiry notifications,
             account verification)
           </li>
         </ul>
@@ -121,15 +121,15 @@ export default function PrivacyPage() {
         <h2>6. Data Retention</h2>
         <ul>
           <li>
-            <strong>Enquiry data</strong> — retained for up to 24 months from the date of
+            <strong>Enquiry data:</strong> retained for up to 24 months from the date of
             submission, then permanently deleted
           </li>
           <li>
-            <strong>Account data</strong> — retained for as long as your account is active.
+            <strong>Account data:</strong> retained for as long as your account is active.
             If you delete your account, we will remove your personal data within 30 days.
           </li>
           <li>
-            <strong>Analytics data</strong> — anonymised and retained indefinitely as it does
+            <strong>Analytics data:</strong> anonymised and retained indefinitely as it does
             not constitute personal data
           </li>
         </ul>
@@ -156,13 +156,13 @@ export default function PrivacyPage() {
         <h2>9. Your Rights</h2>
         <p>Under the UK GDPR, you have the following rights:</p>
         <ul>
-          <li><strong>Right of access</strong> — request a copy of the personal data we hold about you</li>
-          <li><strong>Right to rectification</strong> — ask us to correct inaccurate data</li>
-          <li><strong>Right to erasure</strong> — ask us to delete your personal data</li>
-          <li><strong>Right to restrict processing</strong> — ask us to limit how we use your data</li>
-          <li><strong>Right to data portability</strong> — receive your data in a structured, machine-readable format</li>
-          <li><strong>Right to object</strong> — object to processing based on legitimate interest</li>
-          <li><strong>Right to withdraw consent</strong> — withdraw your consent at any time where processing is based on consent</li>
+          <li><strong>Right of access:</strong> request a copy of the personal data we hold about you</li>
+          <li><strong>Right to rectification:</strong> ask us to correct inaccurate data</li>
+          <li><strong>Right to erasure:</strong> ask us to delete your personal data</li>
+          <li><strong>Right to restrict processing:</strong> ask us to limit how we use your data</li>
+          <li><strong>Right to data portability:</strong> receive your data in a structured, machine-readable format</li>
+          <li><strong>Right to object:</strong> object to processing based on legitimate interest</li>
+          <li><strong>Right to withdraw consent:</strong> withdraw your consent at any time where processing is based on consent</li>
         </ul>
         <p>
           To exercise any of these rights, contact us at{' '}

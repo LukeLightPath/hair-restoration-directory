@@ -76,6 +76,29 @@ export default async function DashboardPage() {
         </div>
       </div>
 
+      {/* Lightpath Agency promo */}
+      <div className="mb-8 rounded-2xl border border-border bg-gradient-to-r from-card via-card to-primary/[0.03] p-4 sm:p-5 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Powered by</p>
+            <p className="text-sm font-semibold text-foreground">
+              Lightpath Agency
+            </p>
+            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+              Want more clients? We offer full-funnel lead generation to help hair clinics grow. This free directory is just the start.
+            </p>
+          </div>
+          <a
+            href="https://www.lightpath.agency"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary-hover transition-all hover:shadow-md active:scale-[0.97]"
+          >
+            Learn more
+          </a>
+        </div>
+      </div>
+
       {!listing ? (
         <DashboardClaimSearch />
       ) : (

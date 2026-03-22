@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: TreatmentPageProps): Promise<
   if (!treatment) return { title: 'Treatment Not Found' }
 
   return {
-    title: `${treatment.label} Clinics UK`,
+    title: `${treatment.label} Clinics UK | Compare Ratings & Reviews`,
     description: treatment.seoDescription,
   }
 }

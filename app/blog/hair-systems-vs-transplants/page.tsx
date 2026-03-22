@@ -13,14 +13,14 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.c
 export const metadata: Metadata = {
   title: 'Hair Systems vs Hair Transplants: A Data-Backed Comparison (2026)',
   description:
-    'An honest, data-backed comparison of hair systems and hair transplants in the UK. Upfront cost, 5-year totals, results, maintenance, and who each option suits best.',
+    'An honest, data-backed comparison of hair systems and hair transplants in the UK. Upfront cost, 5-year totals, results, maintenance and who each option suits best.',
   alternates: {
     canonical: canonicalUrl('/blog/hair-systems-vs-transplants'),
   },
   openGraph: {
     title: 'Hair Systems vs Hair Transplants | Hair Restoration Guide',
     description:
-      'Neutral, data-backed comparison of the two most popular hair restoration options in the UK. Real costs, realistic timelines, and who each one suits best.',
+      'Neutral, data-backed comparison of the two most popular hair restoration options in the UK. Real costs, realistic timelines and who each one suits best.',
     url: canonicalUrl('/blog/hair-systems-vs-transplants'),
     type: 'article',
   },
@@ -41,7 +41,7 @@ const FAQS = [
   {
     question: 'Do hair transplants work for everyone?',
     answer:
-      'No. You need sufficient donor hair (usually from the back and sides of your head) for a transplant to work. If your donor area is thin, or if you have diffuse thinning across the whole scalp, a transplant may not give you enough coverage. Advanced Norwood stages (6 and 7) can also be challenging because the area to cover is large relative to available donor hair.',
+      'No. You need sufficient donor hair (usually from the back and sides of your head) for a transplant to work. If your donor area is thin or if you have diffuse thinning across the whole scalp, a transplant may not give you enough coverage. Advanced Norwood stages (6 and 7) can also be challenging because the area to cover is large relative to available donor hair.',
   },
   {
     question: 'Can you still go bald after a hair transplant?',
@@ -51,12 +51,12 @@ const FAQS = [
   {
     question: 'How long does a hair system appointment take?',
     answer:
-      'An initial fitting typically takes 1.5 to 2.5 hours. This includes measuring, cutting the base to fit your head, blending the hair with any existing hair, and styling. Re-bonding appointments (maintenance) are shorter, usually 45 minutes to an hour.',
+      'An initial fitting typically takes 1.5 to 2.5 hours. This includes measuring, cutting the base to fit your head, blending the hair with any existing hair and styling. Re-bonding appointments (maintenance) are shorter, usually 45 minutes to an hour.',
   },
   {
     question: 'What happens if a hair transplant fails?',
     answer:
-      'Poor graft survival (where transplanted follicles don\'t take root) is uncommon with experienced surgeons but it does happen. The main signs are minimal growth after 12 months. If a transplant underperforms, options include a second procedure using remaining donor hair, switching to a hair system, or SMP to fill in density. The money spent on the first procedure is not recoverable.',
+      'Poor graft survival (where transplanted follicles don\'t take root) is uncommon with experienced surgeons but it does happen. The main signs are minimal growth after 12 months. If a transplant underperforms, options include a second procedure using remaining donor hair, switching to a hair system or SMP to fill in density. The money spent on the first procedure is not recoverable.',
   },
 ]
 
@@ -66,7 +66,7 @@ export default function SystemsVsTransplantsPage() {
     '@type': 'Article',
     headline: 'Hair Systems vs Hair Transplants: A Data-Backed Comparison (2026)',
     description:
-      'An honest, data-backed comparison of hair systems and hair transplants in the UK. Upfront cost, 5-year totals, results, maintenance, and who each option suits best.',
+      'An honest, data-backed comparison of hair systems and hair transplants in the UK. Upfront cost, 5-year totals, results, maintenance and who each option suits best.',
     url: canonicalUrl('/blog/hair-systems-vs-transplants'),
     datePublished: '2026-03-20',
     dateModified: '2026-03-20',
@@ -126,7 +126,7 @@ export default function SystemsVsTransplantsPage() {
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-2xl">
             Two very different approaches to the same problem. One gives you a full head 
             of hair this afternoon; the other takes a year but the results are permanent. 
-            Here&apos;s what the numbers, the timelines, and the real-world experience 
+            Here&apos;s what the numbers, the timelines and the real-world experience 
             look like for each option in the UK.
           </p>
           <p className="mt-3 text-sm text-muted-foreground">
@@ -322,7 +322,7 @@ export default function SystemsVsTransplantsPage() {
               You walk in, you get fitted, you leave with a full head of hair. The 
               change is immediate and dramatic. Modern systems with lace fronts and 
               quality hair are genuinely undetectable to anyone who isn&apos;t specifically 
-              looking. You can choose your density, your hairline position, and your 
+              looking. You can choose your density, your hairline position and your 
               style. Want more hair than you ever had naturally? You can.
             </p>
             <p>
@@ -442,8 +442,8 @@ export default function SystemsVsTransplantsPage() {
                 'Have advanced hair loss (Norwood 5+) with limited donor hair',
                 'Don\'t want surgery or can\'t have it for medical reasons',
                 'Prefer lower upfront cost and are OK with ongoing payments',
-                'Want the flexibility to change your style, colour, or density',
-                'Have alopecia areata, trichotillomania, or medical hair loss',
+                'Want the flexibility to change your style, colour or density',
+                'Have alopecia areata, trichotillomania or medical hair loss',
               ].map((item) => (
                 <div key={item} className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
@@ -521,7 +521,7 @@ export default function SystemsVsTransplantsPage() {
             </p>
             <p>
               Look for clinics with high Google review scores, real before-and-after 
-              photos, and transparent pricing. Most offer free initial consultations 
+              photos and transparent pricing. Most offer free initial consultations 
               where you can discuss your specific situation and get a realistic 
               assessment of what each option would involve for you.
             </p>
@@ -539,7 +539,7 @@ export default function SystemsVsTransplantsPage() {
               </h2>
               <p className="text-white/70 max-w-lg mx-auto mb-6">
                 Compare hair system and hair transplant clinics across the UK. 
-                Check services, read Google reviews, and book a free consultation.
+                Check services, read Google reviews and book a free consultation.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link

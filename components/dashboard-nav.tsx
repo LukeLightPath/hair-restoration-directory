@@ -2,14 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, FileText, MessageSquare, BarChart3, Image } from 'lucide-react'
+import { LayoutDashboard, FileText, MessageSquare, Image, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const SIDEBAR_LINKS = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
   { href: '/dashboard/listing', label: 'My Listing', icon: FileText },
   { href: '/dashboard/inquiries', label: 'Inquiries', icon: MessageSquare },
-  { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/dashboard/images', label: 'Images', icon: Image },
 ]
 
@@ -42,7 +41,7 @@ export default function DashboardNav() {
   )
 }
 
-export function DashboardMobileNav() {
+export function DashboardMobileNav({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname()
 
   return (
@@ -63,6 +62,15 @@ export function DashboardMobileNav() {
           </Link>
         )
       })}
+      {isAdmin && (
+        <Link
+          href="/admin"
+          className="flex flex-col items-center gap-0.5 px-2 py-1 text-amber-500 dark:text-amber-400"
+        >
+          <ShieldCheck className="h-5 w-5" />
+          <span className="text-[10px]">Admin</span>
+        </Link>
+      )}
     </nav>
   )
 }

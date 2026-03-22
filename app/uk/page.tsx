@@ -6,9 +6,9 @@ import { citySlug } from '@/lib/utils'
 import Breadcrumbs from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Hair Restoration Clinics by City',
+  title: 'UK Hair Restoration Clinics by City',
   description:
-    'Browse non-surgical hair restoration clinics across the UK. Find clinics offering hair systems, SMP, wigs and more in your city.',
+    'Browse hair restoration clinics in 175+ UK cities. Compare ratings, services and reviews to find the right clinic near you.',
 }
 
 export default async function AllCitiesPage() {

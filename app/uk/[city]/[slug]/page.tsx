@@ -35,11 +35,11 @@ export async function generateMetadata({ params }: ListingPageProps): Promise<Me
   if (!listing) return { title: 'Clinic Not Found' }
 
   return {
-    title: listing.meta_title || `${listing.title} | Hair Restoration in ${listing.city}`,
+    title: listing.meta_title || `${listing.title}, ${listing.city} | Reviews & Services`,
     description:
       listing.meta_description ||
-      listing.description?.slice(0, 160) ||
-      `${listing.title} in ${listing.city}, non-surgical hair restoration clinic.`,
+      listing.description?.slice(0, 155) ||
+      `${listing.title} in ${listing.city}. View services, read real reviews and send a free enquiry to this non-surgical hair restoration clinic.`,
     alternates: {
       canonical: canonicalUrl(`/uk/${cityParam}/${slug}`),
     },
@@ -132,6 +132,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
     telephone: typed.phone,
     email: typed.email,
     description: typed.description,
+    ...(typed.logo_url && { logo: typed.logo_url }),
     address: {
       '@type': 'PostalAddress',
       streetAddress: typed.street,
@@ -382,6 +383,19 @@ export default async function ListingPage({ params }: ListingPageProps) {
               <div className="h-1 bg-gradient-to-r from-primary via-primary-hover to-accent" />
 
               <div className="p-6">
+                {typed.logo_url && (
+                  <div className="flex justify-center mb-4">
+                    <div className="relative h-16 w-16 rounded-xl overflow-hidden border border-border shadow-sm">
+                      <Image
+                        src={typed.logo_url}
+                        alt={`${typed.title} logo`}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    </div>
+                  </div>
+                )}
                 <h2 className="text-lg font-semibold text-card-foreground mb-5">
                   Contact {typed.title}
                 </h2>

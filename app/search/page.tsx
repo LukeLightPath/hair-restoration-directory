@@ -1,57 +1,103 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { SERVICE_LABELS } from '@/lib/types'
-import type { ListingImage } from '@/lib/types'
+import { SERVICE_LABELS, TREATMENT_CATEGORY_LABELS } from '@/lib/types'
+import type { Listing, ListingImage } from '@/lib/types'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
-import { Search as SearchIcon, SlidersHorizontal, MapPin } from 'lucide-react'
+import { Search as SearchIcon, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
+
+const PER_PAGE = 30
 
 export const metadata: Metadata = {
-  title: 'Search Hair Restoration Clinics',
-  description: 'Search for non-surgical hair restoration clinics across the UK. Filter by city, service and treatment type.',
+  title: 'Search Hair Restoration Clinics UK',
+  description: 'Search and filter non-surgical hair restoration clinics across the UK. Browse by city, service or treatment type and compare real reviews.',
 }
 
 interface SearchPageProps {
-  searchParams: Promise<{ q?: string; service?: string; category?: string }>
+  searchParams: Promise<{ q?: string; service?: string; category?: string; page?: string }>
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { q, service, category } = await searchParams
+  const { q, service, category, page: pageParam } = await searchParams
+  const currentPage = Math.max(1, parseInt(pageParam || '1', 10) || 1)
   const supabase = await createClient()
 
-  let query = supabase
+  /* ── Step 1: If filtering by service, get matching listing IDs first ── */
+  let serviceFilterIds: string[] | null = null
+
+  if (service) {
+    const serviceKey = `has_${service}`
+    const { data: matchingServices } = await supabase
+      .from('listing_services')
+      .select('listing_id')
+      .eq(serviceKey, true)
+
+    serviceFilterIds = (matchingServices || []).map(s => s.listing_id)
+
+    // No matches for this service — short-circuit
+    if (serviceFilterIds.length === 0) {
+      return renderPage({
+        listings: [],
+        servicesMap: {},
+        totalCount: 0,
+        currentPage,
+        q, service, category,
+      })
+    }
+  }
+
+  /* ── Step 2: Build the count query (for pagination) ── */
+  let countQuery = supabase
+    .from('listings')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_status', 'OPERATIONAL')
+
+  if (q) {
+    countQuery = countQuery.or(`title.ilike.%${q}%,city.ilike.%${q}%,description.ilike.%${q}%`)
+  }
+  if (category) {
+    countQuery = countQuery.eq('treatment_category', category)
+  }
+  if (serviceFilterIds) {
+    countQuery = countQuery.in('id', serviceFilterIds)
+  }
+
+  const { count: totalCount } = await countQuery
+
+  /* ── Step 3: Fetch the page of listings ── */
+  const from = (currentPage - 1) * PER_PAGE
+  const to = from + PER_PAGE - 1
+
+  let dataQuery = supabase
     .from('listings')
     .select('*')
     .eq('business_status', 'OPERATIONAL')
     .order('google_rating', { ascending: false, nullsFirst: false })
-    .limit(60)
+    .range(from, to)
 
   if (q) {
-    query = query.or(`title.ilike.%${q}%,city.ilike.%${q}%,description.ilike.%${q}%`)
+    dataQuery = dataQuery.or(`title.ilike.%${q}%,city.ilike.%${q}%,description.ilike.%${q}%`)
   }
-
   if (category) {
-    query = query.eq('treatment_category', category)
+    dataQuery = dataQuery.eq('treatment_category', category)
+  }
+  if (serviceFilterIds) {
+    dataQuery = dataQuery.in('id', serviceFilterIds)
   }
 
-  const { data: listings } = await query
+  const { data: listings } = await dataQuery
+  const filteredListings = listings || []
 
-  let filteredListings = listings || []
+  /* ── Step 4: Fetch services + images for this page of results ── */
   let servicesMap: Record<string, string[]> = {}
 
   if (filteredListings.length > 0) {
     const ids = filteredListings.map(l => l.id)
-    const { data: allServices } = await supabase
-      .from('listing_services')
-      .select('*')
-      .in('listing_id', ids)
 
-    // Fetch images
-    const { data: allImages } = await supabase
-      .from('listing_images')
-      .select('*')
-      .in('listing_id', ids)
-      .order('sort_order', { ascending: true })
+    const [{ data: allServices }, { data: allImages }] = await Promise.all([
+      supabase.from('listing_services').select('*').in('listing_id', ids),
+      supabase.from('listing_images').select('*').in('listing_id', ids).order('sort_order', { ascending: true }),
+    ])
 
     for (const svc of allServices || []) {
       const active = Object.entries(svc)
@@ -59,16 +105,61 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         .map(([key]) => SERVICE_LABELS[key] || key)
       servicesMap[svc.listing_id] = active
     }
+  }
 
-    if (service) {
-      const serviceKey = `has_${service}`
-      const matchingIds = new Set(
-        (allServices || [])
-          .filter((svc: Record<string, unknown>) => svc[serviceKey] === true)
-          .map((svc: Record<string, unknown>) => svc.listing_id as string)
-      )
-      filteredListings = filteredListings.filter(l => matchingIds.has(l.id))
+  return renderPage({
+    listings: filteredListings,
+    servicesMap,
+    totalCount: totalCount || 0,
+    currentPage,
+    q, service, category,
+  })
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Render helper                                              */
+/* ──────────────────────────────────────────────────────────── */
+
+interface RenderProps {
+  listings: Listing[]
+  servicesMap: Record<string, string[]>
+  totalCount: number
+  currentPage: number
+  q?: string
+  service?: string
+  category?: string
+}
+
+function renderPage({ listings, servicesMap, totalCount, currentPage, q, service, category }: RenderProps) {
+  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE))
+  const hasActiveFilters = q || service || category
+
+  /* Build URL preserving current filters */
+  function pageUrl(page: number) {
+    const params = new URLSearchParams()
+    if (q) params.set('q', q)
+    if (category) params.set('category', category)
+    if (service) params.set('service', service)
+    if (page > 1) params.set('page', String(page))
+    const qs = params.toString()
+    return `/search${qs ? `?${qs}` : ''}`
+  }
+
+  /* Generate page numbers with ellipsis */
+  function getPageNumbers(): (number | '...')[] {
+    const pages: (number | '...')[] = []
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i)
+    } else {
+      pages.push(1)
+      if (currentPage > 3) pages.push('...')
+      const start = Math.max(2, currentPage - 1)
+      const end = Math.min(totalPages - 1, currentPage + 1)
+      for (let i = start; i <= end; i++) pages.push(i)
+      if (currentPage < totalPages - 2) pages.push('...')
+      pages.push(totalPages)
     }
+    return pages
   }
 
   const categories = ['Cosmetic Systems', 'Advanced Scalp Therapies', 'Both', 'Wig Specialist', 'General Salon']
@@ -77,7 +168,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     label,
   }))
 
-  const hasActiveFilters = q || service || category
+  const showingFrom = totalCount === 0 ? 0 : (currentPage - 1) * PER_PAGE + 1
+  const showingTo = Math.min(currentPage * PER_PAGE, totalCount)
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -91,7 +183,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground sm:text-4xl">Search Clinics</h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
-          Search by name, city, or filter by treatment to find the right clinic.
+          Search by name, city or filter by treatment to find the right clinic.
         </p>
       </div>
 
@@ -104,7 +196,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               name="q"
               type="text"
               defaultValue={q || ''}
-              placeholder="Search by city, clinic name, or keyword..."
+              placeholder="Search by city, clinic name or keyword..."
               className="w-full rounded-xl border border-input bg-background pl-12 pr-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
             />
           </div>
@@ -119,7 +211,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             >
               <option value="">All categories</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
+                <option key={cat} value={cat}>{TREATMENT_CATEGORY_LABELS[cat] || cat}</option>
               ))}
             </select>
 
@@ -153,17 +245,28 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </div>
       </form>
 
-      {/* Results */}
+      {/* Results Summary */}
       <div className="flex items-center justify-between mb-6">
         <p className="text-sm text-muted-foreground">
-          <span className="font-semibold text-foreground">{filteredListings.length}</span> result{filteredListings.length !== 1 ? 's' : ''} found
-          {q ? <> for &ldquo;<span className="font-medium text-foreground">{q}</span>&rdquo;</> : ''}
+          {totalCount > 0 ? (
+            <>
+              Showing <span className="font-semibold text-foreground">{showingFrom}–{showingTo}</span> of{' '}
+              <span className="font-semibold text-foreground">{totalCount}</span> clinic{totalCount !== 1 ? 's' : ''}
+              {q ? <> for &ldquo;<span className="font-medium text-foreground">{q}</span>&rdquo;</> : ''}
+            </>
+          ) : (
+            <>
+              <span className="font-semibold text-foreground">0</span> results found
+              {q ? <> for &ldquo;<span className="font-medium text-foreground">{q}</span>&rdquo;</> : ''}
+            </>
+          )}
         </p>
       </div>
 
-      {filteredListings.length > 0 ? (
+      {/* Results Grid */}
+      {listings.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredListings.map((listing) => (
+          {listings.map((listing) => (
             <ClinicCard
               key={listing.id}
               listing={listing}
@@ -187,6 +290,66 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             Clear all filters
           </a>
         </div>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <nav aria-label="Search results pagination" className="mt-12 flex items-center justify-center gap-1.5">
+          {/* Previous */}
+          {currentPage > 1 ? (
+            <a
+              href={pageUrl(currentPage - 1)}
+              className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </a>
+          ) : (
+            <span className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-border text-muted-foreground/40 cursor-not-allowed">
+              <ChevronLeft className="h-4 w-4" />
+            </span>
+          )}
+
+          {/* Page numbers */}
+          {getPageNumbers().map((p, i) =>
+            p === '...' ? (
+              <span key={`ellipsis-${i}`} className="inline-flex items-center justify-center h-10 w-8 text-sm text-muted-foreground">
+                &hellip;
+              </span>
+            ) : p === currentPage ? (
+              <span
+                key={p}
+                className="inline-flex items-center justify-center h-10 w-10 rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm"
+                aria-current="page"
+              >
+                {p}
+              </span>
+            ) : (
+              <a
+                key={p}
+                href={pageUrl(p)}
+                className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-border text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              >
+                {p}
+              </a>
+            )
+          )}
+
+          {/* Next */}
+          {currentPage < totalPages ? (
+            <a
+              href={pageUrl(currentPage + 1)}
+              className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              aria-label="Next page"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </a>
+          ) : (
+            <span className="inline-flex items-center justify-center h-10 w-10 rounded-xl border border-border text-muted-foreground/40 cursor-not-allowed">
+              <ChevronRight className="h-4 w-4" />
+            </span>
+          )}
+        </nav>
       )}
     </div>
   )

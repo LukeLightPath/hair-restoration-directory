@@ -13,14 +13,14 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.c
 export const metadata: Metadata = {
   title: 'Every Hair Loss Treatment Compared: Cost, Results & Data (2026 UK)',
   description:
-    'A neutral comparison of every major hair loss treatment available in the UK. Hair systems, transplants, SMP, PRP, medication, laser therapy, and more with real costs and data.',
+    'A neutral comparison of every major hair loss treatment available in the UK. Hair systems, transplants, SMP, PRP, medication, laser therapy and more with real costs and data.',
   alternates: {
     canonical: canonicalUrl('/blog/hair-loss-treatments-compared'),
   },
   openGraph: {
     title: 'Every Hair Loss Treatment Compared | Hair Restoration Guide',
     description:
-      'Side-by-side comparison of all major hair loss treatments in the UK. Real 2026 pricing, effectiveness data, and honest pros and cons.',
+      'Side-by-side comparison of all major hair loss treatments in the UK. Real 2026 pricing, effectiveness data and honest pros and cons.',
     url: canonicalUrl('/blog/hair-loss-treatments-compared'),
     type: 'article',
   },
@@ -237,7 +237,7 @@ export default function AllTreatmentsComparedPage() {
             <Scale className="h-3 w-3" /> Complete Guide
           </span>
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
-            Every Hair Loss Treatment Compared: Cost, Results, and What the Data Shows
+            Every Hair Loss Treatment Compared: Cost, Results and What the Data Shows
           </h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-2xl">
             Seven treatments. Real UK pricing. No affiliate links, no sponsored 
@@ -360,7 +360,7 @@ export default function AllTreatmentsComparedPage() {
             <p>
               A hair system is a custom-made prosthetic that gets bonded to your 
               scalp with adhesive or tape. You leave the clinic with a full head 
-              of hair that you can wash, style, and wear continuously. The result 
+              of hair that you can wash, style and wear continuously. The result 
               is immediate and dramatic.
             </p>
             <p>
@@ -373,7 +373,7 @@ export default function AllTreatmentsComparedPage() {
             <p>
               Hair systems work for any stage of hair loss, including total loss. 
               They&apos;re the only option that gives you complete control over 
-              density, length, colour, and style regardless of how much natural 
+              density, length, colour and style regardless of how much natural 
               hair you have left.
             </p>
             <p>
@@ -465,7 +465,7 @@ export default function AllTreatmentsComparedPage() {
             <p>
               Both medications work best for early-stage thinning. They won&apos;t 
               regrow a full head of hair on a bald scalp, but they can maintain 
-              existing hair and are often used alongside transplants, PRP, or 
+              existing hair and are often used alongside transplants, PRP or 
               hair systems.
             </p>
           </section>
@@ -483,7 +483,7 @@ export default function AllTreatmentsComparedPage() {
               The evidence is promising but mixed. Some studies show meaningful 
               density improvements; others show modest results. It&apos;s most 
               often used as a supporting treatment alongside medication, 
-              transplants, or hair systems rather than as a standalone solution.
+              transplants or hair systems rather than as a standalone solution.
             </p>
             <p>
               Sessions cost £200 to £500 each, and most clinics recommend 3 to 4 
@@ -588,7 +588,7 @@ export default function AllTreatmentsComparedPage() {
               </h2>
               <p className="text-white/70 max-w-lg mx-auto mb-6">
                 Browse UK clinics by treatment type. Compare Google reviews, 
-                check services offered, and book a free consultation.
+                check services offered and book a free consultation.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link

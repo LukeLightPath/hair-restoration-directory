@@ -11,7 +11,7 @@ const FOOTER_LINKS = {
   'For Clinics': [
     { href: '/signup', label: 'List Your Clinic' },
     { href: '/login', label: 'Clinic Login' },
-    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/for-clinics', label: 'Why List With Us' },
   ],
   Company: [
     { href: '/about', label: 'About Us' },
@@ -84,7 +84,7 @@ export default function Footer() {
                 alt="Hair Restoration Guide"
                 width={32}
                 height={32}
-                className="rounded-lg"
+                className=""
               />
               <span className="font-heading font-semibold">Hair Restoration Guide</span>
             </Link>

@@ -34,7 +34,7 @@ export default function Header() {
             alt="Hair Restoration Guide"
             width={36}
             height={36}
-            className="rounded-lg"
+            className=""
             priority
           />
           <span className="hidden sm:inline">

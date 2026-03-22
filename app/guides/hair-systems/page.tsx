@@ -50,7 +50,7 @@ const FAQS = [
   {
     question: 'What\'s the difference between a hair system and a wig?',
     answer:
-      'A hair system (sometimes called a hair replacement system) is semi-permanently attached to your scalp with adhesive, tape, or clips. You wear it around the clock for weeks at a time. A traditional wig, by contrast, sits on top of the head and is usually taken off each day.',
+      'A hair system (sometimes called a hair replacement system) is semi-permanently attached to your scalp with adhesive, tape or clips. You wear it around the clock for weeks at a time. A traditional wig, by contrast, sits on top of the head and is usually taken off each day.',
   },
   {
     question: 'Do hair systems damage your existing hair?',
@@ -169,7 +169,7 @@ export default function HairSystemsGuidePage() {
               Two main components: a <strong>base</strong> (the thin material that sits
               against your scalp) and <strong>hair</strong> (human or synthetic strands
               knotted or injected into that base). The base gets custom-cut to match your
-              area of hair loss, then attached using adhesive, tape, or clips.
+              area of hair loss, then attached using adhesive, tape or clips.
             </p>
             <p>
               No surgery. No downtime. A skilled technician can fit one in under two hours,
@@ -346,7 +346,7 @@ export default function HairSystemsGuidePage() {
             <ul>
               <li>Men with male pattern baldness (any Norwood stage)</li>
               <li>Women with thinning hair or alopecia</li>
-              <li>People who aren&apos;t candidates for surgical transplants, or simply don&apos;t want surgery</li>
+              <li>People who aren&apos;t candidates for surgical transplants or simply don&apos;t want surgery</li>
               <li>Anyone after an immediate, non-invasive option</li>
               <li>People recovering from medical treatments that cause hair loss</li>
             </ul>

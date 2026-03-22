@@ -2,21 +2,35 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, MapPin, Phone, ExternalLink, BadgeCheck, Shield, Camera, ArrowRight, Scissors, Zap, Award, Users, Layers } from 'lucide-react'
+import { Star, MapPin, Phone, ExternalLink, BadgeCheck, Shield, Camera, ArrowRight, Scissors, Award, Users, Layers } from 'lucide-react'
 import { cn, citySlug, truncate } from '@/lib/utils'
 import type { Listing, ListingImage } from '@/lib/types'
 import { TREATMENT_CATEGORY_LABELS } from '@/lib/types'
 
-/* ── Rotating placeholder images ── */
-const PLACEHOLDER_IMAGES = [
-  '/images/clinic-placeholder-1.png',
-  '/images/clinic-placeholder-2.png',
-  '/images/clinic-placeholder-3.png',
+/* ── Gender-aligned placeholder images ── */
+const PLACEHOLDER_WOMEN = [
+  '/images/clinic-placeholder-women-1.png',
+  '/images/clinic-placeholder-women-2.png',
+  '/images/clinic-placeholder-women-3.png',
+]
+const PLACEHOLDER_MEN = [
+  '/images/clinic-placeholder-men-1.png',
+  '/images/clinic-placeholder-men-2.png',
+  '/images/clinic-placeholder-men-3.png',
+]
+const PLACEHOLDER_UNISEX = [
+  '/images/clinic-placeholder-unisex-1.png',
+  '/images/clinic-placeholder-unisex-2.png',
+  '/images/clinic-placeholder-unisex-3.png',
 ]
 
-function getPlaceholder(id: string): string {
+function getPlaceholder(id: string, gender?: string | null): string {
+  const pool =
+    gender === 'Women' ? PLACEHOLDER_WOMEN :
+    gender === 'Men' ? PLACEHOLDER_MEN :
+    PLACEHOLDER_UNISEX
   const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
-  return PLACEHOLDER_IMAGES[hash % PLACEHOLDER_IMAGES.length]
+  return pool[hash % pool.length]
 }
 
 /* ── Service icon mapping ── */
@@ -42,12 +56,13 @@ interface ClinicCardProps {
   services?: string[]
   images?: ListingImage[]
   className?: string
+  priority?: boolean
 }
 
-export default function ClinicCard({ listing, services, images, className }: ClinicCardProps) {
+export default function ClinicCard({ listing, services, images, className, priority = false }: ClinicCardProps) {
   const href = `/uk/${citySlug(listing.city)}/${listing.slug}`
   const hasRealImages = images && images.length > 0
-  const heroImage = hasRealImages ? images[0].storage_path : getPlaceholder(listing.id)
+  const heroImage = hasRealImages ? images[0].storage_path : getPlaceholder(listing.id, listing.men_women_both)
   const isClaimed = listing.claimed
 
   return (
@@ -68,6 +83,7 @@ export default function ClinicCard({ listing, services, images, className }: Cli
           fill
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          {...(priority ? { priority: true, loading: 'eager' as const } : {})}
         />
 
         {/* Gradient overlay */}
@@ -91,12 +107,12 @@ export default function ClinicCard({ listing, services, images, className }: Cli
           </span>
         )}
 
-        {/* Claimed / Unclaimed badge */}
+        {/* Verified / Unclaimed badge */}
         <div className="absolute top-3 right-3 z-10">
           {isClaimed ? (
             <span className="inline-flex items-center gap-1 rounded-full bg-success/90 backdrop-blur-sm px-2.5 py-1 text-xs font-semibold text-white shadow-md">
               <Shield className="h-3 w-3" />
-              Claimed
+              Verified
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-amber-300/80 bg-amber-500/70 backdrop-blur-sm px-2.5 py-1 text-xs font-semibold text-white shadow-md">
@@ -127,14 +143,27 @@ export default function ClinicCard({ listing, services, images, className }: Cli
 
       {/* ── Card Body ── */}
       <Link href={href} className="flex flex-col flex-1 p-5">
-        {/* Title + Category */}
+        {/* Title + Logo + Category */}
         <div className="mb-3">
-          <h3 className="text-lg font-semibold text-card-foreground group-hover:text-primary transition-colors font-sans leading-snug">
-            {listing.title}
-          </h3>
-          {listing.treatment_category && (
+          <div className="flex items-center gap-2.5">
+            {listing.logo_url && (
+              <div className="relative h-8 w-8 shrink-0 rounded-lg overflow-hidden border border-border shadow-sm">
+                <Image
+                  src={listing.logo_url}
+                  alt={`${listing.title} logo`}
+                  fill
+                  className="object-cover"
+                  sizes="32px"
+                />
+              </div>
+            )}
+            <h3 className="text-lg font-semibold text-card-foreground group-hover:text-primary transition-colors font-sans leading-snug">
+              {listing.title}
+            </h3>
+          </div>
+          {listing.men_women_both && (
             <span className="mt-1.5 inline-block rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-              {TREATMENT_CATEGORY_LABELS[listing.treatment_category] || listing.treatment_category}
+              {listing.men_women_both === 'Both' ? 'Men & Women' : listing.men_women_both}
             </span>
           )}
         </div>
@@ -198,12 +227,7 @@ export default function ClinicCard({ listing, services, images, className }: Cli
               {services.filter(s => !HIDDEN_SERVICES.has(s)).length} {services.filter(s => !HIDDEN_SERVICES.has(s)).length === 1 ? 'service' : 'services'}
             </span>
           )}
-          {listing.men_women_both && (
-            <span className="ml-auto flex items-center gap-1 text-xs">
-              <Users className="h-3 w-3" />
-              {listing.men_women_both === 'Both' ? 'Men & Women' : listing.men_women_both}
-            </span>
-          )}
+
         </div>
       </Link>
 

@@ -4,8 +4,8 @@ import { Shield, Heart, Users, Globe, ArrowRight } from 'lucide-react'
 import Breadcrumbs from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'About Hair Restoration Guide',
-  description: 'What Hair Restoration Guide is about and why we built it. The UK\'s directory for finding trusted non-surgical hair restoration clinics.',
+  title: 'About Us | Our Mission & Story',
+  description: 'Hair Restoration Guide is the UK\'s independent directory for non-surgical hair clinics. No pay-to-play, no hidden agendas. Just honest information.',
 }
 
 export default function AboutPage() {
@@ -42,7 +42,7 @@ export default function AboutPage() {
             </h1>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
               We built Hair Restoration Guide because there was no single, reliable place for
-              people experiencing hair loss to compare clinics, read genuine reviews, and make
+              people experiencing hair loss to compare clinics, read genuine reviews and make
               a proper decision about treatment. So we made one.
             </p>
           </div>
@@ -84,7 +84,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-semibold text-foreground mb-4">For Clinic Owners</h2>
           <p className="text-muted-foreground leading-relaxed mb-6 max-w-2xl">
             We think a good directory should work for everyone. Clinics can claim their listing
-            for free, update their profile, reply to enquiries, and see how many clients are
+            at no cost, update their profile, reply to enquiries and see how many clients are
             finding them through our platform.
           </p>
           <Link
@@ -99,7 +99,7 @@ export default function AboutPage() {
         <section className="text-center py-10">
           <h2 className="text-2xl font-semibold text-foreground mb-3">Get in Touch</h2>
           <p className="text-muted-foreground mb-6">
-            Questions, feedback, or a partnership enquiry? Drop us a line.
+            Questions, feedback or a partnership enquiry? Drop us a line.
           </p>
           <Link
             href="/contact"

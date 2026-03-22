@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Search, MapPin, Star, ArrowRight, Shield, Zap, Heart, CheckCircle, Users, Award, Scissors, TrendingUp, SlidersHorizontal, UserX } from 'lucide-react'
+import { Search, MapPin, Star, ArrowRight, Shield, Heart, CheckCircle, Users, Award, Scissors, TrendingUp, SlidersHorizontal, UserX } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { citySlug } from '@/lib/utils'
 import ClinicCard from '@/components/clinic-card'
@@ -148,7 +148,7 @@ export default async function HomePage() {
             </h1>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl animate-fade-in font-light sm:text-xl" style={{ animationDelay: '150ms' }}>
               The UK&apos;s most detailed directory for non-surgical hair restoration.
-              Compare {totalListings}+ clinics across {totalCities} cities, check real reviews,
+              Compare {totalListings}+ clinics across {totalCities} cities, check real reviews
               and book a free consultation.
             </p>
 
@@ -160,7 +160,7 @@ export default async function HomePage() {
                   <input
                     name="q"
                     type="text"
-                    placeholder="Search by city, clinic name, or service..."
+                    placeholder="Search by city, clinic name or service..."
                     className="w-full rounded-2xl border border-input bg-card/80 backdrop-blur-sm pl-12 pr-4 py-4 text-base text-foreground placeholder:text-muted-foreground shadow-lg shadow-primary/5 focus:outline-none focus:ring-2 focus:ring-ring focus:shadow-xl transition-all"
                   />
                 </div>
@@ -243,7 +243,7 @@ export default async function HomePage() {
               {
                 icon: Search,
                 title: 'Search',
-                description: 'Browse clinics by city, service, or treatment type. Use filters to narrow things down.',
+                description: 'Browse clinics by city, service or treatment type. Use filters to narrow things down.',
                 gradient: 'from-primary/10 to-primary/5',
               },
               {
@@ -299,12 +299,13 @@ export default async function HomePage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {displayListings.map((listing: Listing) => (
+              {displayListings.map((listing: Listing, index: number) => (
                 <ClinicCard
                   key={listing.id}
                   listing={listing}
                   services={servicesMap[listing.id]}
                   images={imagesMap[listing.id]}
+                  priority={index < 3}
                 />
               ))}
             </div>
@@ -383,7 +384,7 @@ export default async function HomePage() {
 
             <div className="relative">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/10 px-3.5 py-1 text-xs font-semibold text-white/80 uppercase tracking-wider mb-5">
-                <Zap className="h-3 w-3" /> For Clinic Owners
+                <Scissors className="h-3 w-3" /> For Clinic Owners
               </span>
               <h2 className="text-3xl font-semibold text-white sm:text-4xl">
                 Own a Hair Restoration Clinic?
@@ -397,11 +398,11 @@ export default async function HomePage() {
                   href="/signup"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-lg shadow-accent/25 transition-all hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 active:scale-[0.98]"
                 >
-                  <Zap className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" />
                   Claim Your Listing
                 </Link>
                 <Link
-                  href="/about"
+                  href="/for-clinics"
                   className="inline-flex items-center justify-center rounded-xl border border-white/30 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-white/10 hover:border-white/50"
                 >
                   Learn More

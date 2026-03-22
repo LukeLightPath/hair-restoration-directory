@@ -286,12 +286,13 @@ export default async function CityPage({ params }: CityPageProps) {
           </p>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {listings.map((listing) => (
+            {listings.map((listing, index) => (
               <ClinicCard
                 key={listing.id}
                 listing={listing}
                 services={servicesMap[listing.id]}
                 images={imagesMap[listing.id]}
+                priority={index < 3}
               />
             ))}
           </div>

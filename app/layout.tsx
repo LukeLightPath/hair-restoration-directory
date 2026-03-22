@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
+import dynamic from 'next/dynamic'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import ScrollToTop from '@/components/scroll-to-top'
 import { GoogleTagManagerScript, GoogleTagManagerNoScript } from '@/components/google-tag-manager'
 import './globals.css'
 
@@ -22,11 +22,11 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'),
   title: {
-    default: 'Hair Restoration Guide | Find Non-Surgical Hair Clinics Near You',
+    default: 'Find Non-Surgical Hair Clinics UK | Hair Restoration Guide',
     template: '%s | Hair Restoration Guide',
   },
   description:
-    'The UK\'s most comprehensive directory for non-surgical hair restoration clinics. Find hair systems, SMP, wigs and more near you.',
+    'Compare 400+ non-surgical hair restoration clinics across the UK. Check real reviews, compare services and book a free consultation.',
   openGraph: {
     type: 'website',
     locale: 'en_GB',
@@ -39,7 +39,13 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: '/logo-icon.png',
+    apple: '/logo-icon.png',
+  },
 }
+
+const ScrollToTop = dynamic(() => import('@/components/scroll-to-top'))
 
 export default function RootLayout({
   children,
@@ -49,6 +55,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        <link rel="preconnect" href="https://mazinyslabtuutstgonk.supabase.co" />
+        <link rel="dns-prefetch" href="https://mazinyslabtuutstgonk.supabase.co" />
         <GoogleTagManagerScript />
       </head>
       <body className="min-h-screen flex flex-col">

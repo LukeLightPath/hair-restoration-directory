@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: TreatmentCityPageProps): Prom
   if (!treatment || !treatment.enabled) return { title: 'Not Found' }
 
   return {
-    title: `${treatment.label} in ${cityName}`,
-    description: `Find the best ${treatment.label.toLowerCase()} clinics in ${cityName}. Compare ratings, read reviews and book a free consultation.`,
+    title: `${treatment.label} in ${cityName} | Compare Clinics & Reviews`,
+    description: `Compare ${treatment.label.toLowerCase()} clinics in ${cityName}. Check real ratings, read reviews and book a free consultation today.`,
     alternates: {
       canonical: canonicalUrl(`/treatments/${slug}/${cityParam}`),
     },

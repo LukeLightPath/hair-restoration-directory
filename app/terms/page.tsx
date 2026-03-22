@@ -4,7 +4,7 @@ import Breadcrumbs from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
-  description: 'Hair Restoration Guide terms and conditions — the rules and legal terms that govern your use of our directory platform.',
+  description: 'Hair Restoration Guide terms and conditions: the rules and legal terms that govern your use of our directory platform.',
 }
 
 export default function TermsPage() {
@@ -35,7 +35,7 @@ export default function TermsPage() {
           The Platform is a free directory service. We do not provide medical advice, endorse
           specific clinics, or guarantee the quality of any services listed. Information
           displayed on clinic profiles is provided by the clinics themselves or sourced from
-          publicly available data, and we make reasonable efforts to keep it accurate. However,
+          publicly available data. We make reasonable efforts to keep it accurate; however,
           you should always verify details directly with the clinic before booking any treatment.
         </p>
 
@@ -59,7 +59,7 @@ export default function TermsPage() {
         <p>
           By claiming a listing, you confirm that you are an authorised representative of
           the clinic in question. We reserve the right to verify your identity and connection
-          to the business, and to revoke claims made in bad faith or without proper authorisation.
+          to the business and to revoke claims made in bad faith or without proper authorisation.
         </p>
 
         <h2>5. Enquiry Handling &amp; Data Flow</h2>
@@ -82,7 +82,7 @@ export default function TermsPage() {
         </ul>
         <p>
           We act as a <strong>data controller</strong> when collecting and storing enquiry data, and
-          we process it on the legal basis of <strong>consent</strong> — the visitor explicitly
+          we process it on the legal basis of <strong>consent</strong>: the visitor explicitly
           consents to their details being shared with the selected clinic before submitting
           the form.
         </p>
@@ -114,25 +114,25 @@ export default function TermsPage() {
         <h2>7. Free Service &amp; No Guarantees</h2>
         <p>
           Listing on Hair Restoration Guide is free for clinics. Enquiry delivery is also provided
-          at no cost. We do not guarantee any specific number of enquiries, business outcomes,
+          at no cost. We do not guarantee any specific number of enquiries, business outcomes
           or that all information displayed on the Platform is complete or up to date.
         </p>
 
         <h2>8. Prohibited Conduct</h2>
         <p>You must not:</p>
         <ul>
-          <li>Submit false, misleading, or inaccurate information</li>
-          <li>Attempt to manipulate ratings, reviews, or search rankings</li>
-          <li>Scrape, crawl, or use automated tools to collect data from the Platform</li>
+          <li>Submit false, misleading or inaccurate information</li>
+          <li>Attempt to manipulate ratings, reviews or search rankings</li>
+          <li>Scrape, crawl or use automated tools to collect data from the Platform</li>
           <li>Use the Platform for any unlawful purpose</li>
           <li>Interfere with or disrupt the Platform&apos;s operation or security</li>
         </ul>
 
         <h2>9. Intellectual Property</h2>
         <p>
-          All content on Hair Restoration Guide, including text, design, code, and branding, is
+          All content on Hair Restoration Guide, including text, design, code and branding, is
           owned by us unless otherwise stated. Clinic-provided content (descriptions, images, logos)
-          remains the property of the respective clinics, and by uploading it they grant us
+          remains the property of the respective clinics. By uploading it they grant us
           a licence to display it on the Platform.
         </p>
 
@@ -143,14 +143,14 @@ export default function TermsPage() {
         </p>
         <ul>
           <li>
-            We are not liable for any direct, indirect, incidental, or consequential damages arising
+            We are not liable for any direct, indirect, incidental or consequential damages arising
             from your use of the Platform
           </li>
           <li>
-            We are not liable for any interactions, disputes, or outcomes between visitors and clinics
+            We are not liable for any interactions, disputes or outcomes between visitors and clinics
           </li>
           <li>
-            We are not liable for any loss of data, revenue, or business opportunity
+            We are not liable for any loss of data, revenue or business opportunity
           </li>
         </ul>
         <p>

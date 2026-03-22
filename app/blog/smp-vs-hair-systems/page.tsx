@@ -13,14 +13,14 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.c
 export const metadata: Metadata = {
   title: 'SMP vs Hair Systems: Which Is Right for You? (2026 UK Guide)',
   description:
-    'A neutral comparison of scalp micropigmentation and hair systems in the UK. Costs, maintenance, who each suits, and whether you can combine both.',
+    'A neutral comparison of scalp micropigmentation and hair systems in the UK. Costs, maintenance, who each suits and whether you can combine both.',
   alternates: {
     canonical: canonicalUrl('/blog/smp-vs-hair-systems'),
   },
   openGraph: {
     title: 'SMP vs Hair Systems: Which Is Right for You? | Hair Restoration Guide',
     description:
-      'Side-by-side comparison of SMP and hair systems with real UK pricing, maintenance schedules, and a clear decision framework.',
+      'Side-by-side comparison of SMP and hair systems with real UK pricing, maintenance schedules and a clear decision framework.',
     url: canonicalUrl('/blog/smp-vs-hair-systems'),
     type: 'article',
   },
@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: 'Does SMP look fake?',
     answer:
-      'Not when it\'s done well. A skilled technician matches the pigment to your natural hair colour and places dots at varying depths and spacings to mimic real follicles. Up close, good SMP looks like a freshly shaved scalp. The biggest giveaway of poor SMP is dots that are too uniform, too dark, or placed at the wrong angle. That\'s why choosing an experienced practitioner matters more than anything else.',
+      'Not when it\'s done well. A skilled technician matches the pigment to your natural hair colour and places dots at varying depths and spacings to mimic real follicles. Up close, good SMP looks like a freshly shaved scalp. The biggest giveaway of poor SMP is dots that are too uniform, too dark or placed at the wrong angle. That\'s why choosing an experienced practitioner matters more than anything else.',
   },
   {
     question: 'Can you feel a hair system when you touch your head?',
@@ -41,7 +41,7 @@ const FAQS = [
   {
     question: 'How long does SMP take to heal?',
     answer:
-      'Each session takes 2 to 4 hours, and you\'ll need 2 to 3 sessions spaced about a week apart. After each session, the treated area looks slightly red for 2 to 3 days. You should avoid heavy sweating, swimming, and direct sun for about 5 days after each session. By 7 to 10 days after your final session, everything has settled.',
+      'Each session takes 2 to 4 hours, and you\'ll need 2 to 3 sessions spaced about a week apart. After each session, the treated area looks slightly red for 2 to 3 days. You should avoid heavy sweating, swimming and direct sun for about 5 days after each session. By 7 to 10 days after your final session, everything has settled.',
   },
   {
     question: 'Can you switch from a hair system to SMP later?',
@@ -51,7 +51,7 @@ const FAQS = [
   {
     question: 'What happens to SMP as you age and go greyer?',
     answer:
-      'If your remaining hair goes grey or white, the contrast between your dark SMP dots and lighter natural hair can become noticeable. Most people manage this by either shaving their remaining hair shorter (so the SMP blends better), getting lighter pigment touch-ups, or combining SMP with hair fibres. It\'s worth discussing your long-term colour expectations with your technician before starting.',
+      'If your remaining hair goes grey or white, the contrast between your dark SMP dots and lighter natural hair can become noticeable. Most people manage this by either shaving their remaining hair shorter (so the SMP blends better), getting lighter pigment touch-ups or combining SMP with hair fibres. It\'s worth discussing your long-term colour expectations with your technician before starting.',
   },
   {
     question: 'Is SMP or a hair system better for alopecia?',
@@ -66,7 +66,7 @@ export default function SmpVsHairSystemsPage() {
     '@type': 'Article',
     headline: 'SMP vs Hair Systems: Which Is Right for You? (2026 UK Guide)',
     description:
-      'A neutral comparison of scalp micropigmentation and hair systems in the UK. Costs, maintenance, who each suits, and whether you can combine both.',
+      'A neutral comparison of scalp micropigmentation and hair systems in the UK. Costs, maintenance, who each suits and whether you can combine both.',
     url: canonicalUrl('/blog/smp-vs-hair-systems'),
     datePublished: '2026-03-20',
     dateModified: '2026-03-20',
@@ -125,7 +125,7 @@ export default function SmpVsHairSystemsPage() {
           </h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-2xl">
             One creates the illusion of a full buzz cut. The other gives you actual 
-            hair you can grow, style, and run your fingers through. Both are 
+            hair you can grow, style and run your fingers through. Both are 
             non-surgical, both work, and both have trade-offs most clinics won&apos;t 
             tell you about upfront. Here&apos;s the honest comparison.
           </p>
@@ -232,10 +232,10 @@ export default function SmpVsHairSystemsPage() {
             </p>
             <h3>Hair Systems</h3>
             <p>
-              A hair system is a custom-made base (lace, poly, or mono) with real 
+              A hair system is a custom-made base (lace, poly or mono) with real 
               or synthetic hair attached. It gets bonded to your scalp with adhesive 
               or tape and blended with any existing hair. You walk out of the clinic 
-              with a full head of hair that you can wash, style, and wear around 
+              with a full head of hair that you can wash, style and wear around 
               the clock.
             </p>
             <p>
@@ -342,7 +342,7 @@ export default function SmpVsHairSystemsPage() {
             <p>
               You can swim, sweat, shower, wear hats, sleep however you like. 
               Nobody needs to know unless you tell them. The look doesn&apos;t 
-              change with humidity or rain. It doesn&apos;t move, shift, or come loose.
+              change with humidity or rain. It doesn&apos;t move, shift or come loose.
             </p>
             <p>
               The trade-off is that you&apos;re committed to the shaved look. If 
@@ -416,9 +416,9 @@ export default function SmpVsHairSystemsPage() {
               {[
                 'Like the look of a closely shaved or buzzed head',
                 'Want something low-maintenance with minimal ongoing cost',
-                'Don\'t want to deal with appointments, adhesives, or products',
+                'Don\'t want to deal with appointments, adhesives or products',
                 'Are comfortable with a consistent, fixed style',
-                'Want to swim, exercise, and travel without any extra thought',
+                'Want to swim, exercise and travel without any extra thought',
                 'Have a limited budget and want the best long-term value',
               ].map((item) => (
                 <div key={item} className="flex items-start gap-2">
@@ -432,7 +432,7 @@ export default function SmpVsHairSystemsPage() {
             <h3 className="text-base font-semibold text-foreground mb-4">Go with a hair system if you:</h3>
             <div className="space-y-2 text-sm">
               {[
-                'Want actual hair with length, volume, and styling options',
+                'Want actual hair with length, volume and styling options',
                 'Prefer a dramatic, instant transformation',
                 'Don\'t mind the ongoing maintenance routine',
                 'Want the flexibility to change your look over time',
@@ -460,8 +460,8 @@ export default function SmpVsHairSystemsPage() {
             <h2>Find Clinics Near You</h2>
             <p>
               Our directory lists clinics across the UK offering SMP, hair 
-              systems, or both. Filter by treatment type, check Google 
-              review scores, and book a free consultation to discuss which 
+              systems or both. Filter by treatment type, check Google 
+              review scores and book a free consultation to discuss which 
               option fits your situation.
             </p>
           </section>
@@ -477,8 +477,8 @@ export default function SmpVsHairSystemsPage() {
                 Compare SMP and Hair System Clinics
               </h2>
               <p className="text-white/70 max-w-lg mx-auto mb-6">
-                Browse clinics offering SMP, hair systems, or both. Check pricing, 
-                read reviews, and book a free consultation.
+                Browse clinics offering SMP, hair systems or both. Check pricing, 
+                read reviews and book a free consultation.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link

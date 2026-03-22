@@ -232,7 +232,7 @@ export default function SMPGuidePage() {
                 the full scalp. Often used alongside existing hair.
               </li>
               <li>
-                <strong>Scar camouflage:</strong> Covers FUE dot scars, FUT strip scars, or scarring
+                <strong>Scar camouflage:</strong> Covers FUE dot scars, FUT strip scars or scarring
                 from injuries or burns. The pigment is matched to surrounding follicle appearance.
               </li>
             </ul>

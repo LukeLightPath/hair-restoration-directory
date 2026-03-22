@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     question: 'Do hair extensions damage your natural hair?',
-    answer: 'When applied and maintained correctly by a professional, extensions should not cause damage. Problems tend to arise when extensions are left in too long, applied to hair that\'s too fine to support them, or removed incorrectly. Choosing an experienced technician and following their aftercare advice is the best way to avoid issues.',
+    answer: 'When applied and maintained correctly by a professional, extensions should not cause damage. Problems tend to arise when extensions are left in too long, applied to hair that\'s too fine to support them or removed incorrectly. Choosing an experienced technician and following their aftercare advice is the best way to avoid issues.',
   },
   {
     question: 'How long do hair extensions last?',

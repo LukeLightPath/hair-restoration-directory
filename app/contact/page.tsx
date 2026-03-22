@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Mail, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import Breadcrumbs from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Contact Us',
-  description: 'Questions or feedback? Get in touch with the Hair Restoration Guide team.',
+  title: 'Contact Us | Get in Touch',
+  description: 'Have a question about a clinic listing or our directory? Contact the Hair Restoration Guide team. We aim to reply within 24 hours.',
 }
 
 export default function ContactPage() {
@@ -16,21 +16,12 @@ export default function ContactPage() {
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl">Contact Us</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Have a question, suggestion, or business enquiry? We&apos;re here to help.
+            Have a question, suggestion or business enquiry? We&apos;re here to help.
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 mb-10">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm text-center">
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 mb-3">
-              <Mail className="h-5 w-5 text-primary" />
-            </div>
-            <p className="text-sm font-semibold text-card-foreground mb-1">Email</p>
-            <a href="mailto:hello@hairrestorationguide.com" className="text-sm text-primary hover:text-primary-hover transition-colors">
-              hello@hairrestorationguide.com
-            </a>
-          </div>
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm text-center">
+        <div className="flex justify-center mb-10">
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm text-center w-full max-w-xs">
             <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 mb-3">
               <MapPin className="h-5 w-5 text-primary" />
             </div>
