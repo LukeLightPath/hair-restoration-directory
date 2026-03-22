@@ -3,6 +3,23 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { citySlug } from '@/lib/utils'
 import { TREATMENTS } from '@/lib/types'
 
+// Prevent static generation — sitemap queries Supabase at request time
+export const dynamic = 'force-dynamic'
+
+// Blog posts are static files, so we maintain the slug list here
+const BLOG_SLUGS = [
+  'finasteride-minoxidil-side-effects',
+  'hair-loss-treatments-compared',
+  'hair-system-annual-cost',
+  'hair-system-cost-uk',
+  'hair-systems-vs-transplants',
+  'smp-vs-hair-systems',
+  'spotting-bad-hair-clinics',
+  'uk-hair-loss-statistics',
+  'uk-hair-restoration-market-2026',
+  'womens-hair-loss-uk',
+]
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createServiceClient()
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
@@ -79,15 +96,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Blog pages
-  const { data: posts } = await supabase
-    .from('blog_posts')
-    .select('slug, updated_at')
-    .eq('published', true)
-
-  const blogPages: MetadataRoute.Sitemap = (posts || []).map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.updated_at),
+  // Blog pages (static files, not database)
+  const blogPages: MetadataRoute.Sitemap = BLOG_SLUGS.map((slug) => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
