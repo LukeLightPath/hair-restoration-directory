@@ -75,7 +75,7 @@ export default async function TreatmentsIndexPage() {
         </h1>
         <p className="mt-4 text-muted-foreground max-w-2xl text-lg leading-relaxed">
           Explore all the treatments available at clinics across the UK.
-          Click a treatment to find clinics that offer it or narrow down by city.
+          Click a treatment to find clinics that offer it or narrow down by location.
         </p>
       </div>
 

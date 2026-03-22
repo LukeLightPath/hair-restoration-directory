@@ -145,7 +145,7 @@ export default async function ForClinicsPage() {
                   <MapPin className="h-4 w-4 text-white/70" />
                 </span>
                 <span>
-                  <strong className="text-white">{uniqueCities}+</strong> UK cities
+                  <strong className="text-white">{uniqueCities}+</strong> UK locations
                 </span>
               </span>
               <span className="flex items-center gap-2">
@@ -210,7 +210,7 @@ export default async function ForClinicsPage() {
                 icon: Globe,
                 title: 'Get Found Online',
                 description:
-                  'Your clinic appears in search results for hair restoration in your city. We handle the SEO so your listing ranks where clients are looking.',
+                   'Your clinic appears in search results for hair restoration in your area. We handle the SEO so your listing ranks where clients are looking.',
                 gradient: 'from-primary/10 to-primary/5',
                 color: 'text-primary',
               },

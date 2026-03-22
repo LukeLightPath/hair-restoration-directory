@@ -6,9 +6,9 @@ import { citySlug } from '@/lib/utils'
 import Breadcrumbs from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'UK Hair Restoration Clinics by City',
+  title: 'UK Hair Restoration Clinics by Location',
   description:
-    'Browse hair restoration clinics in 175+ UK cities. Compare ratings, services and reviews to find the right clinic near you.',
+    'Browse hair restoration clinics in 175+ UK locations. Compare ratings, services and reviews to find the right clinic near you.',
 }
 
 export default async function AllCitiesPage() {
@@ -39,10 +39,10 @@ export default async function AllCitiesPage() {
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
-          Hair Restoration Clinics by City
+          Hair Restoration Clinics by Location
         </h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
-          Browse {cities.length} cities across the United Kingdom with {listings?.length || 0}+ clinics offering
+          Browse {cities.length} locations across the United Kingdom with {listings?.length || 0}+ clinics offering
           non-surgical hair restoration services.
         </p>
       </div>

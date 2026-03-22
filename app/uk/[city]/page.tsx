@@ -335,7 +335,7 @@ export default async function CityPage({ params }: CityPageProps) {
         {nearbyCities.length > 0 && (
           <section className="mb-12">
             <h2 className="text-2xl font-semibold text-foreground mb-4">
-              Explore Nearby Cities
+              Explore Nearby Locations
             </h2>
             <p className="text-muted-foreground mb-5">
               Can&apos;t find what you&apos;re looking for in {actualCityName}? Try one of these nearby locations.
@@ -387,8 +387,8 @@ export default async function CityPage({ params }: CityPageProps) {
             >
               <MapPin className="h-5 w-5 text-primary shrink-0" />
               <div>
-                <span className="group-hover:text-primary transition-colors">All UK Cities</span>
-                <p className="text-xs text-muted-foreground mt-0.5">Browse all cities with hair restoration clinics</p>
+                <span className="group-hover:text-primary transition-colors">All UK Locations</span>
+                <p className="text-xs text-muted-foreground mt-0.5">Browse all locations with hair restoration clinics</p>
               </div>
               <ArrowRight className="h-3.5 w-3.5 ml-auto text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </Link>

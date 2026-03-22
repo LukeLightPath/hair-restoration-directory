@@ -148,7 +148,7 @@ export default async function HomePage() {
             </h1>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl animate-fade-in font-light sm:text-xl" style={{ animationDelay: '150ms' }}>
               The UK&apos;s most detailed directory for non-surgical hair restoration.
-              Compare {totalListings}+ clinics across {totalCities} cities, check real reviews
+              Compare {totalListings}+ clinics across {totalCities} locations, check real reviews
               and book a free consultation.
             </p>
 
@@ -160,7 +160,7 @@ export default async function HomePage() {
                   <input
                     name="q"
                     type="text"
-                    placeholder="Search by city, clinic name or service..."
+                    placeholder="Search by postcode, service or clinic name..."
                     className="w-full rounded-2xl border border-input bg-card/80 backdrop-blur-sm pl-12 pr-4 py-4 text-base text-foreground placeholder:text-muted-foreground shadow-lg shadow-primary/5 focus:outline-none focus:ring-2 focus:ring-ring focus:shadow-xl transition-all"
                   />
                 </div>
@@ -179,7 +179,7 @@ export default async function HomePage() {
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
                   <MapPin className="h-4 w-4 text-primary" />
                 </span>
-                <span><strong className="text-foreground">{totalCities}</strong> cities</span>
+                <span><strong className="text-foreground">{totalCities}</strong> locations</span>
               </span>
               <span className="flex items-center gap-2">
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-400/10">
@@ -205,7 +205,7 @@ export default async function HomePage() {
             {[
               { icon: Star, label: 'Real Reviews', desc: 'Verified Google ratings', color: 'text-amber-500', bg: 'bg-amber-500/10' },
               { icon: CheckCircle, label: 'Verified Clinics', desc: 'UK-registered providers', color: 'text-success', bg: 'bg-success/10' },
-              { icon: SlidersHorizontal, label: 'Search, Filter, Done', desc: 'Find by city, service or category', color: 'text-rose-500', bg: 'bg-rose-500/10' },
+              { icon: SlidersHorizontal, label: 'Search, Filter, Done', desc: 'Find by postcode, service or name', color: 'text-rose-500', bg: 'bg-rose-500/10' },
               { icon: UserX, label: 'No Sign-Up Needed', desc: 'Browse and enquire instantly', color: 'text-primary', bg: 'bg-primary/10' },
             ].map((pillar) => (
               <div
@@ -243,7 +243,7 @@ export default async function HomePage() {
               {
                 icon: Search,
                 title: 'Search',
-                description: 'Browse clinics by city, service or treatment type. Use filters to narrow things down.',
+                description: 'Browse clinics by location, service or treatment type. Use filters to narrow things down.',
                 gradient: 'from-primary/10 to-primary/5',
               },
               {
@@ -329,9 +329,9 @@ export default async function HomePage() {
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-3.5 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-3">
               <MapPin className="h-3 w-3" /> Nationwide
             </span>
-            <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">Browse by City</h2>
+            <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">Browse by Location</h2>
             <p className="mt-4 text-muted-foreground text-lg">
-              Find hair restoration clinics in {totalCities} cities across the UK.
+              Find hair restoration clinics in {totalCities} locations across the UK.
             </p>
           </div>
 
@@ -358,7 +358,7 @@ export default async function HomePage() {
               href="/uk"
               className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-medium text-foreground transition-all hover:bg-muted hover:shadow-md group"
             >
-              View all {totalCities} cities <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              View all {totalCities} locations <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>

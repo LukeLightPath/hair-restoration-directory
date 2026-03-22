@@ -128,7 +128,7 @@ export default async function TreatmentPage({ params }: TreatmentPageProps) {
             {treatment.label} Clinics: UK
           </h1>
           <p className="mt-3 text-muted-foreground max-w-2xl leading-relaxed">
-            {treatment.seoDescription} {listings?.length || 0} clinics across {cityMap.size} cities.
+            {treatment.seoDescription} {listings?.length || 0} clinics across {cityMap.size} locations.
           </p>
           {content?.intro && (
             <p className="mt-4 text-foreground/80 max-w-3xl leading-relaxed">
@@ -141,7 +141,7 @@ export default async function TreatmentPage({ params }: TreatmentPageProps) {
         {topCities.length > 0 && (
           <section className="mb-12">
             <h2 className="text-xl font-semibold text-foreground mb-4">
-              Find {treatment.label} by City
+              Find {treatment.label} by Location
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {topCities.map(([city, count]) => (

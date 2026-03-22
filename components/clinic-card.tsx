@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, MapPin, Phone, ExternalLink, BadgeCheck, Shield, Camera, ArrowRight, Scissors, Award, Users, Layers } from 'lucide-react'
+import { Star, MapPin, Phone, ExternalLink, BadgeCheck, Shield, Camera, ArrowRight, Scissors, Award, Users, Layers, Navigation } from 'lucide-react'
 import { cn, citySlug, truncate } from '@/lib/utils'
 import type { Listing, ListingImage } from '@/lib/types'
 import { TREATMENT_CATEGORY_LABELS } from '@/lib/types'
@@ -57,9 +57,10 @@ interface ClinicCardProps {
   images?: ListingImage[]
   className?: string
   priority?: boolean
+  distanceMiles?: number
 }
 
-export default function ClinicCard({ listing, services, images, className, priority = false }: ClinicCardProps) {
+export default function ClinicCard({ listing, services, images, className, priority = false, distanceMiles }: ClinicCardProps) {
   const href = `/uk/${citySlug(listing.city)}/${listing.slug}`
   const hasRealImages = images && images.length > 0
   const heroImage = hasRealImages ? images[0].storage_path : getPlaceholder(listing.id, listing.men_women_both)
@@ -172,6 +173,12 @@ export default function ClinicCard({ listing, services, images, className, prior
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-3">
           <MapPin className="h-3.5 w-3.5 shrink-0 text-primary/60" />
           <span>{listing.street ? `${listing.street}, ` : ''}{listing.city}</span>
+          {distanceMiles !== undefined && (
+            <span className="ml-auto flex items-center gap-1 rounded-full bg-primary/8 px-2 py-0.5 text-xs font-medium text-primary shrink-0">
+              <Navigation className="h-3 w-3" />
+              {distanceMiles} mi
+            </span>
+          )}
         </div>
 
         {/* Description */}
