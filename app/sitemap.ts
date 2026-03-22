@@ -1,10 +1,6 @@
 import type { MetadataRoute } from 'next'
-import { createServiceClient } from '@/lib/supabase/server'
 import { citySlug } from '@/lib/utils'
 import { TREATMENTS } from '@/lib/types'
-
-// Prevent static generation — sitemap queries Supabase at request time
-export const dynamic = 'force-dynamic'
 
 // Blog posts are static files, so we maintain the slug list here
 const BLOG_SLUGS = [
@@ -21,7 +17,6 @@ const BLOG_SLUGS = [
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = await createServiceClient()
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
 
   // Static pages
@@ -61,42 +56,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }))
 
-  // Listing pages
-  const { data: listings } = await supabase
-    .from('listings')
-    .select('slug, city, updated_at')
-    .eq('business_status', 'OPERATIONAL')
-
-  const listingPages: MetadataRoute.Sitemap = (listings || []).map((listing) => ({
-    url: `${baseUrl}/uk/${citySlug(listing.city)}/${listing.slug}`,
-    lastModified: new Date(listing.updated_at),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
-
-  // City pages (deduplicated)
-  const cities = new Set((listings || []).map((l) => l.city))
-  const cityPages: MetadataRoute.Sitemap = Array.from(cities).map((city) => ({
-    url: `${baseUrl}/uk/${citySlug(city)}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
-
-  // Treatment + city combo pages — only enabled treatments
-  const treatmentCityPages: MetadataRoute.Sitemap = []
-  for (const treatment of enabledTreatments) {
-    for (const city of cities) {
-      treatmentCityPages.push({
-        url: `${baseUrl}/treatments/${treatment.slug}/${citySlug(city)}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.75,
-      })
-    }
-  }
-
-  // Blog pages (static files, not database)
+  // Blog pages (static files)
   const blogPages: MetadataRoute.Sitemap = BLOG_SLUGS.map((slug) => ({
     url: `${baseUrl}/blog/${slug}`,
     lastModified: new Date(),
@@ -104,5 +64,56 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  return [...staticPages, ...guidePages, ...treatmentPages, ...cityPages, ...treatmentCityPages, ...listingPages, ...blogPages]
+  // Dynamic pages from Supabase (listings, cities, treatment+city combos)
+  // Wrapped in try-catch so builds succeed even if Supabase is unreachable
+  let listingPages: MetadataRoute.Sitemap = []
+  let cityPages: MetadataRoute.Sitemap = []
+  let treatmentCityPages: MetadataRoute.Sitemap = []
+
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!supabaseUrl || !serviceKey) throw new Error('Missing Supabase credentials')
+
+    const { createClient } = await import('@supabase/supabase-js')
+    const supabase = createClient(supabaseUrl, serviceKey)
+
+    const { data: listings } = await supabase
+      .from('listings')
+      .select('slug, city, updated_at')
+      .eq('business_status', 'OPERATIONAL')
+
+    listingPages = (listings || []).map((listing) => ({
+      url: `${baseUrl}/uk/${citySlug(listing.city)}/${listing.slug}`,
+      lastModified: new Date(listing.updated_at),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
+
+    // City pages (deduplicated)
+    const cities = new Set((listings || []).map((l) => l.city))
+    cityPages = Array.from(cities).map((city) => ({
+      url: `${baseUrl}/uk/${citySlug(city)}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
+
+    // Treatment + city combo pages
+    for (const treatment of enabledTreatments) {
+      for (const city of cities) {
+        treatmentCityPages.push({
+          url: `${baseUrl}/treatments/${treatment.slug}/${citySlug(city)}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.75,
+        })
+      }
+    }
+  } catch {
+    // At build time Supabase may not be available — static pages still included
+  }
+
+  return [...staticPages, ...guidePages, ...treatmentPages, ...blogPages, ...cityPages, ...treatmentCityPages, ...listingPages]
 }
+
