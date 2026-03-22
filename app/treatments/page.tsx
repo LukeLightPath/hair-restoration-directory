@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Scissors, Zap, Wand2, Microscope, Sun, Syringe, Brain, Puzzle, Crown } from 'lucide-react'
+import { ArrowRight, Scissors, Zap, Wand2, Microscope, Sun, Syringe, Crown, Wrench, Layers, ShieldPlus, Droplets } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { TREATMENTS } from '@/lib/types'
 import Breadcrumbs from '@/components/breadcrumbs'
@@ -11,29 +11,35 @@ export const metadata: Metadata = {
     'Explore every hair restoration treatment available in the UK. Compare clinics offering hair systems, SMP, wigs, PRP and more. Find clinics near you.',
 }
 
-/* ── Unique icon per treatment ── */
+/* ── Unique icon per treatment (keys must match TREATMENTS[].slug) ── */
 const TREATMENT_ICONS: Record<string, typeof Scissors> = {
   'hair-systems': Scissors,
-  'smp': Zap,
+  'scalp-micropigmentation': Zap,
   'wigs': Crown,
   'extensions': Wand2,
-  'prp': Syringe,
-  'transplant': Puzzle,
+  'prp-treatment': Droplets,
+  'hair-transplant': Syringe,
   'trichology': Microscope,
-  'laser': Sun,
-  'fitting': Brain,
+  'laser-therapy': Sun,
+  'fitting-service': Wrench,
+  'hair-toppers': Layers,
+  'hair-integration': Wand2,
+  'cranial-prosthesis': ShieldPlus,
 }
 
 const TREATMENT_GRADIENTS: Record<string, string> = {
   'hair-systems': 'from-teal-500/15 to-teal-500/5',
-  'smp': 'from-blue-500/15 to-blue-500/5',
+  'scalp-micropigmentation': 'from-blue-500/15 to-blue-500/5',
   'wigs': 'from-purple-500/15 to-purple-500/5',
   'extensions': 'from-amber-500/15 to-amber-500/5',
-  'prp': 'from-rose-500/15 to-rose-500/5',
-  'transplant': 'from-emerald-500/15 to-emerald-500/5',
+  'prp-treatment': 'from-rose-500/15 to-rose-500/5',
+  'hair-transplant': 'from-emerald-500/15 to-emerald-500/5',
   'trichology': 'from-indigo-500/15 to-indigo-500/5',
-  'laser': 'from-orange-500/15 to-orange-500/5',
-  'fitting': 'from-cyan-500/15 to-cyan-500/5',
+  'laser-therapy': 'from-orange-500/15 to-orange-500/5',
+  'fitting-service': 'from-cyan-500/15 to-cyan-500/5',
+  'hair-toppers': 'from-pink-500/15 to-pink-500/5',
+  'hair-integration': 'from-violet-500/15 to-violet-500/5',
+  'cranial-prosthesis': 'from-sky-500/15 to-sky-500/5',
 }
 
 export default async function TreatmentsIndexPage() {
