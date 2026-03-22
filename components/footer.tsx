@@ -3,7 +3,7 @@ import { Shield, Lock, UserX, Mail } from 'lucide-react'
 
 const FOOTER_LINKS = {
   Directory: [
-    { href: '/uk', label: 'All Cities' },
+    { href: '/uk', label: 'All Locations' },
     { href: '/search', label: 'Search Clinics' },
     { href: '/treatments', label: 'Treatments' },
     { href: '/blog', label: 'Blog' },

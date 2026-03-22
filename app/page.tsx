@@ -160,7 +160,7 @@ export default async function HomePage() {
                   <input
                     name="q"
                     type="text"
-                    placeholder="Search by postcode, service or clinic name..."
+                    placeholder="Search by postcode, treatment or location..."
                     className="w-full rounded-2xl border border-input bg-card/80 backdrop-blur-sm pl-12 pr-4 py-4 text-base text-foreground placeholder:text-muted-foreground shadow-lg shadow-primary/5 focus:outline-none focus:ring-2 focus:ring-ring focus:shadow-xl transition-all"
                   />
                 </div>

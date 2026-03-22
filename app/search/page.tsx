@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { SERVICE_LABELS, TREATMENT_CATEGORY_LABELS } from '@/lib/types'
 import type { Listing, ListingImage } from '@/lib/types'
-import { geocodePostcode } from '@/lib/geocode'
+import { geocodePostcode, UK_POSTCODE_RE } from '@/lib/geocode'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
 import { Search as SearchIcon, SlidersHorizontal, ChevronLeft, ChevronRight, MapPin, Navigation } from 'lucide-react'
@@ -19,7 +19,12 @@ interface SearchPageProps {
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { q, service, category, page: pageParam, postcode } = await searchParams
+  const { q, service, category, page: pageParam, postcode: postcodeParam } = await searchParams
+
+  /* ── Auto-detect postcode in q param ── */
+  const isQPostcode = q && UK_POSTCODE_RE.test(q.trim())
+  const postcode = postcodeParam || (isQPostcode ? q!.trim() : undefined)
+  const textQuery = isQPostcode ? undefined : q
   const currentPage = Math.max(1, parseInt(pageParam || '1', 10) || 1)
   const supabase = await createClient()
 
@@ -53,7 +58,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         distanceMap: {},
         totalCount: 0,
         currentPage,
-        q, service, category, postcode,
+        q: textQuery, service, category, postcode,
         postcodeError: true,
         isNearbySearch: false,
       })
@@ -92,11 +97,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     }
 
     // Step 4: Apply text filter
-    if (q && nearbyIds.length > 0) {
+    if (textQuery && nearbyIds.length > 0) {
       const { data: textListings } = await supabase
         .from('listings')
         .select('id')
-        .or(`title.ilike.%${q}%,city.ilike.%${q}%,description.ilike.%${q}%`)
+        .or(`title.ilike.%${textQuery}%,city.ilike.%${textQuery}%,description.ilike.%${textQuery}%`)
         .in('id', nearbyIds)
 
       const textIds = new Set((textListings || []).map(l => l.id))
@@ -115,7 +120,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         distanceMap,
         totalCount: 0,
         currentPage,
-        q, service, category, postcode,
+        q: textQuery, service, category, postcode,
         postcodeError: false,
         isNearbySearch: true,
       })
@@ -154,7 +159,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       distanceMap,
       totalCount,
       currentPage,
-      q, service, category, postcode,
+      q: textQuery, service, category, postcode,
       postcodeError: false,
       isNearbySearch: true,
     })
@@ -181,7 +186,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         distanceMap: {},
         totalCount: 0,
         currentPage,
-        q, service, category, postcode,
+        q: textQuery, service, category, postcode,
         postcodeError,
         isNearbySearch: false,
       })
@@ -194,8 +199,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     .select('*', { count: 'exact', head: true })
     .eq('business_status', 'OPERATIONAL')
 
-  if (q) {
-    countQuery = countQuery.or(`title.ilike.%${q}%,city.ilike.%${q}%,description.ilike.%${q}%`)
+  if (textQuery) {
+    countQuery = countQuery.or(`title.ilike.%${textQuery}%,city.ilike.%${textQuery}%,description.ilike.%${textQuery}%`)
   }
   if (category) {
     countQuery = countQuery.eq('treatment_category', category)
@@ -217,8 +222,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     .order('google_rating', { ascending: false, nullsFirst: false })
     .range(from, to)
 
-  if (q) {
-    dataQuery = dataQuery.or(`title.ilike.%${q}%,city.ilike.%${q}%,description.ilike.%${q}%`)
+  if (textQuery) {
+    dataQuery = dataQuery.or(`title.ilike.%${textQuery}%,city.ilike.%${textQuery}%,description.ilike.%${textQuery}%`)
   }
   if (category) {
     dataQuery = dataQuery.eq('treatment_category', category)
@@ -255,7 +260,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     distanceMap: {},
     totalCount: totalCount || 0,
     currentPage,
-    q, service, category, postcode,
+    q: textQuery, service, category, postcode,
     postcodeError,
     isNearbySearch: false,
   })
@@ -333,35 +338,23 @@ function renderPage({ listings, servicesMap, distanceMap, totalCount, currentPag
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground sm:text-4xl">Search Clinics</h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
-          Search by name, city or postcode to find the right clinic.
+          Search by postcode, clinic name or location to find the right clinic.
         </p>
       </div>
 
       {/* Search & Filters */}
       <form method="get" className="mb-10">
         <div className="rounded-2xl border border-border bg-card p-5 shadow-sm space-y-4">
-          {/* Text search + Postcode row */}
-          <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-            <div className="relative">
-              <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <input
-                name="q"
-                type="text"
-                defaultValue={q || ''}
-                placeholder="Search by location, clinic name or keyword..."
-                className="w-full rounded-xl border border-input bg-background pl-12 pr-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-              />
-            </div>
-            <div className="relative">
-              <Navigation className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                name="postcode"
-                type="text"
-                defaultValue={postcode || ''}
-                placeholder="Postcode (e.g. M1 4BT)"
-                className="w-full sm:w-64 rounded-xl border border-input bg-background pl-11 pr-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-              />
-            </div>
+          {/* Single smart search field */}
+          <div className="relative">
+            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <input
+              name="q"
+              type="text"
+              defaultValue={q || ''}
+              placeholder="Search by postcode, treatment or location..."
+              className="w-full rounded-xl border border-input bg-background pl-12 pr-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+            />
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
