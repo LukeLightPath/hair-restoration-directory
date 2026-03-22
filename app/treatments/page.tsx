@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Scissors, Zap, Wand2, Microscope, Sun, Syringe, Crown, Wrench, Layers, ShieldPlus, Droplets } from 'lucide-react'
+import { ArrowRight, Scissors, CircleDot, Wand2, Microscope, Sun, Syringe, Crown, Wrench, Layers, ShieldPlus, Droplets } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { TREATMENTS } from '@/lib/types'
 import Breadcrumbs from '@/components/breadcrumbs'
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 /* ── Unique icon per treatment (keys must match TREATMENTS[].slug) ── */
 const TREATMENT_ICONS: Record<string, typeof Scissors> = {
   'hair-systems': Scissors,
-  'scalp-micropigmentation': Zap,
+  'scalp-micropigmentation': CircleDot,
   'wigs': Crown,
   'extensions': Wand2,
   'prp-treatment': Droplets,
