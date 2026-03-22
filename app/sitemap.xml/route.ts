@@ -1,4 +1,3 @@
-import type { MetadataRoute } from 'next'
 import { citySlug } from '@/lib/utils'
 import { TREATMENTS } from '@/lib/types'
 
@@ -16,11 +15,34 @@ const BLOG_SLUGS = [
   'womens-hair-loss-uk',
 ]
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+interface SitemapEntry {
+  url: string
+  lastModified: Date
+  changeFrequency: string
+  priority: number
+}
+
+function toXml(entries: SitemapEntry[]): string {
+  const urls = entries.map((entry) =>
+    `  <url>
+    <loc>${entry.url}</loc>
+    <lastmod>${entry.lastModified.toISOString()}</lastmod>
+    <changefreq>${entry.changeFrequency}</changefreq>
+    <priority>${entry.priority}</priority>
+  </url>`
+  ).join('\n')
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`
+}
+
+export async function GET() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
 
   // Static pages
-  const staticPages: MetadataRoute.Sitemap = [
+  const entries: SitemapEntry[] = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
     { url: `${baseUrl}/uk`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/treatments`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
@@ -40,80 +62,69 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'prp-treatment', 'hair-transplant', 'trichology', 'laser-therapy',
     'fitting-service', 'hair-toppers', 'hair-integration', 'cranial-prosthesis',
   ]
-  const guidePages: MetadataRoute.Sitemap = guideSlugs.map((slug) => ({
-    url: `${baseUrl}/guides/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }))
+  for (const slug of guideSlugs) {
+    entries.push({ url: `${baseUrl}/guides/${slug}`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 })
+  }
 
-  // Treatment pages (national) — only enabled treatments
+  // Treatment pages (national)
   const enabledTreatments = TREATMENTS.filter((t) => t.enabled)
-  const treatmentPages: MetadataRoute.Sitemap = enabledTreatments.map((t) => ({
-    url: `${baseUrl}/treatments/${t.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.85,
-  }))
+  for (const t of enabledTreatments) {
+    entries.push({ url: `${baseUrl}/treatments/${t.slug}`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 })
+  }
 
-  // Blog pages (static files)
-  const blogPages: MetadataRoute.Sitemap = BLOG_SLUGS.map((slug) => ({
-    url: `${baseUrl}/blog/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  // Blog pages
+  for (const slug of BLOG_SLUGS) {
+    entries.push({ url: `${baseUrl}/blog/${slug}`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 })
+  }
 
-  // Dynamic pages from Supabase (listings, cities, treatment+city combos)
-  // Wrapped in try-catch so builds succeed even if Supabase is unreachable
-  let listingPages: MetadataRoute.Sitemap = []
-  let cityPages: MetadataRoute.Sitemap = []
-  let treatmentCityPages: MetadataRoute.Sitemap = []
-
+  // Dynamic pages from Supabase
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    if (!supabaseUrl || !serviceKey) throw new Error('Missing Supabase credentials')
-
     const { createClient } = await import('@supabase/supabase-js')
-    const supabase = createClient(supabaseUrl, serviceKey)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
 
     const { data: listings } = await supabase
       .from('listings')
       .select('slug, city, updated_at')
       .eq('business_status', 'OPERATIONAL')
 
-    listingPages = (listings || []).map((listing) => ({
-      url: `${baseUrl}/uk/${citySlug(listing.city)}/${listing.slug}`,
-      lastModified: new Date(listing.updated_at),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }))
+    // Listing pages
+    for (const listing of listings || []) {
+      entries.push({
+        url: `${baseUrl}/uk/${citySlug(listing.city)}/${listing.slug}`,
+        lastModified: new Date(listing.updated_at),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      })
+    }
 
     // City pages (deduplicated)
     const cities = new Set((listings || []).map((l) => l.city))
-    cityPages = Array.from(cities).map((city) => ({
-      url: `${baseUrl}/uk/${citySlug(city)}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }))
+    for (const city of cities) {
+      entries.push({ url: `${baseUrl}/uk/${citySlug(city)}`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 })
+    }
 
     // Treatment + city combo pages
     for (const treatment of enabledTreatments) {
       for (const city of cities) {
-        treatmentCityPages.push({
+        entries.push({
           url: `${baseUrl}/treatments/${treatment.slug}/${citySlug(city)}`,
           lastModified: new Date(),
-          changeFrequency: 'weekly' as const,
+          changeFrequency: 'weekly',
           priority: 0.75,
         })
       }
     }
   } catch {
-    // At build time Supabase may not be available — static pages still included
+    // Supabase unavailable — static pages still returned
   }
 
-  return [...staticPages, ...guidePages, ...treatmentPages, ...blogPages, ...cityPages, ...treatmentCityPages, ...listingPages]
+  return new Response(toXml(entries), {
+    headers: {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+    },
+  })
 }
-
