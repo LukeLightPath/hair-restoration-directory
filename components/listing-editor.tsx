@@ -48,7 +48,6 @@ export default function ListingEditor({ listing, services, socials }: ListingEdi
     website: listing.website || '',
     street: listing.street || '',
     postcode: listing.postcode || '',
-    booking_url: listing.booking_url || '',
     pricing_tier: listing.pricing_tier || '',
     men_women_both: listing.men_women_both || '',
     free_consultation: listing.free_consultation || '',
@@ -316,7 +315,7 @@ export default function ListingEditor({ listing, services, socials }: ListingEdi
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div>
+              <div className="sm:col-span-2">
                 <label htmlFor="ed-website" className="block text-sm font-medium text-foreground mb-1.5">
                   Website
                 </label>
@@ -328,21 +327,6 @@ export default function ListingEditor({ listing, services, socials }: ListingEdi
                     onChange={e => updateField('website', e.target.value)}
                     className="w-full rounded-xl border border-input bg-background pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
                     placeholder="https://www.yourclinic.co.uk"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="ed-booking" className="block text-sm font-medium text-foreground mb-1.5">
-                  Booking URL
-                </label>
-                <div className="relative">
-                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <input
-                    id="ed-booking"
-                    value={form.booking_url}
-                    onChange={e => updateField('booking_url', e.target.value)}
-                    className="w-full rounded-xl border border-input bg-background pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
-                    placeholder="https://booking.yourclinic.co.uk"
                   />
                 </div>
               </div>

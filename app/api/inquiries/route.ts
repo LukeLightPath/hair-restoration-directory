@@ -116,6 +116,7 @@ export async function POST(request: NextRequest) {
                 enquirerName: name,
                 enquirerEmail: email,
                 enquirerPhone: phone,
+                message,
               }),
             })
           }

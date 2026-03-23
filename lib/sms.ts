@@ -45,11 +45,13 @@ export function buildInquirySmsBody({
   enquirerName,
   enquirerEmail,
   enquirerPhone,
+  message,
 }: {
   clinicName: string
   enquirerName: string
   enquirerEmail: string
   enquirerPhone: string | null
+  message: string | null
 }) {
   const lines = [
     `New enquiry for ${clinicName} via Hair Restoration Guide.`,
@@ -60,6 +62,11 @@ export function buildInquirySmsBody({
 
   if (enquirerPhone) {
     lines.push(`Phone: ${enquirerPhone}`)
+  }
+
+  if (message) {
+    lines.push('')
+    lines.push(`Message: ${message}`)
   }
 
   lines.push('')
