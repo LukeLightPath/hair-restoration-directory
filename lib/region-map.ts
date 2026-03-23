@@ -24,10 +24,42 @@ export const UK_REGIONS = [
 export type UKRegion = typeof UK_REGIONS[number]
 
 const COUNTY_TO_REGION: Record<string, UKRegion> = {
-  // ── London ──
+  // ── London (boroughs — postcodes.io returns these for London postcodes) ──
   'London': 'London',
   'Greater London': 'London',
   'City of London': 'London',
+  'Barking and Dagenham': 'London',
+  'Barnet': 'London',
+  'Bexley': 'London',
+  'Brent': 'London',
+  'Bromley': 'London',
+  'Camden': 'London',
+  'Croydon': 'London',
+  'Ealing': 'London',
+  'Enfield': 'London',
+  'Greenwich': 'London',
+  'Hackney': 'London',
+  'Hammersmith and Fulham': 'London',
+  'Haringey': 'London',
+  'Harrow': 'London',
+  'Havering': 'London',
+  'Hillingdon': 'London',
+  'Hounslow': 'London',
+  'Islington': 'London',
+  'Kensington and Chelsea': 'London',
+  'Kingston upon Thames': 'London',
+  'Lambeth': 'London',
+  'Lewisham': 'London',
+  'Merton': 'London',
+  'Newham': 'London',
+  'Redbridge': 'London',
+  'Richmond upon Thames': 'London',
+  'Southwark': 'London',
+  'Sutton': 'London',
+  'Tower Hamlets': 'London',
+  'Waltham Forest': 'London',
+  'Wandsworth': 'London',
+  'Westminster': 'London',
 
   // ── South East ──
   'Berkshire': 'South East',
@@ -69,6 +101,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Plymouth': 'South West',
   'Bournemouth, Christchurch and Poole': 'South West',
   'City of Bristol': 'South West',
+  'Bristol, City of': 'South West',
 
   // ── East of England ──
   'Bedfordshire': 'East of England',
@@ -99,6 +132,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
 
   // ── West Midlands ──
   'Herefordshire': 'West Midlands',
+  'Herefordshire, County of': 'West Midlands',
   'Shropshire': 'West Midlands',
   'Staffordshire': 'West Midlands',
   'Warwickshire': 'West Midlands',
@@ -168,6 +202,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'West Yorkshire': 'Yorkshire & the Humber',
   'Yorkshire': 'Yorkshire & the Humber',
   'Kingston upon Hull': 'Yorkshire & the Humber',
+  'Kingston upon Hull, City of': 'Yorkshire & the Humber',
   'North Lincolnshire': 'Yorkshire & the Humber',
   'North East Lincolnshire': 'Yorkshire & the Humber',
   'York': 'Yorkshire & the Humber',
