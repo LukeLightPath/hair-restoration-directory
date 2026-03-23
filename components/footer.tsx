@@ -25,32 +25,23 @@ const FOOTER_LINKS = {
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-muted/20">
-      {/* Newsletter signup */}
+      {/* Support contact */}
       <div className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <h3 className="text-lg font-semibold text-foreground">Stay in the loop</h3>
+              <h3 className="text-lg font-semibold text-foreground">Need help or have feedback?</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                New clinics, hair restoration tips and industry updates. Straight to your inbox.
+                We&apos;d love to hear from you. Get in touch with our team.
               </p>
             </div>
-            <form className="flex gap-2 w-full sm:w-auto">
-              <div className="relative flex-1 sm:w-64">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full rounded-xl border border-input bg-card pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
-                />
-              </div>
-              <button
-                type="submit"
-                className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary-hover transition-all hover:shadow-md shrink-0 active:scale-[0.98]"
-              >
-                Subscribe
-              </button>
-            </form>
+            <a
+              href="mailto:support@hairrestorationguide.com"
+              className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm hover:bg-primary/5 hover:border-primary/20 transition-all hover:shadow-md shrink-0"
+            >
+              <Mail className="h-4 w-4 text-primary" />
+              support@hairrestorationguide.com
+            </a>
           </div>
         </div>
       </div>
