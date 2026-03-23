@@ -85,7 +85,7 @@ export default async function DashboardPage() {
               Lightpath Agency
             </p>
             <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-              Want more clients? We offer full-funnel lead generation to help hair clinics grow. Get in touch to find out how.
+              Your listing and leads are completely free, no obligation. Want to grow even further? Book a free discovery call.
             </p>
           </div>
           <a
