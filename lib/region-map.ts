@@ -1,0 +1,289 @@
+/**
+ * Maps UK counties to their standard region.
+ * Counties not found fall into "Other".
+ * 
+ * England uses the 9 official regions.
+ * Scotland, Wales and Northern Ireland are their own groups.
+ */
+
+export const UK_REGIONS = [
+  'London',
+  'South East',
+  'South West',
+  'East of England',
+  'East Midlands',
+  'West Midlands',
+  'North West',
+  'North East',
+  'Yorkshire & the Humber',
+  'Scotland',
+  'Wales',
+  'Northern Ireland',
+] as const
+
+export type UKRegion = typeof UK_REGIONS[number]
+
+const COUNTY_TO_REGION: Record<string, UKRegion> = {
+  // ── London ──
+  'London': 'London',
+  'Greater London': 'London',
+  'City of London': 'London',
+
+  // ── South East ──
+  'Berkshire': 'South East',
+  'Buckinghamshire': 'South East',
+  'East Sussex': 'South East',
+  'Hampshire': 'South East',
+  'Isle of Wight': 'South East',
+  'Kent': 'South East',
+  'Oxfordshire': 'South East',
+  'Surrey': 'South East',
+  'West Sussex': 'South East',
+  'Milton Keynes': 'South East',
+  'Brighton and Hove': 'South East',
+  'Medway': 'South East',
+  'Portsmouth': 'South East',
+  'Southampton': 'South East',
+  'Slough': 'South East',
+  'Reading': 'South East',
+  'Windsor and Maidenhead': 'South East',
+  'Wokingham': 'South East',
+  'West Berkshire': 'South East',
+  'Bracknell Forest': 'South East',
+
+  // ── South West ──
+  'Bristol': 'South West',
+  'Cornwall': 'South West',
+  'Devon': 'South West',
+  'Dorset': 'South West',
+  'Gloucestershire': 'South West',
+  'Somerset': 'South West',
+  'Wiltshire': 'South West',
+  'Bath and North East Somerset': 'South West',
+  'North Somerset': 'South West',
+  'South Gloucestershire': 'South West',
+  'Swindon': 'South West',
+  'Bournemouth': 'South West',
+  'Poole': 'South West',
+  'Torbay': 'South West',
+  'Plymouth': 'South West',
+  'Bournemouth, Christchurch and Poole': 'South West',
+  'City of Bristol': 'South West',
+
+  // ── East of England ──
+  'Bedfordshire': 'East of England',
+  'Cambridgeshire': 'East of England',
+  'Essex': 'East of England',
+  'Hertfordshire': 'East of England',
+  'Norfolk': 'East of England',
+  'Suffolk': 'East of England',
+  'Central Bedfordshire': 'East of England',
+  'Bedford': 'East of England',
+  'Luton': 'East of England',
+  'Peterborough': 'East of England',
+  'Southend-on-Sea': 'East of England',
+  'Thurrock': 'East of England',
+
+  // ── East Midlands ──
+  'Derbyshire': 'East Midlands',
+  'Leicestershire': 'East Midlands',
+  'Lincolnshire': 'East Midlands',
+  'Northamptonshire': 'East Midlands',
+  'Nottinghamshire': 'East Midlands',
+  'Rutland': 'East Midlands',
+  'Derby': 'East Midlands',
+  'Leicester': 'East Midlands',
+  'Nottingham': 'East Midlands',
+  'North Northamptonshire': 'East Midlands',
+  'West Northamptonshire': 'East Midlands',
+
+  // ── West Midlands ──
+  'Herefordshire': 'West Midlands',
+  'Shropshire': 'West Midlands',
+  'Staffordshire': 'West Midlands',
+  'Warwickshire': 'West Midlands',
+  'West Midlands': 'West Midlands',
+  'Worcestershire': 'West Midlands',
+  'Birmingham': 'West Midlands',
+  'Coventry': 'West Midlands',
+  'Dudley': 'West Midlands',
+  'Sandwell': 'West Midlands',
+  'Solihull': 'West Midlands',
+  'Walsall': 'West Midlands',
+  'Wolverhampton': 'West Midlands',
+  'Stoke-on-Trent': 'West Midlands',
+  'Telford and Wrekin': 'West Midlands',
+
+  // ── North West ──
+  'Cheshire': 'North West',
+  'Cumbria': 'North West',
+  'Greater Manchester': 'North West',
+  'Lancashire': 'North West',
+  'Merseyside': 'North West',
+  'Manchester': 'North West',
+  'Liverpool': 'North West',
+  'Cheshire East': 'North West',
+  'Cheshire West and Chester': 'North West',
+  'Halton': 'North West',
+  'Warrington': 'North West',
+  'Blackburn with Darwen': 'North West',
+  'Blackpool': 'North West',
+  'Bolton': 'North West',
+  'Bury': 'North West',
+  'Oldham': 'North West',
+  'Rochdale': 'North West',
+  'Salford': 'North West',
+  'Stockport': 'North West',
+  'Tameside': 'North West',
+  'Trafford': 'North West',
+  'Wigan': 'North West',
+  'Knowsley': 'North West',
+  'Sefton': 'North West',
+  'St Helens': 'North West',
+  'Wirral': 'North West',
+  'Westmorland and Furness': 'North West',
+  'Cumberland': 'North West',
+
+  // ── North East ──
+  'County Durham': 'North East',
+  'Northumberland': 'North East',
+  'Tyne and Wear': 'North East',
+  'Durham': 'North East',
+  'Newcastle upon Tyne': 'North East',
+  'Gateshead': 'North East',
+  'North Tyneside': 'North East',
+  'South Tyneside': 'North East',
+  'Sunderland': 'North East',
+  'Darlington': 'North East',
+  'Hartlepool': 'North East',
+  'Middlesbrough': 'North East',
+  'Redcar and Cleveland': 'North East',
+  'Stockton-on-Tees': 'North East',
+  'Teesside': 'North East',
+
+  // ── Yorkshire & the Humber ──
+  'East Riding of Yorkshire': 'Yorkshire & the Humber',
+  'North Yorkshire': 'Yorkshire & the Humber',
+  'South Yorkshire': 'Yorkshire & the Humber',
+  'West Yorkshire': 'Yorkshire & the Humber',
+  'Yorkshire': 'Yorkshire & the Humber',
+  'Kingston upon Hull': 'Yorkshire & the Humber',
+  'North Lincolnshire': 'Yorkshire & the Humber',
+  'North East Lincolnshire': 'Yorkshire & the Humber',
+  'York': 'Yorkshire & the Humber',
+  'Barnsley': 'Yorkshire & the Humber',
+  'Doncaster': 'Yorkshire & the Humber',
+  'Rotherham': 'Yorkshire & the Humber',
+  'Sheffield': 'Yorkshire & the Humber',
+  'Bradford': 'Yorkshire & the Humber',
+  'Calderdale': 'Yorkshire & the Humber',
+  'Kirklees': 'Yorkshire & the Humber',
+  'Leeds': 'Yorkshire & the Humber',
+  'Wakefield': 'Yorkshire & the Humber',
+  'Humberside': 'Yorkshire & the Humber',
+
+  // ── Scotland ──
+  'Aberdeenshire': 'Scotland',
+  'Angus': 'Scotland',
+  'Argyll and Bute': 'Scotland',
+  'Clackmannanshire': 'Scotland',
+  'Dumfries and Galloway': 'Scotland',
+  'Dundee': 'Scotland',
+  'East Ayrshire': 'Scotland',
+  'East Dunbartonshire': 'Scotland',
+  'East Lothian': 'Scotland',
+  'East Renfrewshire': 'Scotland',
+  'Edinburgh': 'Scotland',
+  'City of Edinburgh': 'Scotland',
+  'Falkirk': 'Scotland',
+  'Fife': 'Scotland',
+  'Glasgow': 'Scotland',
+  'Glasgow City': 'Scotland',
+  'Highland': 'Scotland',
+  'Inverclyde': 'Scotland',
+  'Midlothian': 'Scotland',
+  'Moray': 'Scotland',
+  'North Ayrshire': 'Scotland',
+  'North Lanarkshire': 'Scotland',
+  'Orkney Islands': 'Scotland',
+  'Perth and Kinross': 'Scotland',
+  'Renfrewshire': 'Scotland',
+  'Scottish Borders': 'Scotland',
+  'Shetland Islands': 'Scotland',
+  'South Ayrshire': 'Scotland',
+  'South Lanarkshire': 'Scotland',
+  'Stirling': 'Scotland',
+  'West Dunbartonshire': 'Scotland',
+  'West Lothian': 'Scotland',
+  'Aberdeen': 'Scotland',
+  'Aberdeen City': 'Scotland',
+
+  // ── Wales ──
+  'Blaenau Gwent': 'Wales',
+  'Bridgend': 'Wales',
+  'Caerphilly': 'Wales',
+  'Cardiff': 'Wales',
+  'Carmarthenshire': 'Wales',
+  'Ceredigion': 'Wales',
+  'Conwy': 'Wales',
+  'Denbighshire': 'Wales',
+  'Flintshire': 'Wales',
+  'Gwynedd': 'Wales',
+  'Isle of Anglesey': 'Wales',
+  'Merthyr Tydfil': 'Wales',
+  'Monmouthshire': 'Wales',
+  'Neath Port Talbot': 'Wales',
+  'Newport': 'Wales',
+  'Pembrokeshire': 'Wales',
+  'Powys': 'Wales',
+  'Rhondda Cynon Taf': 'Wales',
+  'Swansea': 'Wales',
+  'Torfaen': 'Wales',
+  'Vale of Glamorgan': 'Wales',
+  'Wrexham': 'Wales',
+
+  // ── Northern Ireland ──
+  'Antrim': 'Northern Ireland',
+  'Antrim and Newtownabbey': 'Northern Ireland',
+  'Armagh': 'Northern Ireland',
+  'Armagh City, Banbridge and Craigavon': 'Northern Ireland',
+  'Belfast': 'Northern Ireland',
+  'Causeway Coast and Glens': 'Northern Ireland',
+  'Derry and Strabane': 'Northern Ireland',
+  'Down': 'Northern Ireland',
+  'Fermanagh': 'Northern Ireland',
+  'Fermanagh and Omagh': 'Northern Ireland',
+  'Lisburn and Castlereagh': 'Northern Ireland',
+  'Londonderry': 'Northern Ireland',
+  'Mid and East Antrim': 'Northern Ireland',
+  'Mid Ulster': 'Northern Ireland',
+  'Newry, Mourne and Down': 'Northern Ireland',
+  'Tyrone': 'Northern Ireland',
+  'Ards and North Down': 'Northern Ireland',
+  'County Antrim': 'Northern Ireland',
+  'County Armagh': 'Northern Ireland',
+  'County Down': 'Northern Ireland',
+  'County Fermanagh': 'Northern Ireland',
+  'County Londonderry': 'Northern Ireland',
+  'County Tyrone': 'Northern Ireland',
+}
+
+/**
+ * Get the UK region for a county string.
+ * Case-insensitive lookup with trimming.
+ */
+export function getRegion(county: string | null | undefined): UKRegion | 'Other' {
+  if (!county) return 'Other'
+  const trimmed = county.trim()
+
+  // Direct lookup
+  if (COUNTY_TO_REGION[trimmed]) return COUNTY_TO_REGION[trimmed]
+
+  // Case-insensitive fallback
+  const lower = trimmed.toLowerCase()
+  for (const [key, region] of Object.entries(COUNTY_TO_REGION)) {
+    if (key.toLowerCase() === lower) return region
+  }
+
+  return 'Other'
+}

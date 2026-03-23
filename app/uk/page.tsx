@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { MapPin } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { citySlug } from '@/lib/utils'
 import Breadcrumbs from '@/components/breadcrumbs'
+import LocationGrid from '@/components/location-grid'
+import { getRegion } from '@/lib/region-map'
+import type { CityWithRegion } from '@/components/location-grid'
 
 export const metadata: Metadata = {
   title: 'UK Hair Restoration Clinics by Location',
   description:
-    'Browse hair restoration clinics in 175+ UK locations. Compare ratings, services and reviews to find the right clinic near you.',
+    'Browse hair restoration clinics in 200+ UK locations. Filter by region and compare ratings, services and reviews to find the right clinic near you.',
 }
 
 export default async function AllCitiesPage() {
@@ -16,17 +17,31 @@ export default async function AllCitiesPage() {
 
   const { data: listings } = await supabase
     .from('listings')
-    .select('city')
+    .select('city, county')
     .eq('business_status', 'OPERATIONAL')
 
-  // Build city map
-  const cityMap = new Map<string, number>()
+  // Build city map with county info
+  const cityData = new Map<string, { count: number; county: string | null }>()
   for (const row of listings || []) {
-    cityMap.set(row.city, (cityMap.get(row.city) || 0) + 1)
+    const existing = cityData.get(row.city)
+    if (existing) {
+      existing.count += 1
+    } else {
+      cityData.set(row.city, { count: 1, county: row.county })
+    }
   }
 
-  const cities = Array.from(cityMap.entries())
-    .sort((a, b) => b[1] - a[1])
+  // Convert to array with region assignment
+  const cities: CityWithRegion[] = Array.from(cityData.entries())
+    .map(([city, { count, county }]) => ({
+      city,
+      slug: citySlug(city),
+      count,
+      region: getRegion(county),
+    }))
+    .sort((a, b) => b.count - a.count)
+
+  const totalClinics = listings?.length || 0
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -42,28 +57,12 @@ export default async function AllCitiesPage() {
           Hair Restoration Clinics by Location
         </h1>
         <p className="mt-3 text-muted-foreground max-w-2xl">
-          Browse {cities.length} locations across the United Kingdom with {listings?.length || 0}+ clinics offering
+          Browse {cities.length} locations across the United Kingdom with {totalClinics}+ clinics offering
           non-surgical hair restoration services.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {cities.map(([city, count]) => (
-          <Link
-            key={city}
-            href={`/uk/${citySlug(city)}`}
-            className="group flex items-center gap-3 rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5"
-          >
-            <MapPin className="h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
-            <div className="min-w-0">
-              <p className="font-medium text-card-foreground text-sm truncate">{city}</p>
-              <p className="text-xs text-muted-foreground">
-                {count} clinic{count !== 1 ? 's' : ''}
-              </p>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <LocationGrid cities={cities} />
     </div>
   )
 }
