@@ -15,6 +15,51 @@ export const metadata: Metadata = {
 
 const POSTS = [
   {
+    slug: 'hair-loss-after-cancer-treatment',
+    title: 'Hair Loss After Cancer Treatment: Your Options and Where to Find Support',
+    excerpt:
+      'What happens to your hair during treatment, the timeline for regrowth, non-surgical options available and UK charities that can help.',
+    date: '2026-03-23',
+    readTime: '12 min',
+    category: 'Support Guide',
+  },
+  {
+    slug: 'non-surgical-hair-replacement-alopecia',
+    title: 'Non-Surgical Hair Replacement for Alopecia: Your Options Explained',
+    excerpt:
+      'Which non-surgical solutions suit which type of alopecia, from areata to totalis. Covers hair systems, toppers, SMP, wigs and what to expect at your first consultation.',
+    date: '2026-03-23',
+    readTime: '10 min',
+    category: 'Complete Guide',
+  },
+  {
+    slug: 'hair-loss-mens-mental-health',
+    title: 'Hair Loss and Men\'s Mental Health: Why Nobody Talks About It',
+    excerpt:
+      'One in three men will experience noticeable hair loss by 35. What the research shows about the mental health impact and practical steps that help.',
+    date: '2026-03-23',
+    readTime: '8 min',
+    category: 'Mental Health',
+  },
+  {
+    slug: 'for-healthcare-professionals',
+    title: 'Non-Surgical Hair Replacement: A Guide for Healthcare Professionals',
+    excerpt:
+      'Clinical overview of non-surgical options for GPs, dermatologists, trichologists and nurses. When to suggest, when to refer and what clinics offer.',
+    date: '2026-03-23',
+    readTime: '10 min',
+    category: 'Clinical Resource',
+  },
+  {
+    slug: 'hair-loss-young-people-families',
+    title: 'Hair Loss in Children and Young People: What Families Need to Know',
+    excerpt:
+      'How hair loss affects children and teenagers, options available by age, school guidance and UK charities supporting young people and families.',
+    date: '2026-03-23',
+    readTime: '9 min',
+    category: 'Family Guide',
+  },
+  {
     slug: 'uk-hair-restoration-market-2026',
     title: 'UK Hair Restoration Market in 2026: Where the Industry Is Heading',
     excerpt:

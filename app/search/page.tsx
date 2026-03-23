@@ -318,10 +318,12 @@ function renderPage({ listings, servicesMap, distanceMap, totalCount, currentPag
   }
 
   const categories = ['Cosmetic Systems', 'Advanced Scalp Therapies', 'Both', 'Wig Specialist', 'General Salon']
-  const serviceOptions = Object.entries(SERVICE_LABELS).map(([key, label]) => ({
-    value: key.replace('has_', ''),
-    label,
-  }))
+  const serviceOptions = Object.entries(SERVICE_LABELS)
+    .filter(([key]) => key !== 'has_transplant')
+    .map(([key, label]) => ({
+      value: key.replace('has_', ''),
+      label,
+    }))
 
   const showingFrom = totalCount === 0 ? 0 : (currentPage - 1) * PER_PAGE + 1
   const showingTo = Math.min(currentPage * PER_PAGE, totalCount)

@@ -7,6 +7,7 @@ const FOOTER_LINKS = {
     { href: '/search', label: 'Search Clinics' },
     { href: '/treatments', label: 'Treatments' },
     { href: '/blog', label: 'Blog' },
+    { href: '/support', label: 'Support & Charities' },
   ],
   'For Clinics': [
     { href: '/signup', label: 'List Your Clinic' },
