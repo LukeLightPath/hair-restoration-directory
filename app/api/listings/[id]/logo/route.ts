@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
@@ -53,12 +53,15 @@ export async function POST(
     )
   }
 
+  // Use service client for storage + DB writes — ownership already verified
+  const svc = await createServiceClient()
+
   /* Delete old logo from storage if exists */
   if (listing.logo_url) {
     const publicUrlPrefix = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/clinic-images/`
     const oldKey = listing.logo_url.replace(publicUrlPrefix, '')
     if (oldKey) {
-      await supabase.storage.from('clinic-images').remove([oldKey])
+      await svc.storage.from('clinic-images').remove([oldKey])
     }
   }
 
@@ -69,7 +72,7 @@ export async function POST(
   const arrayBuffer = await file.arrayBuffer()
   const buffer = new Uint8Array(arrayBuffer)
 
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await svc.storage
     .from('clinic-images')
     .upload(storagePath, buffer, {
       contentType: file.type,
@@ -81,12 +84,12 @@ export async function POST(
   }
 
   /* Get public URL */
-  const { data: urlData } = supabase.storage
+  const { data: urlData } = svc.storage
     .from('clinic-images')
     .getPublicUrl(storagePath)
 
   /* Update listing */
-  const { error: updateError } = await supabase
+  const { error: updateError } = await svc
     .from('listings')
     .update({ logo_url: urlData.publicUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
@@ -125,17 +128,20 @@ export async function DELETE(
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  // Use service client for storage + DB writes — ownership already verified
+  const svc = await createServiceClient()
+
   /* Delete from storage */
   if (listing.logo_url) {
     const publicUrlPrefix = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/clinic-images/`
     const oldKey = listing.logo_url.replace(publicUrlPrefix, '')
     if (oldKey) {
-      await supabase.storage.from('clinic-images').remove([oldKey])
+      await svc.storage.from('clinic-images').remove([oldKey])
     }
   }
 
   /* Clear logo_url on listing */
-  const { error } = await supabase
+  const { error } = await svc
     .from('listings')
     .update({ logo_url: null, updated_at: new Date().toISOString() })
     .eq('id', id)

@@ -293,7 +293,7 @@ export default function ImageManager({
               )}
               {logoUrl ? 'Replace logo' : 'Upload logo'}
             </button>
-            <p className="text-xs text-muted-foreground">JPEG, PNG or WebP. Max 5 MB.</p>
+            <p className="text-xs text-muted-foreground">JPEG, PNG or WebP. Max 5 MB. Recommended: 400×400px.</p>
             <input
               ref={logoInputRef}
               type="file"

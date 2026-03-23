@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
 const MAX_IMAGES = 10
@@ -93,6 +93,9 @@ export async function POST(
     )
   }
 
+  // Use service client for storage + DB writes — ownership already verified
+  const svc = await createServiceClient()
+
   /* Upload to Supabase Storage */
   const ext = file.name.split('.').pop() || 'jpg'
   const fileName = `${generateId()}.${ext}`
@@ -101,7 +104,7 @@ export async function POST(
   const arrayBuffer = await file.arrayBuffer()
   const buffer = new Uint8Array(arrayBuffer)
 
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await svc.storage
     .from('clinic-images')
     .upload(storagePath, buffer, {
       contentType: file.type,
@@ -113,12 +116,12 @@ export async function POST(
   }
 
   /* Get the public URL */
-  const { data: urlData } = supabase.storage
+  const { data: urlData } = svc.storage
     .from('clinic-images')
     .getPublicUrl(storagePath)
 
   /* Insert into listing_images table */
-  const { data: imageRecord, error: insertError } = await supabase
+  const { data: imageRecord, error: insertError } = await svc
     .from('listing_images')
     .insert({
       listing_id: id,
@@ -132,7 +135,7 @@ export async function POST(
 
   if (insertError) {
     // Clean up uploaded file
-    await supabase.storage.from('clinic-images').remove([storagePath])
+    await svc.storage.from('clinic-images').remove([storagePath])
     return NextResponse.json({ error: `Save failed: ${insertError.message}` }, { status: 500 })
   }
 

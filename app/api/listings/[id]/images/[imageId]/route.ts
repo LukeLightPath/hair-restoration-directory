@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 
 /* ── DELETE: remove a specific gallery image ── */
 export async function DELETE(
@@ -29,8 +29,11 @@ export async function DELETE(
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  // Use service client for storage + DB writes — ownership already verified
+  const svc = await createServiceClient()
+
   /* Get the image record to find storage path */
-  const { data: image } = await supabase
+  const { data: image } = await svc
     .from('listing_images')
     .select('id, storage_path')
     .eq('id', imageId)
@@ -47,11 +50,11 @@ export async function DELETE(
 
   /* Delete from storage */
   if (storageKey) {
-    await supabase.storage.from('clinic-images').remove([storageKey])
+    await svc.storage.from('clinic-images').remove([storageKey])
   }
 
   /* Delete from database */
-  const { error } = await supabase
+  const { error } = await svc
     .from('listing_images')
     .delete()
     .eq('id', imageId)
