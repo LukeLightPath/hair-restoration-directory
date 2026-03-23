@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  MapPin, Globe, Clock, Star, Shield,
+  MapPin, Globe, Clock, Star, Shield, Phone,
   ExternalLink, Navigation, Users, Scissors, Camera, ImageIcon, BadgeCheck
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
@@ -430,8 +430,21 @@ export default async function ListingPage({ params }: ListingPageProps) {
                   )}
                 </div>
 
-                {/* Website & Directions links */}
+                {/* Phone, Website & Directions links */}
                 <div className="border-t border-border pt-5 space-y-3">
+                  {typed.phone && (
+                    <ClickTracker listingId={typed.id} eventType="phone_click">
+                      <a
+                        href={`tel:${typed.phone}`}
+                        className="flex items-center gap-3 rounded-xl border border-border p-3.5 text-sm transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 hover:shadow-sm"
+                      >
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10">
+                          <Phone className="h-4 w-4 text-amber-500" />
+                        </div>
+                        <span className="text-card-foreground font-medium">{typed.phone}</span>
+                      </a>
+                    </ClickTracker>
+                  )}
                   {typed.website && (
                     <ClickTracker listingId={typed.id} eventType="website_click">
                       <a

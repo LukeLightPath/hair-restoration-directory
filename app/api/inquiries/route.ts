@@ -4,8 +4,13 @@ import { sendEmail } from '@/lib/email'
 import { buildInquirySubject, buildInquiryHtml } from '@/lib/emails/inquiry-notification'
 import { sendSms, buildInquirySmsBody } from '@/lib/sms'
 import { buildUnsubscribeUrl } from '@/app/api/unsubscribe/route'
+import { checkRateLimit } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
+  // Rate limit: 20 inquiries per minute per IP
+  const rateLimitResponse = checkRateLimit(request, 20, 60_000)
+  if (rateLimitResponse) return rateLimitResponse
+
   try {
     const body = await request.json()
     const { listing_id, name, email, phone, message } = body

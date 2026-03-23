@@ -46,6 +46,7 @@ export const metadata: Metadata = {
 }
 
 const ScrollToTop = dynamic(() => import('@/components/scroll-to-top'))
+const CookieConsent = dynamic(() => import('@/components/cookie-consent'))
 
 export default function RootLayout({
   children,
@@ -74,6 +75,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <ScrollToTop />
+        <CookieConsent />
       </body>
     </html>
   )

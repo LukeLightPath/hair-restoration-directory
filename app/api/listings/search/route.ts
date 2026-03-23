@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { checkRateLimit } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
+  // Rate limit: 30 searches per minute per IP
+  const rateLimitResponse = checkRateLimit(request, 30, 60_000)
+  if (rateLimitResponse) return rateLimitResponse
+
   const q = request.nextUrl.searchParams.get('q')
 
   if (!q || q.trim().length < 2) {

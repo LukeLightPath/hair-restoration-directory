@@ -34,17 +34,12 @@ export async function POST(request: NextRequest) {
 
     const column = columnMap[event_type]
 
-    // Try upsert
-    const { error } = await supabase
-      .from('listing_analytics')
-      .upsert(
-        {
-          listing_id,
-          date: today,
-          [column]: 1,
-        },
-        { onConflict: 'listing_id,date' }
-      )
+    // Atomically increment the counter via RPC
+    const { error } = await supabase.rpc('increment_analytics', {
+      p_listing_id: listing_id,
+      p_date: today,
+      p_column: column,
+    })
 
     if (error) {
       console.error('Analytics upsert error:', error)
