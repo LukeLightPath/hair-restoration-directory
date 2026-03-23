@@ -200,7 +200,20 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 )}
               </div>
 
-              <h1 className="text-3xl font-bold text-foreground sm:text-4xl">{typed.title}</h1>
+              <div className="flex items-center gap-4">
+                {typed.logo_url && (
+                  <div className="relative h-14 w-14 shrink-0 rounded-xl overflow-hidden border border-border shadow-sm">
+                    <Image
+                      src={typed.logo_url}
+                      alt={`${typed.title} logo`}
+                      fill
+                      className="object-cover"
+                      sizes="56px"
+                    />
+                  </div>
+                )}
+                <h1 className="text-3xl font-bold text-foreground sm:text-4xl">{typed.title}</h1>
+              </div>
 
               <div className="mt-4 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
                 {typed.street && (
@@ -383,19 +396,6 @@ export default async function ListingPage({ params }: ListingPageProps) {
               <div className="h-1 bg-gradient-to-r from-primary via-primary-hover to-accent" />
 
               <div className="p-6">
-                {typed.logo_url && (
-                  <div className="flex justify-center mb-4">
-                    <div className="relative h-16 w-16 rounded-xl overflow-hidden border border-border shadow-sm">
-                      <Image
-                        src={typed.logo_url}
-                        alt={`${typed.title} logo`}
-                        fill
-                        className="object-cover"
-                        sizes="64px"
-                      />
-                    </div>
-                  </div>
-                )}
                 <h2 className="text-lg font-semibold text-card-foreground mb-5">
                   Contact {typed.title}
                 </h2>
