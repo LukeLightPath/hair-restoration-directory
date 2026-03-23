@@ -131,6 +131,10 @@ export interface Profile {
   business_name: string | null
   phone: string | null
   role: 'clinic_owner' | 'super_admin'
+  notification_email: string | null
+  notification_phone: string | null
+  email_notifications_on: boolean
+  sms_notifications_on: boolean
   created_at: string
 }
 

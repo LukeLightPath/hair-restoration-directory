@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 
 /* ── Whitelist of owner-editable fields ── */
 const LISTING_FIELDS = new Set([
@@ -62,10 +62,13 @@ export async function PUT(
 
   const errors: string[] = []
 
+  // Use service client for writes — ownership already verified above
+  const serviceClient = await createServiceClient()
+
   /* ── Update listings table ── */
   if (Object.keys(listingUpdates).length > 0) {
     listingUpdates.updated_at = new Date().toISOString()
-    const { error } = await supabase
+    const { error } = await serviceClient
       .from('listings')
       .update(listingUpdates)
       .eq('id', id)
@@ -74,7 +77,7 @@ export async function PUT(
 
   /* ── Update listing_services table ── */
   if (Object.keys(serviceUpdates).length > 0) {
-    const { error } = await supabase
+    const { error } = await serviceClient
       .from('listing_services')
       .update(serviceUpdates)
       .eq('listing_id', id)
@@ -83,7 +86,7 @@ export async function PUT(
 
   /* ── Update listing_socials table ── */
   if (Object.keys(socialUpdates).length > 0) {
-    const { error } = await supabase
+    const { error } = await serviceClient
       .from('listing_socials')
       .upsert({ listing_id: id, ...socialUpdates })
     if (error) errors.push(`listing_socials: ${error.message}`)

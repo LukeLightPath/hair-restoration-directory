@@ -53,52 +53,72 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (listing && !listing.notifications_off) {
-        // Resolve recipient email: claimed owner first, then listing email
-        let recipientEmail = listing.email
+        // Load the claimed owner's profile for notification preferences
+        let ownerProfile: {
+          notification_email: string | null
+          notification_phone: string | null
+          email_notifications_on: boolean | null
+          sms_notifications_on: boolean | null
+        } | null = null
 
         if (listing.claimed_by) {
-          const { data: ownerProfile } = await supabase
+          const { data: profile } = await supabase
             .from('profiles')
-            .select('id')
+            .select('notification_email, notification_phone, email_notifications_on, sms_notifications_on')
             .eq('id', listing.claimed_by)
             .single()
+          ownerProfile = profile
+        }
 
-          if (ownerProfile) {
+        // ── Email notification ──
+        const emailOn = ownerProfile?.email_notifications_on ?? true
+        if (emailOn) {
+          // Priority: profile notification_email → auth email → listing email
+          let recipientEmail = listing.email
+
+          if (ownerProfile?.notification_email) {
+            recipientEmail = ownerProfile.notification_email
+          } else if (listing.claimed_by) {
             const { data: authUser } = await supabase.auth.admin.getUserById(listing.claimed_by)
             if (authUser?.user?.email) {
               recipientEmail = authUser.user.email
             }
           }
+
+          if (recipientEmail) {
+            await sendEmail({
+              to: recipientEmail,
+              subject: buildInquirySubject(name, listing.title),
+              html: buildInquiryHtml({
+                clinicName: listing.title,
+                enquirerName: name,
+                enquirerEmail: email,
+                enquirerPhone: phone,
+                message,
+                unsubscribeUrl: buildUnsubscribeUrl(listing_id),
+              }),
+              replyTo: email,
+            })
+          }
         }
 
-        // Send email if we have one
-        if (recipientEmail) {
-          await sendEmail({
-            to: recipientEmail,
-            subject: buildInquirySubject(name, listing.title),
-            html: buildInquiryHtml({
-              clinicName: listing.title,
-              enquirerName: name,
-              enquirerEmail: email,
-              enquirerPhone: phone,
-              message,
-              unsubscribeUrl: buildUnsubscribeUrl(listing_id),
-            }),
-            replyTo: email,
-          })
-        }
+        // ── SMS notification ──
+        const smsOn = ownerProfile?.sms_notifications_on ?? true
+        if (smsOn) {
+          // Priority: profile notification_phone → listing phone
+          const smsPhone = ownerProfile?.notification_phone || listing.phone
 
-        // Also send SMS if the clinic has a mobile number
-        if (listing.phone && isMobileNumber(listing.phone)) {
-          await sendSms({
-            to: listing.phone,
-            body: buildInquirySmsBody({
-              clinicName: listing.title,
-              enquirerName: name,
-              enquirerEmail: email,
-              enquirerPhone: phone,
-            }),
-          })
+          if (smsPhone && isMobileNumber(smsPhone)) {
+            await sendSms({
+              to: smsPhone,
+              body: buildInquirySmsBody({
+                clinicName: listing.title,
+                enquirerName: name,
+                enquirerEmail: email,
+                enquirerPhone: phone,
+              }),
+            })
+          }
         }
       }
     } catch (notifyErr) {

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, FileText, MessageSquare, Image, ShieldCheck } from 'lucide-react'
+import { LayoutDashboard, FileText, MessageSquare, Image, ShieldCheck, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const SIDEBAR_LINKS = [
@@ -10,6 +10,7 @@ const SIDEBAR_LINKS = [
   { href: '/dashboard/listing', label: 'My Listing', icon: FileText },
   { href: '/dashboard/inquiries', label: 'Inquiries', icon: MessageSquare },
   { href: '/dashboard/images', label: 'Images', icon: Image },
+  { href: '/dashboard/profile', label: 'Profile', icon: User },
 ]
 
 export default function DashboardNav() {
