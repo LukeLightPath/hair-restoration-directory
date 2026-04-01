@@ -1,11 +1,11 @@
-'use client'
-
 import Script from 'next/script'
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID
 
 /**
  * Google Tag Manager — loads the GTM container script.
+ * Uses beforeInteractive so the snippet is included in the initial
+ * server-rendered HTML and executes before React hydration.
  * Renders nothing if NEXT_PUBLIC_GTM_ID is not set (safe for local dev).
  */
 export function GoogleTagManagerScript() {
@@ -14,7 +14,7 @@ export function GoogleTagManagerScript() {
   return (
     <Script
       id="gtm-script"
-      strategy="afterInteractive"
+      strategy="beforeInteractive"
       dangerouslySetInnerHTML={{
         __html: `
           (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
