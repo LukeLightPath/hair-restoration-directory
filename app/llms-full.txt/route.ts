@@ -6,7 +6,7 @@ import { TREATMENTS } from '@/lib/types'
 export async function GET() {
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, supabaseKey)
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 
   // Fetch cities with clinic counts
   const { data: listings } = await supabase

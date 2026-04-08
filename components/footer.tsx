@@ -114,16 +114,6 @@ export default function Footer() {
             Made with care for people experiencing hair loss.
           </p>
         </div>
-
-        {/* Honeypot — hidden link only bots follow */}
-        <a
-          href="/trap"
-          style={{ opacity: 0, position: 'absolute', left: '-9999px', height: 0, width: 0, overflow: 'hidden' }}
-          tabIndex={-1}
-          aria-hidden="true"
-        >
-          Do not follow this link
-        </a>
       </div>
     </footer>
   )

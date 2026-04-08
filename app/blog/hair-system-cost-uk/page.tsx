@@ -7,7 +7,7 @@ import {
 import { canonicalUrl } from '@/lib/utils'
 import Breadcrumbs from '@/components/breadcrumbs'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 
 export const metadata: Metadata = {
   title: 'How Much Does a Hair System Cost in the UK? Real 2026 Pricing',

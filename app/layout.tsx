@@ -20,7 +20,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'),
   title: {
     default: 'Find Non-Surgical Hair Clinics UK | Hair Restoration Guide',
     template: '%s | Hair Restoration Guide',

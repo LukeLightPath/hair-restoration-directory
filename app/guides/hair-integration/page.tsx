@@ -4,7 +4,7 @@ import { BookOpen, ArrowRight, HelpCircle, MapPin, Link as LinkIcon } from 'luci
 import { canonicalUrl } from '@/lib/utils'
 import Breadcrumbs from '@/components/breadcrumbs'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 
 export const metadata: Metadata = {
   title: 'What Is Hair Integration? How It Works, Cost & Suitability | Guide',

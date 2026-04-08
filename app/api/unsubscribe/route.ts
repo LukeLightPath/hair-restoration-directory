@@ -17,7 +17,7 @@ export function generateUnsubscribeToken(listingId: string): string {
  */
 export function buildUnsubscribeUrl(listingId: string): string {
   const token = generateUnsubscribeToken(listingId)
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
   return `${baseUrl}/api/unsubscribe?id=${listingId}&token=${token}`
 }
 

@@ -4,7 +4,7 @@ import { BookOpen, ArrowRight, Crown, CheckCircle, Clock, HelpCircle, MapPin } f
 import { canonicalUrl } from '@/lib/utils'
 import Breadcrumbs from '@/components/breadcrumbs'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 
 export const metadata: Metadata = {
   title: 'What Is a Hair Topper? Types, Attachment & Cost | Complete Guide',

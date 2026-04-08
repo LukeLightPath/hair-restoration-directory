@@ -4,7 +4,7 @@ import { BookOpen, ArrowRight, Microscope, HelpCircle, MapPin } from 'lucide-rea
 import { canonicalUrl } from '@/lib/utils'
 import Breadcrumbs from '@/components/breadcrumbs'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 
 export const metadata: Metadata = {
   title: 'What Is Trichology? Diagnosis, Treatment & Finding a Trichologist | Guide',

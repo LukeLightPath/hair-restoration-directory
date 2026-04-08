@@ -115,7 +115,7 @@ async function main() {
         postcode: 'L1 1AA',
         phone: '+44 7378 433383', // Use your own mobile for SMS testing
         email: DEMO_EMAIL,
-        website: 'https://hairrestorationguide.com',
+        website: 'https://www.hairrestorationguide.com',
         description: 'This is a demo listing for testing notifications. It is not a real clinic.',
         treatment_category: 'Cosmetic Systems',
         business_status: 'OPERATIONAL',

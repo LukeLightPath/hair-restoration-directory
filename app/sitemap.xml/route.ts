@@ -39,7 +39,7 @@ ${urls}
 }
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 
   // Static pages
   const entries: SitemapEntry[] = [

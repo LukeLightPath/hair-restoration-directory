@@ -2,72 +2,10 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 /* ──────────────────────────────────────────────
- * Bot Detection — blocked user-agent substrings
- * ────────────────────────────────────────────── */
-const BLOCKED_UA = [
-  'python-requests', 'python-urllib', 'python-httpx',
-  'scrapy', 'httpclient', 'curl/', 'wget/',
-  'libwww-perl', 'java/', 'php/', 'go-http-client',
-  'node-fetch', 'axios/', 'postman', 'insomnia',
-  'mechanize', 'phantom', 'selenium', 'headless',
-  'crawl', 'spider', 'scrape', 'harvest',
-]
-
-/* Good bots we should never block */
-const ALLOWED_BOTS = [
-  'googlebot', 'bingbot', 'slurp', 'duckduckbot',
-  'yandexbot', 'baiduspider', 'facebot',
-  'twitterbot', 'linkedinbot', 'whatsapp',
-  'telegrambot', 'discordbot',
-]
-
-function isBlockedBot(ua: string): boolean {
-  const lower = ua.toLowerCase()
-  // Never block legitimate crawlers
-  if (ALLOWED_BOTS.some(bot => lower.includes(bot))) return false
-  // Block known scraper signatures
-  return BLOCKED_UA.some(blocked => lower.includes(blocked))
-}
-
-/* ──────────────────────────────────────────────
- * Honeypot — track IPs that hit /trap
- * In-memory set; resets on cold start.
- * ────────────────────────────────────────────── */
-const trappedIPs = new Set<string>()
-
-function getClientIp(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for')
-  if (forwarded) return forwarded.split(',')[0].trim()
-  const realIp = request.headers.get('x-real-ip')
-  if (realIp) return realIp
-  return '127.0.0.1'
-}
-
-/* ──────────────────────────────────────────────
- * Middleware
+ * Middleware — Supabase auth for protected routes
  * ────────────────────────────────────────────── */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const ua = request.headers.get('user-agent') || ''
-  const clientIp = getClientIp(request)
-
-  // ── Honeypot trap ──
-  if (pathname === '/trap') {
-    trappedIPs.add(clientIp)
-    console.warn(`[Bot Trap] IP ${clientIp} hit honeypot — blocked`)
-    return new NextResponse('Forbidden', { status: 403 })
-  }
-
-  // ── Block previously trapped IPs ──
-  if (trappedIPs.has(clientIp)) {
-    return new NextResponse('Forbidden', { status: 403 })
-  }
-
-  // ── Block scraper user agents ──
-  if (ua && isBlockedBot(ua)) {
-    console.warn(`[Bot Block] Blocked UA: ${ua.substring(0, 80)}`)
-    return new NextResponse('Forbidden', { status: 403 })
-  }
 
   // ── Supabase auth (for protected routes) ──
   let supabaseResponse = NextResponse.next({ request })
@@ -136,9 +74,10 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all paths EXCEPT static files and Next.js internals.
-     * This ensures bot detection runs on every page request.
+     * Only match dashboard and admin routes — no need to run middleware
+     * on every single request since bot detection has been removed.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|eot)$).*)',
+    '/dashboard/:path*',
+    '/admin/:path*',
   ],
 }

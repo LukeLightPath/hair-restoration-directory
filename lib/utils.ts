@@ -62,7 +62,7 @@ export function truncate(text: string, maxLength: number): string {
 
 /** Get the site URL, works in both server and client */
 export function getSiteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL || 'https://hairrestorationguide.com'
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 }
 
 /** Build full canonical URL for a path */
