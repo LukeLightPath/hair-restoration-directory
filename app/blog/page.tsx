@@ -15,6 +15,15 @@ export const metadata: Metadata = {
 
 const POSTS = [
   {
+    slug: 'diy-vs-salon-hair-systems',
+    title: 'DIY vs Salon Hair Systems: A Real Cost Breakdown for the UK',
+    excerpt:
+      'Should you maintain your hair system yourself or use a salon? A side-by-side comparison of real UK costs for both routes, plus the hybrid approach most people end up using.',
+    date: '2026-04-17',
+    readTime: '9 min',
+    category: 'Cost Guide',
+  },
+  {
     slug: 'hair-loss-after-cancer-treatment',
     title: 'Hair Loss After Cancer Treatment: Your Options and Where to Find Support',
     excerpt:

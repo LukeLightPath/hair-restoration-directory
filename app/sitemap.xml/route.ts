@@ -3,11 +3,17 @@ import { TREATMENTS } from '@/lib/types'
 
 // Blog posts are static files, so we maintain the slug list here
 const BLOG_SLUGS = [
+  'diy-vs-salon-hair-systems',
   'finasteride-minoxidil-side-effects',
+  'for-healthcare-professionals',
+  'hair-loss-after-cancer-treatment',
+  'hair-loss-mens-mental-health',
   'hair-loss-treatments-compared',
+  'hair-loss-young-people-families',
   'hair-system-annual-cost',
   'hair-system-cost-uk',
   'hair-systems-vs-transplants',
+  'non-surgical-hair-replacement-alopecia',
   'smp-vs-hair-systems',
   'spotting-bad-hair-clinics',
   'uk-hair-loss-statistics',
