@@ -198,6 +198,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     .from('listings')
     .select('*', { count: 'exact', head: true })
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   if (textQuery) {
     countQuery = countQuery.or(`title.ilike.%${textQuery}%,city.ilike.%${textQuery}%,description.ilike.%${textQuery}%`)
@@ -219,6 +220,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     .from('listings')
     .select('*')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
     .order('google_rating', { ascending: false, nullsFirst: false })
     .range(from, to)
 

@@ -38,11 +38,13 @@ export default async function ForClinicsPage() {
     .from('listings')
     .select('id', { count: 'exact', head: true })
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   const { data: cityData } = await supabase
     .from('listings')
     .select('city')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   const uniqueCities = new Set((cityData || []).map((r) => r.city)).size
 

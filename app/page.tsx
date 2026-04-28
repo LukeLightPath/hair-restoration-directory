@@ -15,6 +15,7 @@ export default async function HomePage() {
     .select('*')
     .eq('featured', true)
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
     .order('featured_sort_order', { ascending: true })
     .limit(6)
 
@@ -35,6 +36,7 @@ export default async function HomePage() {
       .from('listings')
       .select('*')
       .eq('business_status', 'OPERATIONAL')
+      .eq('hidden', false)
       .not('google_rating', 'is', null)
       .order('google_rating', { ascending: false })
       .limit(6)
@@ -83,6 +85,7 @@ export default async function HomePage() {
     .from('listings')
     .select('city')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   const cityMap = new Map<string, number>()
   for (const row of cityCounts || []) {

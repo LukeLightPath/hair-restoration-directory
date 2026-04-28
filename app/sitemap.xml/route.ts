@@ -96,6 +96,7 @@ export async function GET() {
       .from('listings')
       .select('slug, city, updated_at')
       .eq('business_status', 'OPERATIONAL')
+      .eq('hidden', false)
 
     // Listing pages
     for (const listing of listings || []) {

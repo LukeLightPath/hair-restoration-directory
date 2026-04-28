@@ -13,6 +13,7 @@ export async function GET() {
     .from('listings')
     .select('city')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   const cityMap = new Map<string, number>()
   for (const l of listings || []) {

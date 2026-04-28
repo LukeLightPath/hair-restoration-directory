@@ -13,6 +13,7 @@ export async function GET() {
     .from('listings')
     .select('city')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   const cities = [...new Set((listings || []).map((l) => l.city))].sort()
 

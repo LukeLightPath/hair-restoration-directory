@@ -19,6 +19,7 @@ export default async function AllCitiesPage() {
     .from('listings')
     .select('city, county')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   // Build city map with county info
   const cityData = new Map<string, { count: number; county: string | null }>()

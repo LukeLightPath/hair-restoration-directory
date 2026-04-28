@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
     .from('listings')
     .select('id, title, city, slug, claimed, claim_status')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
     .or(`title.ilike.%${q}%,city.ilike.%${q}%`)
     .order('google_rating', { ascending: false, nullsFirst: false })
     .limit(10)

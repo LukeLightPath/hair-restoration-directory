@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
     .select('*', { count: 'exact', head: true })
     .ilike('city', city)
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   const clinicCount = count || 0
   if (clinicCount === 0) return { title: 'Not Found' }
@@ -62,6 +63,7 @@ export default async function CityPage({ params }: CityPageProps) {
     .select('*')
     .ilike('city', cityName)
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
     .order('google_rating', { ascending: false, nullsFirst: false })
 
   if (!listings || listings.length === 0) {
@@ -106,6 +108,7 @@ export default async function CityPage({ params }: CityPageProps) {
     .from('listings')
     .select('city')
     .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
 
   const allCitiesInDb = Array.from(new Set((allCityRows || []).map(r => r.city)))
   const nearbyCities = getNearbyCities(actualCityName, allCitiesInDb, 5)

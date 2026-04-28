@@ -103,6 +103,14 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   if (!listing) notFound()
 
+  // If listing is hidden, only allow the owner to view it
+  if (listing.hidden) {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user || user.id !== listing.claimed_by) {
+      notFound()
+    }
+  }
+
   const typed = listing as unknown as ListingWithRelations
 
   const PLACEHOLDER_IMAGES = [
