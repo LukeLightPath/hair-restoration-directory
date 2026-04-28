@@ -136,7 +136,14 @@ export default function Header() {
                     <p className="text-xs text-muted-foreground">Signed in as</p>
                     <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
                   </div>
-                  {/* Dashboard links hidden — re-enable when dashboard is live */}
+                  <Link
+                    href="/dashboard"
+                    className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                    Dashboard
+                  </Link>
                   <hr className="my-1 border-border" />
                   <button
                     onClick={handleLogout}
@@ -215,7 +222,14 @@ export default function Header() {
                   <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
                 </div>
               </div>
-              {/* Dashboard link hidden — re-enable when dashboard is live */}
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-base font-medium text-foreground hover:bg-muted transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
+              </Link>
               <button
                 onClick={() => { handleLogout(); setMobileOpen(false) }}
                 className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-base font-medium text-destructive hover:bg-destructive/5"
