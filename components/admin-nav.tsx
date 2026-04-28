@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, ShieldCheck, BarChart3, FileText, MessageSquare } from 'lucide-react'
+import { LayoutDashboard, ShieldCheck, BarChart3, FileText, MessageSquare, Award } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const ADMIN_LINKS = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true },
+  { href: '/admin#featured', label: 'Featured', icon: Award },
   { href: '/admin/inquiries', label: 'Enquiries', icon: MessageSquare },
   { href: '/admin/claims', label: 'Claims', icon: ShieldCheck },
   { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },

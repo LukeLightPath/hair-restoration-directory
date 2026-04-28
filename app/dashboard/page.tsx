@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { FileText, MessageSquare, Eye, Globe, Phone, TrendingUp, ArrowRight } from 'lucide-react'
+import { FileText, MessageSquare, Eye, Globe, Phone, TrendingUp, ArrowRight, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/utils'
 import DashboardClaimSearch from '@/components/dashboard-claim-search'
@@ -39,23 +39,26 @@ export default async function DashboardPage() {
         .eq('listing_id', listing.id)
     : { count: 0 }
 
-  // Get this month's analytics
-  const startOfMonth = new Date()
-  startOfMonth.setDate(1)
-  startOfMonth.setHours(0, 0, 0, 0)
-
-  const { data: monthlyAnalytics } = listing
-    ? await supabase
-        .from('listing_analytics')
-        .select('page_views, phone_clicks, website_clicks, inquiry_clicks')
-        .eq('listing_id', listing.id)
-        .gte('date', startOfMonth.toISOString().split('T')[0])
-    : { data: [] }
-
-  const monthViews = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.page_views || 0), 0)
-  const monthWebsiteClicks = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.website_clicks || 0), 0)
-  const monthPhoneClicks = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.phone_clicks || 0), 0)
-  const monthInquiryClicks = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.inquiry_clicks || 0), 0)
+  // Analytics data is still collected in the background via page-view-tracker
+  // and click-tracker components. The stat cards are hidden for now to avoid
+  // showing "0" to newly claimed profiles. Re-enable by uncommenting below.
+  //
+  // const startOfMonth = new Date()
+  // startOfMonth.setDate(1)
+  // startOfMonth.setHours(0, 0, 0, 0)
+  //
+  // const { data: monthlyAnalytics } = listing
+  //   ? await supabase
+  //       .from('listing_analytics')
+  //       .select('page_views, phone_clicks, website_clicks, inquiry_clicks')
+  //       .eq('listing_id', listing.id)
+  //       .gte('date', startOfMonth.toISOString().split('T')[0])
+  //   : { data: [] }
+  //
+  // const monthViews = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.page_views || 0), 0)
+  // const monthWebsiteClicks = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.website_clicks || 0), 0)
+  // const monthPhoneClicks = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.phone_clicks || 0), 0)
+  // const monthInquiryClicks = (monthlyAnalytics || []).reduce((sum, a) => sum + (a.inquiry_clicks || 0), 0)
 
   const firstName = (profile?.full_name || 'there').split(' ')[0]
 
@@ -70,7 +73,7 @@ export default async function DashboardPage() {
               Welcome back, {firstName} 👋
             </h1>
             <p className="text-white/70 text-sm">
-              Here&apos;s how your listing is performing this month.
+              Manage your listing, respond to enquiries and grow your clinic&apos;s visibility.
             </p>
           </div>
         </div>
@@ -103,25 +106,20 @@ export default async function DashboardPage() {
         <DashboardClaimSearch />
       ) : (
         <div className="space-y-6">
-          {/* Stat cards */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { label: 'Profile Visits', value: monthViews, icon: Eye, color: 'text-blue-500', gradient: 'from-blue-500/10 to-blue-500/5' },
-              { label: 'Website Clicks', value: monthWebsiteClicks, icon: Globe, color: 'text-emerald-500', gradient: 'from-emerald-500/10 to-emerald-500/5' },
-              { label: 'Phone Clicks', value: monthPhoneClicks, icon: Phone, color: 'text-amber-500', gradient: 'from-amber-500/10 to-amber-500/5' },
-              { label: 'Enquiry Clicks', value: monthInquiryClicks, icon: MessageSquare, color: 'text-primary', gradient: 'from-primary/10 to-primary/5' },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</span>
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${stat.gradient}`}>
-                    <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                  </div>
-                </div>
-                <p className="text-3xl font-bold text-card-foreground">{stat.value}</p>
-                <p className="text-xs text-muted-foreground mt-1">This month</p>
+          {/* Analytics — coming soon placeholder */}
+          <div className="rounded-2xl border border-dashed border-primary/20 bg-primary/[0.02] p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                <BarChart3 className="h-5 w-5 text-primary" />
               </div>
-            ))}
+              <div>
+                <h2 className="text-sm font-semibold text-foreground">Performance Analytics</h2>
+                <p className="text-xs text-muted-foreground">Coming soon</p>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              We&apos;re gathering data on your listing&apos;s performance. Profile views, website clicks, phone clicks and enquiry stats will appear here once enough data has been collected.
+            </p>
           </div>
 
           {/* Listing info */}

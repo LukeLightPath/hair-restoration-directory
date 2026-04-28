@@ -15,7 +15,7 @@ export default async function HomePage() {
     .select('*')
     .eq('featured', true)
     .eq('business_status', 'OPERATIONAL')
-    .order('google_rating', { ascending: false })
+    .order('featured_sort_order', { ascending: true })
     .limit(6)
 
   // Fetch all featured listing services

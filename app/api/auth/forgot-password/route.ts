@@ -14,12 +14,17 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createServiceClient()
 
-    // Generate a recovery link using Supabase Admin API
+    // Generate a recovery link using Supabase Admin API.
+    // admin.generateLink uses the implicit flow — the action_link goes through
+    // Supabase's verify endpoint, which validates the token and redirects to
+    // our redirectTo URL with auth tokens in the URL hash fragment.
     const { data, error } = await supabase.auth.admin.generateLink({
       type: 'recovery',
       email,
       options: {
-        redirectTo: `${SITE_URL}/auth/callback?next=/reset-password`,
+        // Redirect directly to /reset-password — the client-side Supabase
+        // browser client will auto-detect the hash fragments and set the session
+        redirectTo: `${SITE_URL}/reset-password`,
       },
     })
 
@@ -29,7 +34,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
-    // Build the confirmation URL from the returned properties
     const resetUrl = data.properties?.action_link
 
     if (!resetUrl) {

@@ -1,20 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Lock, Loader2, Eye, EyeOff, CheckCircle, ArrowLeft } from 'lucide-react'
+import { Lock, Loader2, Eye, EyeOff, CheckCircle, ArrowLeft, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function ResetPasswordPage() {
   const router = useRouter()
+  const supabase = createClient()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPw, setShowPw] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [hasSession, setHasSession] = useState<boolean | null>(null)
+
+  // Check that the user has a valid session (set by the auth/callback route)
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setHasSession(!!user)
+    })
+  }, [supabase])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -33,7 +42,6 @@ export default function ResetPasswordPage() {
       return
     }
 
-    const supabase = createClient()
     const { error: updateError } = await supabase.auth.updateUser({ password })
 
     if (updateError) {
@@ -52,6 +60,18 @@ export default function ResetPasswordPage() {
     }, 2000)
   }
 
+  // Loading state while checking session
+  if (hasSession === null) {
+    return (
+      <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md text-center">
+          <Loader2 className="mx-auto h-8 w-8 text-primary animate-spin mb-4" />
+          <p className="text-sm text-muted-foreground">Verifying your reset link...</p>
+        </div>
+      </div>
+    )
+  }
+
   if (success) {
     return (
       <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center px-4 py-12">
@@ -63,6 +83,29 @@ export default function ResetPasswordPage() {
           <p className="text-muted-foreground leading-relaxed">
             Your password has been changed successfully. Redirecting you to the dashboard...
           </p>
+        </div>
+      </div>
+    )
+  }
+
+  // No session — link expired or invalid
+  if (!hasSession) {
+    return (
+      <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md text-center">
+          <div className="mx-auto mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
+            <AlertCircle className="h-7 w-7" />
+          </div>
+          <h1 className="text-2xl font-bold text-foreground mb-3">Link expired</h1>
+          <p className="text-muted-foreground leading-relaxed mb-6">
+            This password reset link has expired or is invalid. Please request a new one.
+          </p>
+          <Link
+            href="/forgot-password"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary-hover hover:shadow-md"
+          >
+            Request new link
+          </Link>
         </div>
       </div>
     )

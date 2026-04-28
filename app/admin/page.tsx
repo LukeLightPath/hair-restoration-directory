@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Eye, Globe, Phone, MessageSquare, FileText, ShieldCheck, Clock, Users } from 'lucide-react'
 import { formatDateShort } from '@/lib/utils'
+import FeaturedClinicsManager from '@/components/featured-clinics-manager'
 
 export default async function AdminOverviewPage() {
   const supabase = await createClient()
@@ -156,6 +157,12 @@ export default async function AdminOverviewPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Featured clinics manager */}
+      <div className="mb-8">
+        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Homepage Featured</h2>
+        <FeaturedClinicsManager />
       </div>
 
       {/* Activity feed */}

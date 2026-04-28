@@ -37,6 +37,7 @@ export interface Listing {
   claimed: boolean
   claimed_by: string | null
   featured: boolean
+  featured_sort_order: number
   source: string | null
   claim_status: 'none' | 'pending' | 'approved' | 'rejected'
   claim_requested_by: string | null

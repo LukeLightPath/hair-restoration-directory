@@ -34,16 +34,53 @@ export async function POST(request: NextRequest) {
 
     const column = columnMap[event_type]
 
-    // Atomically increment the counter via RPC
+    // Step 1: Ensure the row exists (ignore if it already does)
+    await supabase
+      .from('listing_analytics')
+      .upsert(
+        {
+          listing_id,
+          date: today,
+          page_views: 0,
+          phone_clicks: 0,
+          website_clicks: 0,
+          inquiry_clicks: 0,
+        },
+        { onConflict: 'listing_id,date', ignoreDuplicates: true }
+      )
+
+    // Step 2: Increment the specific column using raw rpc
     const { error } = await supabase.rpc('increment_analytics', {
       p_listing_id: listing_id,
       p_date: today,
       p_column: column,
     })
 
+    // If RPC fails (function may not exist), fall back to select + update
     if (error) {
-      console.error('Analytics upsert error:', error)
-      return NextResponse.json({ error: 'Failed to track event' }, { status: 500 })
+      console.warn('RPC increment failed, using fallback:', error.message)
+
+      // Read current value
+      const { data: current } = await supabase
+        .from('listing_analytics')
+        .select(column)
+        .eq('listing_id', listing_id)
+        .eq('date', today)
+        .single()
+
+      const currentVal = (current as Record<string, number> | null)?.[column] || 0
+
+      // Update with incremented value
+      const { error: updateError } = await supabase
+        .from('listing_analytics')
+        .update({ [column]: currentVal + 1 })
+        .eq('listing_id', listing_id)
+        .eq('date', today)
+
+      if (updateError) {
+        console.error('Analytics update error:', updateError)
+        return NextResponse.json({ error: 'Failed to track event' }, { status: 500 })
+      }
     }
 
     return NextResponse.json({ success: true })
@@ -52,3 +89,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+
