@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import {
   Upload, X, Loader2, CheckCircle, AlertCircle, Image as ImageIcon,
@@ -31,9 +31,6 @@ export default function ImageManager({
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [deletingLogo, setDeletingLogo] = useState(false)
-
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const logoInputRef = useRef<HTMLInputElement>(null)
 
   const MAX_IMAGES = 10
 
@@ -281,10 +278,12 @@ export default function ImageManager({
 
           {/* Upload button */}
           <div className="space-y-2">
-            <button
-              onClick={() => logoInputRef.current?.click()}
-              disabled={uploadingLogo}
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary-hover hover:shadow-md disabled:opacity-50 active:scale-[0.98]"
+            <label
+              htmlFor="logo-file-input"
+              className={cn(
+                'inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary-hover hover:shadow-md active:scale-[0.98] cursor-pointer',
+                uploadingLogo && 'opacity-50 pointer-events-none'
+              )}
             >
               {uploadingLogo ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -292,10 +291,10 @@ export default function ImageManager({
                 <Upload className="h-4 w-4" />
               )}
               {logoUrl ? 'Replace logo' : 'Upload logo'}
-            </button>
+            </label>
             <p className="text-xs text-muted-foreground">JPEG, PNG or WebP. Max 5 MB. Recommended: 400×400px.</p>
             <input
-              ref={logoInputRef}
+              id="logo-file-input"
               type="file"
               accept="image/jpeg,image/png,image/webp"
               onChange={handleLogoUpload}
@@ -390,13 +389,12 @@ export default function ImageManager({
 
         {/* Upload dropzone */}
         {images.length < MAX_IMAGES && (
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
+          <label
+            htmlFor="gallery-file-input"
             className={cn(
-              'w-full rounded-2xl border-2 border-dashed transition-all py-10',
+              'block w-full rounded-2xl border-2 border-dashed transition-all py-10',
               uploading
-                ? 'border-primary/30 bg-primary/5 cursor-wait'
+                ? 'border-primary/30 bg-primary/5 cursor-wait pointer-events-none'
                 : 'border-border bg-muted/20 hover:border-primary/40 hover:bg-primary/5 cursor-pointer'
             )}
           >
@@ -417,11 +415,11 @@ export default function ImageManager({
                 </p>
               </div>
             </div>
-          </button>
+          </label>
         )}
 
         <input
-          ref={fileInputRef}
+          id="gallery-file-input"
           type="file"
           accept="image/jpeg,image/png,image/webp"
           multiple
