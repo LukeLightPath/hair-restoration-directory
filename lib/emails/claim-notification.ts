@@ -6,7 +6,7 @@ interface ClaimEmailData {
 }
 
 export function buildClaimSubject(clinicName: string) {
-  return `New Claim Request — ${clinicName}`
+  return `New Claim Request: ${clinicName}`
 }
 
 export function buildClaimHtml({
@@ -56,7 +56,7 @@ export function buildClaimHtml({
     </div>
 
     <div style="text-align:center;padding:20px 0 0;">
-      <p style="margin:0;font-size:12px;color:#9ca3af;">Hair Restoration Guide — Admin Notification</p>
+      <p style="margin:0;font-size:12px;color:#9ca3af;">Hair Restoration Guide | Admin Notification</p>
     </div>
 
   </div>

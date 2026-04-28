@@ -7,8 +7,8 @@ interface ClaimDecisionEmailData {
 
 export function buildClaimDecisionSubject(clinicName: string, action: 'approve' | 'reject') {
   return action === 'approve'
-    ? `Claim Approved — ${clinicName}`
-    : `Claim Update — ${clinicName}`
+    ? `Claim Approved: ${clinicName}`
+    : `Claim Update: ${clinicName}`
 }
 
 export function buildClaimDecisionHtml({

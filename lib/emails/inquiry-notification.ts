@@ -8,7 +8,7 @@ interface InquiryEmailData {
 }
 
 export function buildInquirySubject(enquirerName: string, clinicName: string) {
-  return `New Enquiry for ${clinicName} — ${enquirerName}`
+  return `New Enquiry for ${clinicName}: ${enquirerName}`
 }
 
 export function buildInquiryHtml({
