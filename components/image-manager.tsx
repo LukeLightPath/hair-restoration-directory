@@ -90,8 +90,9 @@ export default function ImageManager({
 
   /* ── Gallery image upload ── */
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files
-    if (!files || files.length === 0) return
+    const fileList = e.target.files
+    if (!fileList || fileList.length === 0) return
+    const files = Array.from(fileList)
     e.target.value = ''
 
     if (images.length + files.length > MAX_IMAGES) {
@@ -103,7 +104,7 @@ export default function ImageManager({
     const uploaded: ListingImage[] = []
     const errors: string[] = []
 
-    for (const file of Array.from(files)) {
+    for (const file of files) {
       try {
         const formData = new FormData()
         formData.append('file', file)
