@@ -253,39 +253,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
               {/* Image Gallery */}
               <section className="mt-6">
                 {hasRealImages ? (
-                  <ImageLightbox images={typed.listing_images} clinicName={typed.title}>
-                    {(openLightbox) => (
-                      <div className={cn(
-                        "grid gap-2 rounded-2xl overflow-hidden",
-                        typed.listing_images.length === 1
-                          ? "grid-cols-1"
-                          : "grid-cols-2 sm:grid-cols-3"
-                      )}>
-                        {typed.listing_images.slice(0, 6).map((img, idx) => (
-                          <div
-                            key={img.id}
-                            onClick={() => openLightbox(idx)}
-                            className={cn(
-                              'relative overflow-hidden bg-muted group/img cursor-pointer',
-                              typed.listing_images.length === 1
-                                ? 'aspect-[16/10]'
-                                : idx === 0
-                                  ? 'col-span-2 row-span-2'
-                                  : 'aspect-[4/3]'
-                            )}
-                          >
-                            <Image
-                              src={img.storage_path}
-                              alt={img.alt_text || `${typed.title} photo ${idx + 1}`}
-                              fill
-                              className="object-cover transition-transform duration-500 group-hover/img:scale-105"
-                              sizes={idx === 0 ? '(max-width: 768px) 100vw, 66vw' : '(max-width: 768px) 50vw, 33vw'}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </ImageLightbox>
+                  <ImageLightbox images={typed.listing_images} clinicName={typed.title} />
                 ) : (
                   <div className="rounded-2xl border border-dashed border-border bg-muted/20 p-8">
                     <div className="grid gap-3 grid-cols-3">

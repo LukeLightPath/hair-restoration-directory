@@ -9,10 +9,9 @@ import type { ListingImage } from '@/lib/types'
 interface ImageLightboxProps {
   images: ListingImage[]
   clinicName: string
-  children: (openLightbox: (index: number) => void) => React.ReactNode
 }
 
-export default function ImageLightbox({ images, clinicName, children }: ImageLightboxProps) {
+export default function ImageLightbox({ images, clinicName }: ImageLightboxProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -55,9 +54,38 @@ export default function ImageLightbox({ images, clinicName, children }: ImageLig
 
   return (
     <>
-      {children(openLightbox)}
+      {/* ── Gallery Grid ── */}
+      <div className={cn(
+        "grid gap-2 rounded-2xl overflow-hidden",
+        images.length === 1
+          ? "grid-cols-1"
+          : "grid-cols-2 sm:grid-cols-3"
+      )}>
+        {images.slice(0, 6).map((img, idx) => (
+          <div
+            key={img.id}
+            onClick={() => openLightbox(idx)}
+            className={cn(
+              'relative overflow-hidden bg-muted group/img cursor-pointer',
+              images.length === 1
+                ? 'aspect-[16/10]'
+                : idx === 0
+                  ? 'col-span-2 row-span-2'
+                  : 'aspect-[4/3]'
+            )}
+          >
+            <Image
+              src={img.storage_path}
+              alt={img.alt_text || `${clinicName} photo ${idx + 1}`}
+              fill
+              className="object-cover transition-transform duration-500 group-hover/img:scale-105"
+              sizes={idx === 0 ? '(max-width: 768px) 100vw, 66vw' : '(max-width: 768px) 50vw, 33vw'}
+            />
+          </div>
+        ))}
+      </div>
 
-      {/* Lightbox overlay */}
+      {/* ── Lightbox Overlay ── */}
       {isOpen && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center"
