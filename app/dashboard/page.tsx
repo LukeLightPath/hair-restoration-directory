@@ -118,7 +118,7 @@ export default async function DashboardPage() {
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              We&apos;re gathering data on your listing&apos;s performance. Profile views, website clicks, phone clicks and enquiry stats will appear here once enough data has been collected.
+              We&apos;re currently building your performance analytics dashboard. Profile views, website clicks, phone clicks and enquiry stats will appear here once this feature is ready.
             </p>
           </div>
 
