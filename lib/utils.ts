@@ -76,3 +76,27 @@ export function canonicalUrl(path: string): string {
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }
+
+/**
+ * Resolve a city slug back to its exact database name by fetching all
+ * distinct cities and matching against their slugified form.
+ *
+ * This handles hyphenated cities (Weston-super-Mare, Stoke-on-Trent, etc.)
+ * that cityFromSlug() cannot reverse correctly because hyphens are ambiguous
+ * in URL slugs.
+ */
+export async function resolveCityFromSlug(
+  supabase: { from: (table: string) => any },
+  slug: string
+): Promise<string | null> {
+  const { data: rows } = await supabase
+    .from('listings')
+    .select('city')
+    .eq('business_status', 'OPERATIONAL')
+    .eq('hidden', false)
+
+  if (!rows || rows.length === 0) return null
+
+  const uniqueCities = Array.from<string>(new Set(rows.map((r: { city: string }) => r.city)))
+  return uniqueCities.find(city => citySlug(city) === slug) ?? null
+}

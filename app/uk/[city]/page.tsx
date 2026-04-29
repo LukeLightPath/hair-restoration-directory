@@ -6,7 +6,7 @@ import {
   BookOpen, Scissors
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { cityFromSlug, citySlug, canonicalUrl, cn } from '@/lib/utils'
+import { cityFromSlug, citySlug, canonicalUrl, cn, resolveCityFromSlug } from '@/lib/utils'
 import { SERVICE_LABELS } from '@/lib/types'
 import type { ListingImage } from '@/lib/types'
 import { getCityContent } from '@/lib/city-content-variants'
@@ -21,9 +21,11 @@ interface CityPageProps {
 
 export async function generateMetadata({ params }: CityPageProps): Promise<Metadata> {
   const { city: slug } = await params
-  const city = cityFromSlug(slug)
 
   const supabase = await createClient()
+  const city = await resolveCityFromSlug(supabase, slug)
+  if (!city) return { title: 'Not Found' }
+
   const { count } = await supabase
     .from('listings')
     .select('*', { count: 'exact', head: true })
@@ -53,9 +55,12 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
 
 export default async function CityPage({ params }: CityPageProps) {
   const { city: citySlugParam } = await params
-  const cityName = cityFromSlug(citySlugParam)
 
   const supabase = await createClient()
+
+  // Resolve slug to exact DB city name (handles hyphenated cities like Weston-super-Mare)
+  const cityName = await resolveCityFromSlug(supabase, citySlugParam)
+  if (!cityName) notFound()
 
   // Fetch listings for this city
   const { data: listings } = await supabase
