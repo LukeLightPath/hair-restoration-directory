@@ -18,6 +18,7 @@ export const UK_REGIONS = [
   'Scotland',
   'Wales',
   'Northern Ireland',
+  'Republic of Ireland',
 ] as const
 
 export type UKRegion = typeof UK_REGIONS[number]
@@ -72,6 +73,8 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'West Sussex': 'South East',
   'Milton Keynes': 'South East',
   'Brighton and Hove': 'South East',
+  'Brighton & Hove': 'South East',
+  'Brighton': 'South East',
   'Medway': 'South East',
   'Portsmouth': 'South East',
   'Southampton': 'South East',
@@ -101,6 +104,8 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Bournemouth, Christchurch and Poole': 'South West',
   'City of Bristol': 'South West',
   'Bristol, City of': 'South West',
+  'Exeter': 'South West',
+  'Gloucester': 'South West',
 
   // ── East of England ──
   'Bedfordshire': 'East of England',
@@ -115,6 +120,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Peterborough': 'East of England',
   'Southend-on-Sea': 'East of England',
   'Thurrock': 'East of England',
+  'Basildon': 'East of England',
 
   // ── East Midlands ──
   'Derbyshire': 'East Midlands',
@@ -128,6 +134,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Nottingham': 'East Midlands',
   'North Northamptonshire': 'East Midlands',
   'West Northamptonshire': 'East Midlands',
+  'Markfield': 'East Midlands',
 
   // ── West Midlands ──
   'Herefordshire': 'West Midlands',
@@ -159,6 +166,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Cheshire West and Chester': 'North West',
   'Halton': 'North West',
   'Warrington': 'North West',
+  'Chester': 'North West',
   'Blackburn with Darwen': 'North West',
   'Blackpool': 'North West',
   'Bolton': 'North West',
@@ -215,6 +223,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Leeds': 'Yorkshire & the Humber',
   'Wakefield': 'Yorkshire & the Humber',
   'Humberside': 'Yorkshire & the Humber',
+  'Hessle': 'Yorkshire & the Humber',
 
   // ── Scotland ──
   'Aberdeenshire': 'Scotland',
@@ -234,6 +243,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Glasgow': 'Scotland',
   'Glasgow City': 'Scotland',
   'Highland': 'Scotland',
+  'Inverness': 'Scotland',
   'Inverclyde': 'Scotland',
   'Midlothian': 'Scotland',
   'Moray': 'Scotland',
@@ -300,6 +310,10 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'County Fermanagh': 'Northern Ireland',
   'County Londonderry': 'Northern Ireland',
   'County Tyrone': 'Northern Ireland',
+
+  // ── Republic of Ireland ──
+  'Dublin': 'Republic of Ireland',
+  'County Dublin': 'Republic of Ireland',
 }
 
 /**

@@ -34,12 +34,18 @@ export default async function AllCitiesPage() {
 
   // Convert to array with region assignment
   const cities: CityWithRegion[] = Array.from(cityData.entries())
-    .map(([city, { count, county }]) => ({
-      city,
-      slug: citySlug(city),
-      count,
-      region: getRegion(county),
-    }))
+    .map(([city, { count, county }]) => {
+      let region = getRegion(county)
+      if (region === 'Other') {
+        region = getRegion(city)
+      }
+      return {
+        city,
+        slug: citySlug(city),
+        count,
+        region,
+      }
+    })
     .sort((a, b) => b.count - a.count)
 
   const totalClinics = listings?.length || 0
