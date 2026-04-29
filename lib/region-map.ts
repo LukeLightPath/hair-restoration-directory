@@ -84,6 +84,9 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Wokingham': 'South East',
   'West Berkshire': 'South East',
   'Bracknell Forest': 'South East',
+  'High Wycombe': 'South East',
+  'Folkestone': 'South East',
+  'Ashford': 'South East',
 
   // ── South West ──
   'Bristol': 'South West',
@@ -121,6 +124,8 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Southend-on-Sea': 'East of England',
   'Thurrock': 'East of England',
   'Basildon': 'East of England',
+  'St Albans': 'East of England',
+  'Stevenage': 'East of England',
 
   // ── East Midlands ──
   'Derbyshire': 'East Midlands',
@@ -135,6 +140,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'North Northamptonshire': 'East Midlands',
   'West Northamptonshire': 'East Midlands',
   'Markfield': 'East Midlands',
+  'Mansfield': 'East Midlands',
 
   // ── West Midlands ──
   'Herefordshire': 'West Midlands',
@@ -184,6 +190,8 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Wirral': 'North West',
   'Westmorland and Furness': 'North West',
   'Cumberland': 'North West',
+  'Blackburn': 'North West',
+  'Burnley': 'North West',
 
   // ── North East ──
   'County Durham': 'North East',
@@ -201,6 +209,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Redcar and Cleveland': 'North East',
   'Stockton-on-Tees': 'North East',
   'Teesside': 'North East',
+  'Newcastle': 'North East',
 
   // ── Yorkshire & the Humber ──
   'East Riding of Yorkshire': 'Yorkshire & the Humber',
@@ -224,6 +233,7 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Wakefield': 'Yorkshire & the Humber',
   'Humberside': 'Yorkshire & the Humber',
   'Hessle': 'Yorkshire & the Humber',
+  'Grimsby': 'Yorkshire & the Humber',
 
   // ── Scotland ──
   'Aberdeenshire': 'Scotland',
@@ -261,6 +271,9 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'West Lothian': 'Scotland',
   'Aberdeen': 'Scotland',
   'Aberdeen City': 'Scotland',
+  'Dunfermline': 'Scotland',
+  'Ayr': 'Scotland',
+  'Dumfries': 'Scotland',
 
   // ── Wales ──
   'Blaenau Gwent': 'Wales',
@@ -285,6 +298,8 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'Torfaen': 'Wales',
   'Vale of Glamorgan': 'Wales',
   'Wrexham': 'Wales',
+  'Llanelli': 'Wales',
+  'Aberystwyth': 'Wales',
 
   // ── Northern Ireland ──
   'Antrim': 'Northern Ireland',
@@ -310,6 +325,10 @@ const COUNTY_TO_REGION: Record<string, UKRegion> = {
   'County Fermanagh': 'Northern Ireland',
   'County Londonderry': 'Northern Ireland',
   'County Tyrone': 'Northern Ireland',
+  'Derry': 'Northern Ireland',
+  'Lisburn': 'Northern Ireland',
+  'Bangor': 'Northern Ireland',
+  'Newry': 'Northern Ireland',
 
   // ── Republic of Ireland ──
   'Dublin': 'Republic of Ireland',
