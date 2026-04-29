@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { Send, Loader2, CheckCircle, AlertCircle, Check } from 'lucide-react'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { cn } from '@/lib/utils'
 import { pushEvent } from '@/lib/analytics'
 
@@ -19,7 +20,9 @@ export default function ContactForm({ listingId, clinicName, className, ctaLabel
   const [errorMsg, setErrorMsg] = useState('')
   const [shake, setShake] = useState(false)
   const [consent, setConsent] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const turnstileRef = useRef<TurnstileInstance>(null)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -33,6 +36,7 @@ export default function ContactForm({ listingId, clinicName, className, ctaLabel
       email: formData.get('email') as string,
       phone: formData.get('phone') as string || null,
       message: formData.get('message') as string || null,
+      turnstileToken,
     }
 
     try {
@@ -68,6 +72,10 @@ export default function ContactForm({ listingId, clinicName, className, ctaLabel
       // Trigger validation shake
       setShake(true)
       setTimeout(() => setShake(false), 500)
+      
+      // Reset Turnstile so user can try again
+      turnstileRef.current?.reset()
+      setTurnstileToken(null)
     }
   }
 
@@ -183,9 +191,21 @@ export default function ContactForm({ listingId, clinicName, className, ctaLabel
         </div>
       )}
 
+      {/* Cloudflare Turnstile */}
+      <div className="flex justify-center py-2">
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          onSuccess={(token) => setTurnstileToken(token)}
+          onError={() => setTurnstileToken(null)}
+          onExpire={() => setTurnstileToken(null)}
+          options={{ theme: 'light' }}
+        />
+      </div>
+
       <button
         type="submit"
-        disabled={status === 'loading' || !consent}
+        disabled={status === 'loading' || !consent || !turnstileToken}
         className="w-full flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground shadow-sm transition-all hover:bg-accent-hover hover:shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {status === 'loading' ? (

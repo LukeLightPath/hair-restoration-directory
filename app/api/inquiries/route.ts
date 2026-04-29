@@ -13,13 +13,34 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { listing_id, name, email, phone, message } = body
+    const { listing_id, name, email, phone, message, turnstileToken } = body
 
     if (!listing_id || !name || !email) {
       return NextResponse.json(
         { error: 'Missing required fields: listing_id, name, email' },
         { status: 400 }
       )
+    }
+
+    if (!turnstileToken) {
+      return NextResponse.json({ error: 'Missing Turnstile token' }, { status: 400 })
+    }
+
+    // Verify Turnstile Token
+    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        secret: process.env.TURNSTILE_SECRET_KEY!,
+        response: turnstileToken,
+      }),
+    })
+
+    const verifyData = await verifyRes.json()
+
+    if (!verifyData.success) {
+      console.error('Turnstile verification failed:', verifyData)
+      return NextResponse.json({ error: 'CAPTCHA verification failed. Please try again.' }, { status: 400 })
     }
 
     const supabase = await createServiceClient()
