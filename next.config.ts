@@ -22,6 +22,20 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: '/uk/brighton',
+        destination: '/uk/brighton-and-hove',
+        permanent: true,
+      },
+      {
+        source: '/uk/brighton/:slug',
+        destination: '/uk/brighton-and-hove/:slug',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default nextConfig;
