@@ -69,6 +69,7 @@ export default async function CityPage({ params }: CityPageProps) {
     .ilike('city', cityName)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
+    .order('claimed', { ascending: false })
     .order('google_rating', { ascending: false, nullsFirst: false })
 
   if (!listings || listings.length === 0) {

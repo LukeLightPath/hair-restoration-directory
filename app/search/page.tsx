@@ -221,6 +221,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     .select('*')
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
+    .order('claimed', { ascending: false })
     .order('google_rating', { ascending: false, nullsFirst: false })
     .range(from, to)
 

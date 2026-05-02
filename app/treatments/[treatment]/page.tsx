@@ -62,6 +62,7 @@ export default async function TreatmentPage({ params }: TreatmentPageProps) {
     .in('id', listingIds)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
+    .order('claimed', { ascending: false })
     .order('google_rating', { ascending: false, nullsFirst: false })
 
   // Fetch all services for these listings

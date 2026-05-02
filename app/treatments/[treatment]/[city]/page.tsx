@@ -52,6 +52,7 @@ export default async function TreatmentCityPage({ params }: TreatmentCityPagePro
     .ilike('city', cityName)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
+    .order('claimed', { ascending: false })
     .order('google_rating', { ascending: false, nullsFirst: false })
 
   // Filter to only those offering this treatment
