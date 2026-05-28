@@ -1,31 +1,14 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Mail, Lock, Loader2, Eye, EyeOff, Pencil, Shield, Heart } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
-  return (
-    <Suspense fallback={
-      <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-6 w-6 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    }>
-      <LoginForm />
-    </Suspense>
-  )
-}
-
-function LoginForm() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') || '/dashboard'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -46,6 +29,10 @@ function LoginForm() {
       setLoading(false)
       return
     }
+
+    // Read redirect param at submit time to avoid useSearchParams() Suspense
+    const params = new URLSearchParams(window.location.search)
+    const redirect = params.get('redirect') || '/dashboard'
 
     router.push(redirect)
     router.refresh()
@@ -182,3 +169,4 @@ function LoginForm() {
     </div>
   )
 }
+
