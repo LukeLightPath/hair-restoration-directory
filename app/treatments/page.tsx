@@ -42,6 +42,8 @@ const TREATMENT_GRADIENTS: Record<string, string> = {
   'cranial-prosthesis': 'from-sky-500/15 to-sky-500/5',
 }
 
+export const revalidate = 3600 // ISR: regenerate at most once per hour
+
 export default async function TreatmentsIndexPage() {
   const supabase = await createClient()
 

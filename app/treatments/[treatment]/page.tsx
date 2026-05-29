@@ -9,6 +9,8 @@ import { citySlug, canonicalUrl } from '@/lib/utils'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
 
+export const revalidate = 3600 // ISR: regenerate at most once per hour
+
 interface TreatmentPageProps {
   params: Promise<{ treatment: string }>
 }

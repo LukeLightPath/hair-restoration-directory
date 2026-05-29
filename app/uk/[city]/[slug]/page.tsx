@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server'
 import { cn, citySlug, cityFromSlug, canonicalUrl } from '@/lib/utils'
 import { SERVICE_LABELS, TREATMENT_CATEGORY_LABELS } from '@/lib/types'
 import type { ListingWithRelations } from '@/lib/types'
+import { getListingMeta } from '@/lib/data'
 import Breadcrumbs from '@/components/breadcrumbs'
 import ServiceBadges from '@/components/service-badges'
 import ReviewCard from '@/components/review-card'
@@ -19,19 +20,16 @@ import PageViewTracker from '@/components/page-view-tracker'
 import ContactForm from '@/components/contact-form'
 import ImageLightbox from '@/components/image-lightbox'
 
+export const revalidate = 3600 // ISR: regenerate at most once per hour
+
 interface ListingPageProps {
   params: Promise<{ city: string; slug: string }>
 }
 
 export async function generateMetadata({ params }: ListingPageProps): Promise<Metadata> {
   const { city: cityParam, slug } = await params
-  const supabase = await createClient()
 
-  const { data: listing } = await supabase
-    .from('listings')
-    .select('title, city, meta_title, meta_description, description')
-    .eq('slug', slug)
-    .single()
+  const listing = await getListingMeta(slug)
 
   if (!listing) return { title: 'Clinic Not Found' }
 

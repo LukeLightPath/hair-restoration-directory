@@ -2,9 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getTreatmentBySlug, SERVICE_LABELS } from '@/lib/types'
-import { cityFromSlug, canonicalUrl, resolveCityFromSlug } from '@/lib/utils'
+import { cityFromSlug, canonicalUrl } from '@/lib/utils'
+import { resolveCityFromSlugCached } from '@/lib/data'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
+
+export const revalidate = 3600 // ISR: regenerate at most once per hour
 
 interface TreatmentCityPageProps {
   params: Promise<{ treatment: string; city: string }>
@@ -16,8 +19,7 @@ export async function generateMetadata({ params }: TreatmentCityPageProps): Prom
 
   if (!treatment || !treatment.enabled) return { title: 'Not Found' }
 
-  const supabase = await createClient()
-  const cityName = await resolveCityFromSlug(supabase, cityParam) || cityFromSlug(cityParam)
+  const cityName = await resolveCityFromSlugCached(cityParam) || cityFromSlug(cityParam)
 
   return {
     title: `${treatment.label} in ${cityName} | Compare Clinics & Reviews`,
@@ -34,8 +36,9 @@ export default async function TreatmentCityPage({ params }: TreatmentCityPagePro
 
   if (!treatment || !treatment.enabled) notFound()
 
+  const cityName = await resolveCityFromSlugCached(cityParam) || cityFromSlug(cityParam)
+
   const supabase = await createClient()
-  const cityName = await resolveCityFromSlug(supabase, cityParam) || cityFromSlug(cityParam)
 
   // Get listing IDs that offer this treatment
   const { data: serviceRows } = await supabase

@@ -6,7 +6,8 @@ import {
   BookOpen, Scissors
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { cityFromSlug, citySlug, canonicalUrl, cn, resolveCityFromSlug } from '@/lib/utils'
+import { cityFromSlug, citySlug, canonicalUrl, cn } from '@/lib/utils'
+import { resolveCityFromSlugCached, getAllCityCounts } from '@/lib/data'
 import { SERVICE_LABELS } from '@/lib/types'
 import type { ListingImage } from '@/lib/types'
 import { getCityContent } from '@/lib/city-content-variants'
@@ -14,6 +15,8 @@ import type { MiddleSection } from '@/lib/city-content-variants'
 import { getNearbyCities } from '@/lib/nearby-cities'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
+
+export const revalidate = 3600 // ISR: regenerate at most once per hour
 
 interface CityPageProps {
   params: Promise<{ city: string }>
@@ -23,7 +26,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   const { city: slug } = await params
 
   const supabase = await createClient()
-  const city = await resolveCityFromSlug(supabase, slug)
+  const city = await resolveCityFromSlugCached(slug)
   if (!city) return { title: 'Not Found' }
 
   const { count } = await supabase
@@ -59,7 +62,7 @@ export default async function CityPage({ params }: CityPageProps) {
   const supabase = await createClient()
 
   // Resolve slug to exact DB city name (handles hyphenated cities like Weston-super-Mare)
-  const cityName = await resolveCityFromSlug(supabase, citySlugParam)
+  const cityName = await resolveCityFromSlugCached(citySlugParam)
   if (!cityName) notFound()
 
   // Fetch listings for this city
@@ -109,14 +112,9 @@ export default async function CityPage({ params }: CityPageProps) {
   // Get actual city name from first listing
   const actualCityName = listings[0].city
 
-  // Get all cities in DB for nearby cities linking
-  const { data: allCityRows } = await supabase
-    .from('listings')
-    .select('city')
-    .eq('business_status', 'OPERATIONAL')
-    .eq('hidden', false)
-
-  const allCitiesInDb = Array.from(new Set((allCityRows || []).map(r => r.city)))
+  // Get all cities in DB for nearby cities linking (uses cached function)
+  const cityCountMap = await getAllCityCounts()
+  const allCitiesInDb = Array.from(cityCountMap.keys())
   const nearbyCities = getNearbyCities(actualCityName, allCitiesInDb, 5)
 
   // Get city content (variant-selected)

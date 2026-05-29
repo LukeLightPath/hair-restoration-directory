@@ -1,6 +1,8 @@
 import { citySlug } from '@/lib/utils'
 import { TREATMENTS } from '@/lib/types'
 
+export const revalidate = 3600 // ISR: regenerate at most once per hour
+
 // Blog posts are static files, so we maintain the slug list here
 const BLOG_SLUGS = [
   'diy-vs-salon-hair-systems',
@@ -132,7 +134,7 @@ export async function GET() {
   return new Response(toXml(entries), {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
     },
   })
 }

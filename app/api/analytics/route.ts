@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 
+/* Bot User-Agent patterns — these should not trigger analytics writes */
+const BOT_UA_PATTERNS = /bot|crawl|spider|slurp|bingbot|googlebot|yandex|baidu|duckduck|facebookexternalhit|twitterbot|linkedinbot|semrush|ahref|mj12bot|dotbot|petalbot|bytespider|gptbot|claudebot|anthropic/i
+
 export async function POST(request: NextRequest) {
   try {
+    /* ── Skip writes for bots — they inflate analytics and burn IO ── */
+    const userAgent = request.headers.get('user-agent') || ''
+    if (BOT_UA_PATTERNS.test(userAgent)) {
+      return NextResponse.json({ success: true, skipped: 'bot' })
+    }
+
     const body = await request.json()
     const { listing_id, event_type } = body
 

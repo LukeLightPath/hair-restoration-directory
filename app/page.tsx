@@ -2,9 +2,12 @@ import Link from 'next/link'
 import { Search, MapPin, Star, ArrowRight, Shield, Heart, CheckCircle, Users, Award, Scissors, TrendingUp, SlidersHorizontal, UserX } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { citySlug } from '@/lib/utils'
+import { getAllCityCounts } from '@/lib/data'
 import ClinicCard from '@/components/clinic-card'
 import { SERVICE_LABELS } from '@/lib/types'
 import type { Listing, ListingServices, ListingImage } from '@/lib/types'
+
+export const revalidate = 3600 // ISR: regenerate at most once per hour
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -80,23 +83,15 @@ export default async function HomePage() {
     imagesMap[img.listing_id].push(img)
   }
 
-  // Fetch city counts
-  const { data: cityCounts } = await supabase
-    .from('listings')
-    .select('city')
-    .eq('business_status', 'OPERATIONAL')
-    .eq('hidden', false)
-
-  const cityMap = new Map<string, number>()
-  for (const row of cityCounts || []) {
-    cityMap.set(row.city, (cityMap.get(row.city) || 0) + 1)
-  }
+  // Fetch city counts (cached — shared across request)
+  const cityMap = await getAllCityCounts()
   const topCities = Array.from(cityMap.entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, 12)
 
   // Total stats
-  const totalListings = cityCounts?.length || 0
+  let totalListings = 0
+  for (const count of cityMap.values()) totalListings += count
   const totalCities = cityMap.size
 
   return (

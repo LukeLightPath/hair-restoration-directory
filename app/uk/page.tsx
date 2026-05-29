@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     'Browse hair restoration clinics in 200+ UK locations. Filter by region and compare ratings, services and reviews to find the right clinic near you.',
 }
 
+export const revalidate = 3600 // ISR: regenerate at most once per hour
+
 export default async function AllCitiesPage() {
   const supabase = await createClient()
 
