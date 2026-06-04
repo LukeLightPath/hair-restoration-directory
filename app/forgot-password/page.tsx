@@ -4,13 +4,17 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, Loader2, ArrowLeft, CheckCircle } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hairrestorationguide.com'
 
 export default function ForgotPasswordPage() {
   return (
-    <Suspense>
+    <Suspense fallback={
+      <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md text-center">
+          <Loader2 className="mx-auto h-8 w-8 text-primary animate-spin mb-4" />
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
       <ForgotPasswordForm />
     </Suspense>
   )
@@ -28,21 +32,15 @@ function ForgotPasswordForm() {
     setError('')
 
     try {
-      // Call resetPasswordForEmail directly from the browser client.
-      // This properly initiates the PKCE flow:
-      // 1. Client generates code_verifier (stored in cookies by @supabase/ssr)
-      // 2. Supabase sends an email with a link containing a code_challenge
-      // 3. User clicks link → Supabase verify → redirects to our callback with ?code=
-      // 4. Callback exchanges code using the cookie-stored code_verifier
-      // 5. User lands on /reset-password with a valid session
-      const supabase = createClient()
-
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${SITE_URL}/auth/callback?next=/reset-password`,
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       })
 
-      if (resetError) {
-        setError(resetError.message)
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.error || 'Something went wrong. Please try again.')
         setLoading(false)
         return
       }
