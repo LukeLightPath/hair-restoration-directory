@@ -1,10 +1,10 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { Eye, Globe, Phone, MessageSquare, FileText, ShieldCheck, Clock, Users } from 'lucide-react'
 import { formatDateShort } from '@/lib/utils'
 import FeaturedClinicsManager from '@/components/featured-clinics-manager'
 
 export default async function AdminOverviewPage() {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
 
   // Total listings
   const { count: totalListings } = await supabase
