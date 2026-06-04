@@ -1,26 +1,11 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, Loader2, ArrowLeft, CheckCircle } from 'lucide-react'
 
 export default function ForgotPasswordPage() {
-  return (
-    <Suspense fallback={
-      <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md text-center">
-          <Loader2 className="mx-auto h-8 w-8 text-primary animate-spin mb-4" />
-          <p className="text-sm text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    }>
-      <ForgotPasswordForm />
-    </Suspense>
-  )
-}
-
-function ForgotPasswordForm() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
