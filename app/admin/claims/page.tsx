@@ -10,13 +10,13 @@ export default async function AdminClaimsPage() {
   // Get all listings with non-none claim status
   const { data: pendingClaims } = await supabase
     .from('listings')
-    .select('id, title, city, claim_status, claim_requested_by, claim_requested_at')
+    .select('id, title, city, claim_status, claim_requested_by, claim_requested_at, claim_requested_name, claim_requested_email')
     .eq('claim_status', 'pending')
     .order('claim_requested_at', { ascending: false })
 
   const { data: historyClaims } = await supabase
     .from('listings')
-    .select('id, title, city, claim_status, claim_requested_by, claim_requested_at, claimed_by')
+    .select('id, title, city, claim_status, claim_requested_by, claim_requested_at, claimed_by, claim_requested_name, claim_requested_email')
     .in('claim_status', ['approved', 'rejected'])
     .order('claim_requested_at', { ascending: false })
     .limit(50)
@@ -77,7 +77,9 @@ export default async function AdminClaimsPage() {
                         <span className="text-xs text-muted-foreground">{claim.city}</span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Requested by <span className="font-medium text-foreground/80">{profileMap.get(claim.claim_requested_by!) || 'Unknown'}</span>
+                        Requested by <span className="font-medium text-foreground/80">{claim.claim_requested_name || profileMap.get(claim.claim_requested_by!) || 'Unknown'}</span>
+                        {claim.claim_requested_email && (
+                          <> (<span className="font-medium text-foreground/80">{claim.claim_requested_email}</span>)</>)}
                         {claim.claim_requested_at && (
                           <> on {formatDateShort(claim.claim_requested_at)}</>
                         )}
@@ -121,7 +123,8 @@ export default async function AdminClaimsPage() {
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-foreground truncate">{claim.title}</p>
                       <p className="text-xs text-muted-foreground">
-                        {claim.city} — {profileMap.get(claim.claim_requested_by!) || 'Unknown'}
+                        {claim.city} — {claim.claim_requested_name || profileMap.get(claim.claim_requested_by!) || 'Unknown'}
+                        {claim.claim_requested_email && <> ({claim.claim_requested_email})</>}
                       </p>
                     </div>
                   </div>

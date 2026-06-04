@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { Shield, Loader2, CheckCircle, AlertCircle, ArrowLeft, LogIn } from 'lucide-react'
+import { Shield, Loader2, CheckCircle, AlertCircle, ArrowLeft, Check, Mail, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 interface ListingInfo {
@@ -16,28 +16,22 @@ interface ListingInfo {
 }
 
 export default function ClaimPage() {
-  const router = useRouter()
   const params = useParams()
   const slug = params.slug as string
 
   const [listing, setListing] = useState<ListingInfo | null>(null)
-  const [user, setUser] = useState<{ id: string; email: string } | null>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'already_claimed'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
 
   useEffect(() => {
     async function init() {
       const supabase = createClient()
 
-      // Check auth
-      const { data: { user: authUser } } = await supabase.auth.getUser()
-      if (authUser) {
-        setUser({ id: authUser.id, email: authUser.email || '' })
-      }
-
-      // Get listing
       const { data } = await supabase
         .from('listings')
         .select('id, title, city, slug, claim_status, claimed')
@@ -57,8 +51,12 @@ export default function ClaimPage() {
     init()
   }, [slug])
 
+  function isValidEmail(value: string) {
+    return value.includes('@') && value.includes('.')
+  }
+
   async function handleClaim() {
-    if (!listing || !user) return
+    if (!listing || !name.trim() || !isValidEmail(email) || !agreedToTerms) return
     setSubmitting(true)
     setErrorMsg('')
 
@@ -66,7 +64,7 @@ export default function ClaimPage() {
       const res = await fetch('/api/claim', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ listing_id: listing.id }),
+        body: JSON.stringify({ listing_id: listing.id, name: name.trim(), email: email.trim() }),
       })
 
       if (res.ok) {
@@ -115,41 +113,6 @@ export default function ClaimPage() {
     )
   }
 
-  // Not logged in
-  if (!user) {
-    return (
-      <div className="mx-auto max-w-lg px-4 py-16">
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 mb-5">
-            <LogIn className="h-6 w-6 text-primary" />
-          </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Log in to Claim</h1>
-          <p className="text-muted-foreground mb-2">
-            You need to be logged in to claim <span className="font-medium text-foreground">{listing.title}</span>.
-          </p>
-          <p className="text-sm text-muted-foreground mb-6">
-            If you don&apos;t have an account yet, you can create one for free.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href={`/login?redirect=/claim/${slug}`}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary-hover transition-all hover:shadow-md"
-            >
-              Log In
-            </Link>
-            <Link
-              href={`/signup?redirect=/claim/${slug}`}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/50 transition-colors"
-            >
-              Create Account
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Already claimed or pending
   if (status === 'already_claimed') {
     return (
       <div className="mx-auto max-w-lg px-4 py-16">
@@ -173,7 +136,6 @@ export default function ClaimPage() {
     )
   }
 
-  // Success
   if (status === 'success') {
     return (
       <div className="mx-auto max-w-lg px-4 py-16">
@@ -187,21 +149,21 @@ export default function ClaimPage() {
             We&apos;ll review it and get back to you within 24 hours.
           </p>
           <Link
-            href="/dashboard"
+            href="/uk"
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors"
           >
-            Go to Dashboard
+            Browse Clinics
           </Link>
         </div>
       </div>
     )
   }
 
-  // Claim form
+  const canSubmit = name.trim() && isValidEmail(email) && agreedToTerms && !submitting
+
   return (
     <div className="mx-auto max-w-lg px-4 py-16">
       <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-        {/* Gradient header */}
         <div className="h-1 bg-gradient-to-r from-primary via-primary-hover to-accent" />
 
         <div className="p-8">
@@ -215,7 +177,6 @@ export default function ClaimPage() {
             </p>
           </div>
 
-          {/* What you get */}
           <div className="rounded-xl bg-primary/[0.03] border border-primary/10 p-5 mb-6">
             <p className="text-sm font-semibold text-foreground mb-3">When approved, you&apos;ll be able to:</p>
             <ul className="space-y-2 text-sm text-muted-foreground">
@@ -238,10 +199,45 @@ export default function ClaimPage() {
             </ul>
           </div>
 
-          {/* Logged in as */}
-          <div className="rounded-xl bg-muted/30 border border-border p-4 mb-6">
-            <p className="text-xs text-muted-foreground mb-1">Claiming as</p>
-            <p className="text-sm font-medium text-foreground">{user.email}</p>
+          <div className="space-y-4 mb-6">
+            <div className="relative">
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full rounded-xl border border-input bg-background py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+              />
+            </div>
+            <div className="relative">
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-input bg-background py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 mb-6">
+            <button
+              type="button"
+              role="checkbox"
+              aria-checked={agreedToTerms}
+              onClick={() => setAgreedToTerms(!agreedToTerms)}
+              className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all ${agreedToTerms ? 'border-primary bg-primary text-primary-foreground' : 'border-input bg-background hover:border-primary/50'}`}
+            >
+              {agreedToTerms && <Check className="h-3.5 w-3.5" />}
+            </button>
+            <label
+              className="text-sm text-muted-foreground leading-snug cursor-pointer select-none"
+              onClick={() => setAgreedToTerms(!agreedToTerms)}
+            >
+              I agree to the <Link href="/terms" className="font-medium text-primary hover:text-primary-hover transition-colors" target="_blank">Terms &amp; Conditions</Link> and <Link href="/privacy" className="font-medium text-primary hover:text-primary-hover transition-colors" target="_blank">Privacy Policy</Link>
+            </label>
           </div>
 
           {errorMsg && (
@@ -252,7 +248,7 @@ export default function ClaimPage() {
 
           <button
             onClick={handleClaim}
-            disabled={submitting}
+            disabled={!canSubmit}
             className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary-hover hover:shadow-md disabled:opacity-50 active:scale-[0.98]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Shield className="h-4 w-4" />}

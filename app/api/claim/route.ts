@@ -1,40 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
-import { createServerClient } from '@supabase/ssr'
+import { checkRateLimit } from '@/lib/rate-limit'
 import { sendEmail } from '@/lib/email'
 import { buildClaimSubject, buildClaimHtml } from '@/lib/emails/claim-notification'
 
 const ADMIN_EMAIL = 'luke@lightpath.agency'
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export async function POST(request: NextRequest) {
   try {
+    const rateLimited = checkRateLimit(request, 5, 300_000)
+    if (rateLimited) return rateLimited
+
     const body = await request.json()
-    const { listing_id } = body
+    const { listing_id, name, email } = body
 
     if (!listing_id) {
       return NextResponse.json({ error: 'Missing listing_id' }, { status: 400 })
     }
 
-    // Get user session
-    const supabaseAuth = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return request.cookies.getAll() },
-          setAll() {},
-        },
-      }
-    )
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      return NextResponse.json({ error: 'Missing or invalid name' }, { status: 400 })
+    }
 
-    const { data: { user } } = await supabaseAuth.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email)) {
+      return NextResponse.json({ error: 'Missing or invalid email' }, { status: 400 })
     }
 
     const supabase = await createServiceClient()
 
-    // Check listing exists and isn't already claimed
     const { data: listing } = await supabase
       .from('listings')
       .select('id, title, claim_status')
@@ -52,12 +47,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Submit claim request
     const { error } = await supabase
       .from('listings')
       .update({
         claim_status: 'pending',
-        claim_requested_by: user.id,
+        claim_requested_name: name.trim(),
+        claim_requested_email: email.trim().toLowerCase(),
         claim_requested_at: new Date().toISOString(),
       })
       .eq('id', listing_id)
@@ -67,22 +62,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to submit claim' }, { status: 500 })
     }
 
-    // Send admin notification (fire-and-forget)
     try {
-      // Get claimer's profile name
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('full_name')
-        .eq('id', user.id)
-        .single()
-
       await sendEmail({
         to: ADMIN_EMAIL,
         subject: buildClaimSubject(listing.title),
         html: buildClaimHtml({
           clinicName: listing.title,
-          claimerEmail: user.email || 'unknown',
-          claimerName: profile?.full_name || null,
+          claimerEmail: email.trim().toLowerCase(),
+          claimerName: name.trim(),
           listingId: listing_id,
         }),
       })

@@ -3,6 +3,7 @@ interface ClaimDecisionEmailData {
   claimerName: string | null
   action: 'approve' | 'reject'
   dashboardUrl: string
+  setupPasswordUrl?: string | null
 }
 
 export function buildClaimDecisionSubject(clinicName: string, action: 'approve' | 'reject') {
@@ -16,6 +17,7 @@ export function buildClaimDecisionHtml({
   claimerName,
   action,
   dashboardUrl,
+  setupPasswordUrl,
 }: ClaimDecisionEmailData): string {
   const isApproved = action === 'approve'
   const firstName = claimerName ? escapeHtml(claimerName.split(' ')[0]) : 'there'
@@ -29,14 +31,29 @@ export function buildClaimDecisionHtml({
     ? 'You can now manage your listing'
     : 'Your claim could not be verified'
 
-  const bodyText = isApproved
+  // For new users who need to set a password
+  const passwordBlock = setupPasswordUrl
     ? `<p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.6;">
-        Hi ${firstName}, great news. Your claim for <strong>${escapeHtml(clinicName)}</strong> has been approved.
+        To get started, click the button below to set your password. This will give you access to your dashboard where you can manage your listing, respond to enquiries and upload photos.
+      </p>
+      <a href="${escapeHtml(setupPasswordUrl)}" style="display:inline-block;background:#2F6364;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">
+        Set Your Password
+      </a>
+      <p style="margin:16px 0 0;font-size:12px;color:#9ca3af;line-height:1.5;">
+        This link will expire in 24 hours. If it expires, visit <a href="${escapeHtml(dashboardUrl.replace('/dashboard', '/forgot-password'))}" style="color:#2563eb;text-decoration:none;">hairrestorationguide.com/forgot-password</a> to request a new one.
+      </p>`
+    : `<p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.6;">
         You can now log in to your dashboard to manage your listing, respond to enquiries and upload photos.
       </p>
       <a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background:#2F6364;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">
         Go to your dashboard
       </a>`
+
+  const bodyText = isApproved
+    ? `<p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.6;">
+        Hi ${firstName}, great news. Your claim for <strong>${escapeHtml(clinicName)}</strong> has been approved.
+      </p>
+      ${passwordBlock}`
     : `<p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.6;">
         Hi ${firstName}, we were unable to verify your claim for <strong>${escapeHtml(clinicName)}</strong> at this time.
         This could happen if the clinic has already been claimed by someone else or if we need more information to verify ownership.
