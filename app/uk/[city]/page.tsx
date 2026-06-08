@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { cityFromSlug, citySlug, canonicalUrl, cn } from '@/lib/utils'
-import { resolveCityFromSlugCached, getAllCityCounts } from '@/lib/data'
+import { resolveCityFromSlugCached, getAllCityCounts, LISTING_CARD_COLUMNS } from '@/lib/data'
 import { SERVICE_LABELS } from '@/lib/types'
 import type { ListingImage } from '@/lib/types'
 import { getCityContent } from '@/lib/city-content-variants'
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
 
   const { count } = await supabase
     .from('listings')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .ilike('city', city)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
@@ -68,7 +68,7 @@ export default async function CityPage({ params }: CityPageProps) {
   // Fetch listings for this city
   const { data: listings } = await supabase
     .from('listings')
-    .select('*')
+    .select(LISTING_CARD_COLUMNS)
     .ilike('city', cityName)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
@@ -83,13 +83,13 @@ export default async function CityPage({ params }: CityPageProps) {
   const listingIds = listings.map(l => l.id)
   const { data: allServices } = await supabase
     .from('listing_services')
-    .select('*')
+    .select('listing_id, has_hair_systems, has_smp, has_wigs, has_extensions, has_prp, has_transplant, has_trichology, has_laser, has_fitting, has_toppers, has_integration, has_cranial')
     .in('listing_id', listingIds)
 
   // Fetch images for all listings
   const { data: allImages } = await supabase
     .from('listing_images')
-    .select('*')
+    .select('id, listing_id, storage_path, alt_text, sort_order')
     .in('listing_id', listingIds)
     .order('sort_order', { ascending: true })
 

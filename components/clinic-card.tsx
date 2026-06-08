@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Phone, ExternalLink, BadgeCheck, Shield, Camera, ArrowRight, Scissors, Award, Users, Layers, Navigation } from 'lucide-react'
 import { cn, citySlug, truncate } from '@/lib/utils'
-import type { Listing, ListingImage } from '@/lib/types'
+import type { ListingCardData, ListingImage } from '@/lib/types'
 import { TREATMENT_CATEGORY_LABELS } from '@/lib/types'
 
 /* ── Gender-aligned placeholder images ── */
@@ -52,7 +52,7 @@ const SERVICE_ICONS: Record<string, string> = {
 const HIDDEN_SERVICES = new Set(['Hair Transplant'])
 
 interface ClinicCardProps {
-  listing: Listing
+  listing: ListingCardData
   services?: string[]
   images?: ListingImage[]
   className?: string

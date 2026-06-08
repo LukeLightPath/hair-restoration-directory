@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getTreatmentBySlug, SERVICE_LABELS } from '@/lib/types'
 import { TREATMENT_CONTENT } from '@/lib/treatment-content'
 import { citySlug, canonicalUrl } from '@/lib/utils'
+import { LISTING_CARD_COLUMNS } from '@/lib/data'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
 
@@ -60,17 +61,18 @@ export default async function TreatmentPage({ params }: TreatmentPageProps) {
   // Fetch the listings
   const { data: listings } = await supabase
     .from('listings')
-    .select('*')
+    .select(LISTING_CARD_COLUMNS)
     .in('id', listingIds)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
     .order('claimed', { ascending: false })
     .order('google_rating', { ascending: false, nullsFirst: false })
+    .limit(12)
 
   // Fetch all services for these listings
   const { data: allServices } = await supabase
     .from('listing_services')
-    .select('*')
+    .select('listing_id, has_hair_systems, has_smp, has_wigs, has_extensions, has_prp, has_transplant, has_trichology, has_laser, has_fitting, has_toppers, has_integration, has_cranial')
     .in('listing_id', listingIds)
 
   const servicesMap: Record<string, string[]> = {}

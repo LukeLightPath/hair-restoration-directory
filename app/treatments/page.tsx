@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Scissors, CircleDot, Wand2, Microscope, Sun, Syringe, Crown, Wrench, Layers, ShieldPlus, Droplets } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
+import { getTreatmentCounts } from '@/lib/data'
 import { TREATMENTS } from '@/lib/types'
 import Breadcrumbs from '@/components/breadcrumbs'
 
@@ -45,18 +45,14 @@ const TREATMENT_GRADIENTS: Record<string, string> = {
 export const revalidate = 3600 // ISR: regenerate at most once per hour
 
 export default async function TreatmentsIndexPage() {
-  const supabase = await createClient()
-
   const enabledTreatments = TREATMENTS.filter(t => t.enabled)
+
+  // Single RPC replaces 11 sequential count queries
+  const dbCounts = await getTreatmentCounts()
+
   const treatmentCounts: Record<string, number> = {}
-
   for (const treatment of enabledTreatments) {
-    const { count } = await supabase
-      .from('listing_services')
-      .select('listing_id', { count: 'exact', head: true })
-      .eq(treatment.dbColumn, true)
-
-    treatmentCounts[treatment.slug] = count || 0
+    treatmentCounts[treatment.slug] = dbCounts[treatment.dbColumn] || 0
   }
 
   return (

@@ -165,6 +165,19 @@ export interface ListingWithRelations extends Listing {
   listing_images: ListingImage[]
 }
 
+/**
+ * Lightweight listing type for card/list views.
+ * Matches the columns in LISTING_CARD_COLUMNS from lib/data.ts.
+ * Used when we SELECT only card-display fields instead of *.
+ */
+export type ListingCardData = Pick<Listing,
+  | 'id' | 'slug' | 'title' | 'city' | 'county' | 'country' | 'street'
+  | 'phone' | 'website' | 'description' | 'treatment_category'
+  | 'google_rating' | 'google_review_count' | 'pricing_tier'
+  | 'men_women_both' | 'claimed' | 'featured' | 'featured_sort_order'
+  | 'logo_url' | 'business_status'
+>
+
 export interface CityInfo {
   city: string
   count: number

@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { Search, MapPin, Star, ArrowRight, Shield, Heart, CheckCircle, Users, Award, Scissors, TrendingUp, SlidersHorizontal, UserX } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { citySlug } from '@/lib/utils'
-import { getAllCityCounts } from '@/lib/data'
+import { getAllCityCounts, LISTING_CARD_COLUMNS } from '@/lib/data'
 import ClinicCard from '@/components/clinic-card'
 import { SERVICE_LABELS } from '@/lib/types'
-import type { Listing, ListingServices, ListingImage } from '@/lib/types'
+import type { ListingCardData, ListingServices, ListingImage } from '@/lib/types'
 
 export const revalidate = 3600 // ISR: regenerate at most once per hour
 
@@ -15,7 +15,7 @@ export default async function HomePage() {
   // Fetch featured clinics
   const { data: featuredListings } = await supabase
     .from('listings')
-    .select('*')
+    .select(LISTING_CARD_COLUMNS)
     .eq('featured', true)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
@@ -27,7 +27,7 @@ export default async function HomePage() {
   const { data: featuredServices } = featuredIds.length > 0
     ? await supabase
         .from('listing_services')
-        .select('*')
+        .select('listing_id, has_hair_systems, has_smp, has_wigs, has_extensions, has_prp, has_transplant, has_trichology, has_laser, has_fitting, has_toppers, has_integration, has_cranial')
         .in('listing_id', featuredIds)
     : { data: [] }
 
@@ -37,7 +37,7 @@ export default async function HomePage() {
   if (displayListings.length === 0) {
     const { data: topRated } = await supabase
       .from('listings')
-      .select('*')
+      .select(LISTING_CARD_COLUMNS)
       .eq('business_status', 'OPERATIONAL')
       .eq('hidden', false)
       .not('google_rating', 'is', null)
@@ -49,7 +49,7 @@ export default async function HomePage() {
     if (topIds.length > 0) {
       const { data: topSvc } = await supabase
         .from('listing_services')
-        .select('*')
+        .select('listing_id, has_hair_systems, has_smp, has_wigs, has_extensions, has_prp, has_transplant, has_trichology, has_laser, has_fitting, has_toppers, has_integration, has_cranial')
         .in('listing_id', topIds)
       displayServices = topSvc || []
     }
@@ -61,7 +61,7 @@ export default async function HomePage() {
   if (displayIds.length > 0) {
     const { data: imgData } = await supabase
       .from('listing_images')
-      .select('*')
+      .select('id, listing_id, storage_path, alt_text, sort_order')
       .in('listing_id', displayIds)
       .order('sort_order', { ascending: true })
     displayImages = (imgData || []) as ListingImage[]
@@ -297,7 +297,7 @@ export default async function HomePage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {displayListings.map((listing: Listing, index: number) => (
+              {displayListings.map((listing: ListingCardData, index: number) => (
                 <ClinicCard
                   key={listing.id}
                   listing={listing}

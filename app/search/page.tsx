@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { SERVICE_LABELS, TREATMENT_CATEGORY_LABELS } from '@/lib/types'
-import type { Listing, ListingImage } from '@/lib/types'
+import type { ListingCardData, ListingImage } from '@/lib/types'
 import { geocodePostcode, UK_POSTCODE_RE } from '@/lib/geocode'
+import { LISTING_CARD_COLUMNS } from '@/lib/data'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
 import { Search as SearchIcon, SlidersHorizontal, ChevronLeft, ChevronRight, MapPin, Navigation } from 'lucide-react'
@@ -13,6 +14,8 @@ export const metadata: Metadata = {
   title: 'Search Hair Restoration Clinics UK',
   description: 'Search and filter non-surgical hair restoration clinics across the UK. Browse by postcode, service or treatment type and compare real reviews.',
 }
+
+export const revalidate = 300 // ISR: regenerate at most once per 5 minutes
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; service?: string; category?: string; page?: string; postcode?: string }>
@@ -129,7 +132,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     // Step 6: Fetch full listing data
     const { data: listings } = await supabase
       .from('listings')
-      .select('*')
+      .select(LISTING_CARD_COLUMNS)
       .in('id', paginatedIds)
 
     // Re-sort by distance (Supabase .in() doesn't preserve order)
@@ -142,7 +145,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     if (paginatedIds.length > 0) {
       const { data: allServices } = await supabase
         .from('listing_services')
-        .select('*')
+        .select('listing_id, has_hair_systems, has_smp, has_wigs, has_extensions, has_prp, has_transplant, has_trichology, has_laser, has_fitting, has_toppers, has_integration, has_cranial')
         .in('listing_id', paginatedIds)
 
       for (const svc of allServices || []) {
@@ -196,7 +199,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   /* Step 2: Build the count query (for pagination) */
   let countQuery = supabase
     .from('listings')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
 
@@ -218,7 +221,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   let dataQuery = supabase
     .from('listings')
-    .select('*')
+    .select(LISTING_CARD_COLUMNS)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
     .order('claimed', { ascending: false })
@@ -246,7 +249,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
     const { data: allServices } = await supabase
       .from('listing_services')
-      .select('*')
+      .select('listing_id, has_hair_systems, has_smp, has_wigs, has_extensions, has_prp, has_transplant, has_trichology, has_laser, has_fitting, has_toppers, has_integration, has_cranial')
       .in('listing_id', ids)
 
     for (const svc of allServices || []) {
@@ -274,7 +277,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 /* ──────────────────────────────────────────────────────────── */
 
 interface RenderProps {
-  listings: Listing[]
+  listings: ListingCardData[]
   servicesMap: Record<string, string[]>
   distanceMap: Record<string, number>
   totalCount: number

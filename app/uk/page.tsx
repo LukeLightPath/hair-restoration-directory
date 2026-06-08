@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { createClient } from '@/lib/supabase/server'
 import { citySlug } from '@/lib/utils'
+import { getCityCountsWithCounty } from '@/lib/data'
 import Breadcrumbs from '@/components/breadcrumbs'
 import LocationGrid from '@/components/location-grid'
 import { getRegion } from '@/lib/region-map'
@@ -15,28 +15,10 @@ export const metadata: Metadata = {
 export const revalidate = 3600 // ISR: regenerate at most once per hour
 
 export default async function AllCitiesPage() {
-  const supabase = await createClient()
+  const cityCountData = await getCityCountsWithCounty()
 
-  const { data: listings } = await supabase
-    .from('listings')
-    .select('city, county')
-    .eq('business_status', 'OPERATIONAL')
-    .eq('hidden', false)
-
-  // Build city map with county info
-  const cityData = new Map<string, { count: number; county: string | null }>()
-  for (const row of listings || []) {
-    const existing = cityData.get(row.city)
-    if (existing) {
-      existing.count += 1
-    } else {
-      cityData.set(row.city, { count: 1, county: row.county })
-    }
-  }
-
-  // Convert to array with region assignment
-  const cities: CityWithRegion[] = Array.from(cityData.entries())
-    .map(([city, { count, county }]) => {
+  const cities: CityWithRegion[] = cityCountData
+    .map(({ city, count, county }) => {
       let region = getRegion(county)
       if (region === 'Other') {
         region = getRegion(city)
@@ -50,7 +32,7 @@ export default async function AllCitiesPage() {
     })
     .sort((a, b) => b.count - a.count)
 
-  const totalClinics = listings?.length || 0
+  const totalClinics = cityCountData.reduce((sum, r) => sum + r.count, 0)
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

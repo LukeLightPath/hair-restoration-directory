@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getTreatmentBySlug, SERVICE_LABELS } from '@/lib/types'
 import { cityFromSlug, canonicalUrl } from '@/lib/utils'
-import { resolveCityFromSlugCached } from '@/lib/data'
+import { resolveCityFromSlugCached, LISTING_CARD_COLUMNS } from '@/lib/data'
 import ClinicCard from '@/components/clinic-card'
 import Breadcrumbs from '@/components/breadcrumbs'
 
@@ -51,7 +51,7 @@ export default async function TreatmentCityPage({ params }: TreatmentCityPagePro
   // Get listings in this city
   const { data: listings } = await supabase
     .from('listings')
-    .select('*')
+    .select(LISTING_CARD_COLUMNS)
     .ilike('city', cityName)
     .eq('business_status', 'OPERATIONAL')
     .eq('hidden', false)
@@ -96,7 +96,7 @@ export default async function TreatmentCityPage({ params }: TreatmentCityPagePro
   const filteredIds = filteredListings.map(l => l.id)
   const { data: allServices } = await supabase
     .from('listing_services')
-    .select('*')
+    .select('listing_id, has_hair_systems, has_smp, has_wigs, has_extensions, has_prp, has_transplant, has_trichology, has_laser, has_fitting, has_toppers, has_integration, has_cranial')
     .in('listing_id', filteredIds)
 
   const servicesMap: Record<string, string[]> = {}

@@ -34,3 +34,20 @@ export async function createServiceClient() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 }
+
+/**
+ * Cookie-free Supabase client for use inside `unstable_cache()`.
+ *
+ * Next.js forbids calling `cookies()` inside a cached function scope.
+ * This client uses the anon key (RLS still applies) but doesn't
+ * depend on any Dynamic APIs, so it's safe for cross-request caching.
+ *
+ * Only use for public, read-only queries (listings, city counts, etc.).
+ */
+export async function createStaticClient() {
+  const { createClient } = await import('@supabase/supabase-js')
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
