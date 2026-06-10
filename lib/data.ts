@@ -109,12 +109,14 @@ export const getDistinctCities = unstable_cache(
 )
 
 /**
- * Fetch all distinct cities with clinic counts (cross-request cached).
- * Uses the get_city_counts() DB function — returns ~200 rows of {city, count}
- * instead of scanning all 1,900+ listings and counting in JS.
+ * Internal: fetch city counts as a JSON-serializable array for unstable_cache.
+ *
+ * unstable_cache serializes return values to JSON.  Map objects serialize
+ * to `{}` and lose all data, so we store as `{city, count}[]` and
+ * reconstruct the Map in the public wrapper below.
  */
-export const getAllCityCounts = unstable_cache(
-  async (): Promise<Map<string, number>> => {
+const _getCityCountsRaw = unstable_cache(
+  async (): Promise<{ city: string; count: number }[]> => {
     const supabase = await createStaticClient()
 
     const { data, error } = await supabase.rpc('get_city_counts')
@@ -131,18 +133,34 @@ export const getAllCityCounts = unstable_cache(
       for (const row of rows || []) {
         cityMap.set(row.city, (cityMap.get(row.city) || 0) + 1)
       }
-      return cityMap
+      // Convert to serializable array
+      return Array.from(cityMap.entries()).map(([city, count]) => ({ city, count }))
     }
 
-    const cityMap = new Map<string, number>()
-    for (const row of data as { city: string; count: number }[]) {
-      cityMap.set(row.city, Number(row.count))
-    }
-    return cityMap
+    return (data as { city: string; count: number }[]).map(r => ({
+      city: r.city,
+      count: Number(r.count),
+    }))
   },
   ['city-counts'],
   { revalidate: 3600 }
 )
+
+/**
+ * Fetch all distinct cities with clinic counts.
+ * Returns a Map<city, count> for backward-compatibility with all callers.
+ *
+ * Wraps the unstable_cache'd raw array and reconstructs the Map on every call.
+ * The Map reconstruction is O(n) with ~200 entries — negligible.
+ */
+export async function getAllCityCounts(): Promise<Map<string, number>> {
+  const rows = await _getCityCountsRaw()
+  const cityMap = new Map<string, number>()
+  for (const row of rows) {
+    cityMap.set(row.city, row.count)
+  }
+  return cityMap
+}
 
 /**
  * Fetch city counts with county info (cross-request cached).
